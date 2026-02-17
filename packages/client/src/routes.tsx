@@ -1,4 +1,4 @@
-import { AppDispatch, RootState } from './store'
+import type { AppDispatch, RootState } from './store'
 
 import { initMainPage, MainPage } from './pages/Main'
 import { initFriendsPage, FriendsPage } from './pages/FriendsPage'

@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/server'
 import { Provider } from 'react-redux'
 import { ServerStyleSheet } from 'styled-components'
 import { Helmet } from 'react-helmet'
-import { Request as ExpressRequest } from 'express'
+import { type Request as ExpressRequest } from 'express'
 import {
   createStaticHandler,
   createStaticRouter,
@@ -19,7 +19,6 @@ import {
 } from './entry-server.utils'
 import { reducer } from './store'
 import { routes } from './routes'
-import './index.css'
 import { setPageHasBeenInitializedOnServer } from './slices/ssrSlice'
 
 export const render = async (req: ExpressRequest) => {

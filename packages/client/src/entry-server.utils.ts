@@ -1,5 +1,5 @@
-import { Request as ExpressRequest } from 'express'
-import { PageInitContext } from './routes'
+import { type Request as ExpressRequest } from 'express'
+import { type PageInitContext } from './routes'
 
 export const createContext = (req: ExpressRequest): PageInitContext => ({
   clientToken: req.cookies.token,
@@ -35,7 +35,7 @@ export const createFetchRequest = (req: ExpressRequest) => {
     method: string
     headers: Headers
     signal: AbortSignal
-    body?: any
+    body?: BodyInit | null
   } = {
     method: req.method,
     headers,

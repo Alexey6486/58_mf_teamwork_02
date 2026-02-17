@@ -1,7 +1,7 @@
 import {
   useDispatch as useDispatchBase,
   useSelector as useSelectorBase,
-  TypedUseSelectorHook,
+  type TypedUseSelectorHook,
   useStore as useStoreBase,
 } from 'react-redux'
 import { combineReducers } from 'redux'

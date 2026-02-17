@@ -1,5 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { RootState } from '../store'
+import { createAsyncThunk, createSlice, type PayloadAction } from '@reduxjs/toolkit'
+import type { RootState } from '../store'
 import { SERVER_HOST } from '../constants'
 
 interface Friend {
