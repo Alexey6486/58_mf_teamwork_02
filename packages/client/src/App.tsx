@@ -6,7 +6,7 @@ const App = () => {
   const user = useSelector(selectUser)
 
   return (
-    <div className="container">
+    <div>
       {user ? (
         <div>
           <p>{user.name}</p>

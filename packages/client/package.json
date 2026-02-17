@@ -10,8 +10,7 @@
     "lint:style": "stylelint \"**/*.{css,scss}\"",
     "lint:style:fix": "stylelint \"**/*.{css,scss}\" --fix",
     "format": "prettier --write .",
-    "test": "jest ./",
-    "prepare": "husky"
+    "test": "jest ./"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.5",
