@@ -5,7 +5,7 @@ import { useSelector } from '../store'
 import { fetchUserThunk, selectUser } from '../slices/userSlice'
 import { Header } from '../components/Header'
 import { usePage } from '../hooks/usePage'
-import { PageInitArgs } from '../routes'
+import type { PageInitArgs } from '../routes'
 
 import './styles.scss'
 

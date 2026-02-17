@@ -4,7 +4,7 @@ import {
   setPageHasBeenInitializedOnServer,
   selectPageHasBeenInitializedOnServer,
 } from '../slices/ssrSlice'
-import { PageInitArgs, PageInitContext } from '../routes'
+import type { PageInitArgs, PageInitContext } from '../routes'
 
 const getCookie = (name: string) => {
   const matches = document.cookie.match(
