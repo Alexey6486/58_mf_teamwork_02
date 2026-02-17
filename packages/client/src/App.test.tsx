@@ -13,11 +13,6 @@ global.fetch = jest.fn(() =>
   Promise.resolve({ json: () => Promise.resolve('hey') })
 )
 
-// test('Example test', async () => {
-//   render(<App />)
-//   expect(screen.getByText(appContent)).toBeDefined()
-// })
-
 describe('Example test', () => {
   let store: ToolkitStore<unknown, AnyAction, [ThunkMiddleware<unknown, AnyAction, undefined>]>;
 
