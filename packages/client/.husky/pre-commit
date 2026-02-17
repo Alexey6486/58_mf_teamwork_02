@@ -6,7 +6,7 @@ set -e
 
 echo "Running pre-commit checks..."
 
-npm run lint
-npm run test
+yarn run lint
+yarn run test
 
 echo "All checks passed!"
