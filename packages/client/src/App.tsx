@@ -2,8 +2,6 @@ import { useSelector } from './store'
 
 import { selectUser } from './slices/userSlice'
 
-import './App.scss'
-
 const App = () => {
   const user = useSelector(selectUser)
 
