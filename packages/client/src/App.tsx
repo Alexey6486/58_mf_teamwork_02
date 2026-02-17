@@ -1,12 +1,14 @@
 import { useSelector } from './store'
 
-import { fetchUserThunk, selectUser } from './slices/userSlice'
+import { selectUser } from './slices/userSlice'
+
+import 'App.scss'
 
 const App = () => {
   const user = useSelector(selectUser)
 
   return (
-    <div>
+    <div className="container">
       {user ? (
         <div>
           <p>{user.name}</p>
