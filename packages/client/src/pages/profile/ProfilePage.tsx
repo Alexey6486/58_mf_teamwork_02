@@ -1,26 +1,28 @@
-import { type FC, type MouseEvent } from 'react';
-// import { useDispatch } from 'react-redux';
+import { type FC, type MouseEvent, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
-import { useFormik, FormikProvider } from 'formik'
+import { useFormik, FormikProvider } from 'formik';
 import { Fields } from '../../fields';
 import {
   requiredString,
   regexpValidation,
   REGEX,
   VALIDATION_MSG
-} from '../../validations'
+} from '../../validations';
 import styles from './styles.module.scss';
+import {
+  type AppDispatch,
+  useSelector
+} from '../../store'
+import {
+  changeUserDataThunk,
+  fetchUserThunk,
+  selectUser
+} from '../../slices/userSlice';
+import type { IUser } from '../../types';
+import { URL_BASE, URL_LOGIN, URL_LOGOUT } from '../../constants/urls';
 
-interface IUser {
-  first_name: string
-  second_name: string
-  display_name: string
-  login: string
-  email: string
-  phone: string
-}
-
-const INITIAL_VALUES = {
+const INITIAL_VALUES: Partial<IUser> = {
   first_name: '',
   second_name: '',
   display_name: '',
@@ -32,31 +34,34 @@ const INITIAL_VALUES = {
 const profileFormSchema = Yup.object().shape({
   first_name: requiredString()
     .concat(regexpValidation(REGEX.name, VALIDATION_MSG.name)),
-  // second_name: requiredString()
-  //   .concat(regexpValidation(REGEX.name, VALIDATION_MSG.name)),
-  // display_name: requiredString()
-  //   .concat(regexpValidation(REGEX.name, VALIDATION_MSG.name)),
-  // login: requiredString()
-  //   .concat(regexpValidation(REGEX.login, VALIDATION_MSG.login)),
-  // phone: requiredString()
-  //   .concat(regexpValidation(REGEX.phone, VALIDATION_MSG.phone)),
-  //
-  //
+  second_name: requiredString()
+    .concat(regexpValidation(REGEX.name, VALIDATION_MSG.name)),
+  display_name: requiredString()
+    .concat(regexpValidation(REGEX.name, VALIDATION_MSG.name)),
+  login: requiredString()
+    .concat(regexpValidation(REGEX.login, VALIDATION_MSG.login)),
+  email: requiredString()
+    .concat(regexpValidation(REGEX.email, VALIDATION_MSG.email)),
+  phone: requiredString()
+    .concat(regexpValidation(REGEX.phone, VALIDATION_MSG.phone)),
+
   // email: regexpValidation(REGEX.email, VALIDATION_MSG.email),
 });
 
 export const ProfilePage: FC = () => {
-  // const dispatch = useDispatch();
+  const user = useSelector(selectUser)
+  const dispatch = useDispatch<AppDispatch>();
+  console.log({ user })
 
   const formik = useFormik<Partial<IUser>>({
-    initialValues: INITIAL_VALUES,
+    initialValues: user || INITIAL_VALUES,
     validationSchema: profileFormSchema,
     validateOnMount: true,
     enableReinitialize: true,
     onSubmit: (values) => {
       console.log({ values })
       formik.setSubmitting(false);
-      // dispatch();
+      dispatch(changeUserDataThunk(values));
     },
   });
 
@@ -65,6 +70,41 @@ export const ProfilePage: FC = () => {
     console.log('Submit');
     formik?.handleSubmit();
   };
+
+  /* Удалить, для тестирования (начало) */
+  useEffect(() => {
+    dispatch(fetchUserThunk());
+  }, []);
+
+  const onLogin = async () => {
+    const result = await fetch(
+      `${URL_BASE}${URL_LOGIN}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          login: 'axel',
+          password: 'baRKm1n0',
+        }),
+        credentials: 'include',
+      },
+    );
+    console.log('login', { result });
+  };
+
+  const onLogout = async () => {
+    const result = await fetch(
+      `${URL_BASE}${URL_LOGOUT}`,
+      {
+        method: 'POST',
+        credentials: 'include',
+      },
+    );
+    console.log('logout', { result });
+  };
+  /* удалить, для тестирования (конец) */
 
   return (
     <div className={styles.container}>
@@ -124,7 +164,10 @@ export const ProfilePage: FC = () => {
 
             <div className={styles.buttons}>
               <button type="submit" onClick={onSubmitForm}>Сохранить</button>
+              <button>Изменить пароль</button>
               <button>Назад</button>
+              <button onClick={onLogin}>авторизоваться (тест)</button>
+              <button onClick={onLogout}>выйти (тест)</button>
             </div>
           </FormikProvider>
         </div>

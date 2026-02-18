@@ -33,9 +33,9 @@ const TextField = ({
   characterLimit,
   showTextCounter,
   onChangeShowCounter,
-  type,
-  placeholder,
-  disabled,
+  // type,
+  // placeholder,
+  // disabled,
 }: FieldAttributes<TextFieldProps> & { showTextCounter: boolean; onChangeShowCounter: (value: boolean) => void }) => (
   {
     field,
@@ -57,13 +57,7 @@ const TextField = ({
     meta: FieldMetaProps<unknown>,
   },
 ) => {
-  // console.log({
-  //   field,
-  //   form,
-  //   meta,
-  // })
   const error = getError(meta, helperText);
-  // console.log({error, meta, helperText})
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     form.setFieldValue(field.name, e.target.value);
