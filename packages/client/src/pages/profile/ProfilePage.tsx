@@ -1,9 +1,14 @@
-import { type FC } from 'react';
+import { type FC, type MouseEvent } from 'react';
 // import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 import { useFormik, FormikProvider } from 'formik'
-import { requiredString } from '../../validations'
 import { Fields } from '../../fields';
+import {
+  requiredString,
+  regexpValidation,
+  REGEX,
+  VALIDATION_MSG
+} from '../../validations'
 import styles from './styles.module.scss';
 
 interface IUser {
@@ -25,7 +30,19 @@ const INITIAL_VALUES = {
 };
 
 const profileFormSchema = Yup.object().shape({
-  first_name: requiredString(),
+  first_name: requiredString()
+    .concat(regexpValidation(REGEX.name, VALIDATION_MSG.name)),
+  // second_name: requiredString()
+  //   .concat(regexpValidation(REGEX.name, VALIDATION_MSG.name)),
+  // display_name: requiredString()
+  //   .concat(regexpValidation(REGEX.name, VALIDATION_MSG.name)),
+  // login: requiredString()
+  //   .concat(regexpValidation(REGEX.login, VALIDATION_MSG.login)),
+  // phone: requiredString()
+  //   .concat(regexpValidation(REGEX.phone, VALIDATION_MSG.phone)),
+  //
+  //
+  // email: regexpValidation(REGEX.email, VALIDATION_MSG.email),
 });
 
 export const ProfilePage: FC = () => {
@@ -36,15 +53,18 @@ export const ProfilePage: FC = () => {
     validationSchema: profileFormSchema,
     validateOnMount: true,
     enableReinitialize: true,
-    onSubmit: () => {
+    onSubmit: (values) => {
+      console.log({ values })
       formik.setSubmitting(false);
       // dispatch();
     },
   });
 
-  // const onSubmitForm = () => {
-  //   formik.handleSubmit();
-  // };
+  const onSubmitForm = (event: MouseEvent<HTMLButtonElement>) => {
+    event?.preventDefault();
+    console.log('Submit');
+    formik?.handleSubmit();
+  };
 
   return (
     <div className={styles.container}>
@@ -67,7 +87,6 @@ export const ProfilePage: FC = () => {
                 type="text"
                 label="Фамилия"
                 placeholder="Фамилия"
-                characterLimit={10}
               />
             </div>
             <div className={styles.field}>
@@ -76,7 +95,6 @@ export const ProfilePage: FC = () => {
                 type="text"
                 label="Ник"
                 placeholder="Ник"
-                characterLimit={10}
               />
             </div>
             <div className={styles.field}>
@@ -85,7 +103,6 @@ export const ProfilePage: FC = () => {
                 type="text"
                 label="Логин"
                 placeholder="Логин"
-                characterLimit={10}
               />
             </div>
             <div className={styles.field}>
@@ -94,7 +111,6 @@ export const ProfilePage: FC = () => {
                 type="email"
                 label="Почта"
                 placeholder="Почта"
-                characterLimit={10}
               />
             </div>
             <div className={styles.field}>
@@ -103,11 +119,11 @@ export const ProfilePage: FC = () => {
                 type="text"
                 label="Телефон"
                 placeholder="Телефон"
-                characterLimit={10}
               />
             </div>
+
             <div className={styles.buttons}>
-              <button>Сохранить</button>
+              <button type="submit" onClick={onSubmitForm}>Сохранить</button>
               <button>Назад</button>
             </div>
           </FormikProvider>

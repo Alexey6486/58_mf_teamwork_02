@@ -10,7 +10,9 @@ import type { FieldMetaProps } from 'formik/dist/types'
 import styles from './styles.module.scss';
 
 export interface IInputProps {
-  disabled: boolean
+  disabled?: boolean
+  type?: boolean
+  placeholder?: boolean
 }
 
 export type TextFieldProps = FieldAttributes<IInputProps> & {
@@ -31,6 +33,9 @@ const TextField = ({
   characterLimit,
   showTextCounter,
   onChangeShowCounter,
+  type,
+  placeholder,
+  disabled,
 }: FieldAttributes<TextFieldProps> & { showTextCounter: boolean; onChangeShowCounter: (value: boolean) => void }) => (
   {
     field,
