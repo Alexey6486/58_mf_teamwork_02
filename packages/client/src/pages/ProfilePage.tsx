@@ -13,7 +13,7 @@ const INITIAL_VALUES = {
   first_name: '',
 };
 
-export const IProfileFormSchema = Yup.object().shape({
+export const profileFormSchema = Yup.object().shape({
   first_name: requiredString(),
 });
 
@@ -22,7 +22,7 @@ export const ProfilePage: FC = () => {
 
   const formik = useFormik<Partial<IUser>>({
     initialValues: INITIAL_VALUES,
-    validationSchema: IProfileFormSchema,
+    validationSchema: profileFormSchema,
     validateOnMount: true,
     enableReinitialize: true,
     onSubmit: () => {
@@ -30,7 +30,7 @@ export const ProfilePage: FC = () => {
       // dispatch(RegistrationCodeDictionaryRedux.Actions.editRegCode(values));
     },
   });
-  // console.log({ v: formik?.values });
+  // console.log({ v: formik });
 
   // const onSubmitForm = () => {
   //   formik.handleSubmit();
@@ -42,6 +42,7 @@ export const ProfilePage: FC = () => {
         Profile 1
         <Fields.Text
           name="first_name"
+          type="text"
           label="Имя"
           placeholder="Имя"
           characterLimit={10}

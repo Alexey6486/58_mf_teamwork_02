@@ -1,6 +1,7 @@
-import { useState, type ReactElement, type ChangeEvent } from 'react'
+import { useState, type ReactElement, type ChangeEvent, type FocusEvent } from 'react'
 import {
   Field,
+  ErrorMessage,
   type FieldAttributes,
   type FormikErrors,
   type FormikValues
@@ -39,6 +40,7 @@ const TextField = ({
     field: {
       name: string,
       value: string,
+      onBlur: (event: FocusEvent<HTMLInputElement | HTMLTextAreaElement, Element>) => void
     },
     form: {
       setFieldValue: (
@@ -56,6 +58,7 @@ const TextField = ({
   //   meta,
   // })
   const error = getError(meta, helperText);
+  // console.log({error, meta, helperText})
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     form.setFieldValue(field.name, e.target.value);
@@ -65,8 +68,9 @@ const TextField = ({
     onChangeShowCounter(true);
   }
 
-  const handleBlur = () => {
+  const handleBlur = (event: FocusEvent<HTMLInputElement | HTMLTextAreaElement, Element>) => {
     onChangeShowCounter(false);
+    field?.onBlur?.(event);
   }
 
   return (
@@ -76,7 +80,7 @@ const TextField = ({
           {label}
         </label>
       )}
-      <input type='text' onChange={handleChange} value={field.value || ''} onFocus={handleFocus} onBlur={handleBlur} />
+      <input name={field.name} type='text' onChange={handleChange} value={field.value || ''} onFocus={handleFocus} onBlur={handleBlur} />
       <div>
         <div>{error?.helperText}</div>
         {characterLimit && showTextCounter && (
