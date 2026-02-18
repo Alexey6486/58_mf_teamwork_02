@@ -1,8 +1,10 @@
-import { useState, type ReactElement } from 'react'
+import { useState, type ReactElement, type ChangeEvent } from 'react'
 import {
   Field,
   type FieldAttributes,
-} from 'formik';
+  type FormikErrors,
+  type FormikValues
+} from 'formik'
 import { getError } from './errors'
 import type { FieldMetaProps } from 'formik/dist/types'
 
@@ -23,25 +25,50 @@ export type TextFieldProps = FieldAttributes<IInputProps> & {
 }
 
 const TextField = ({
-                     helperText,
-                     label,
-                     characterLimit,
-                     showTextCounter,
-                   }: FieldAttributes<TextFieldProps> & { showTextCounter: boolean; onChangeShowCounter: (value: boolean) => void }) => (
+  helperText,
+  label,
+  characterLimit,
+  showTextCounter,
+  onChangeShowCounter,
+}: FieldAttributes<TextFieldProps> & { showTextCounter: boolean; onChangeShowCounter: (value: boolean) => void }) => (
   {
     field,
     form,
     meta,
-  }: { field: unknown, form: unknown, meta: FieldMetaProps<unknown> },
+  }: {
+    field: {
+      name: string,
+      value: string,
+    },
+    form: {
+      setFieldValue: (
+        field: string,
+        value: string,
+        shouldValidate?: boolean | undefined,
+      ) => Promise<FormikErrors<FormikValues>> | Promise<void>;
+    },
+    meta: FieldMetaProps<unknown>,
+  },
 ) => {
-  console.log({
-    field,
-    form,
-    meta,
-  })
+  // console.log({
+  //   field,
+  //   form,
+  //   meta,
+  // })
   const error = getError(meta, helperText);
-// onFocus = () => onChangeShowCounter(true)
-// onBlur = () => onChangeShowCounter(false)
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    form.setFieldValue(field.name, e.target.value);
+  }
+
+  const handleFocus = () => {
+    onChangeShowCounter(true);
+  }
+
+  const handleBlur = () => {
+    onChangeShowCounter(false);
+  }
+
   return (
     <>
       {label && (
@@ -49,7 +76,7 @@ const TextField = ({
           {label}
         </label>
       )}
-      <input type='text' />
+      <input type='text' onChange={handleChange} value={field.value || ''} onFocus={handleFocus} onBlur={handleBlur} />
       <div>
         <div>{error?.helperText}</div>
         {characterLimit && showTextCounter && (

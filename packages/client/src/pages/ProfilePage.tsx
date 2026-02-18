@@ -30,7 +30,7 @@ export const ProfilePage: FC = () => {
       // dispatch(RegistrationCodeDictionaryRedux.Actions.editRegCode(values));
     },
   });
-  console.log({ v: formik?.values });
+  // console.log({ v: formik?.values });
 
   // const onSubmitForm = () => {
   //   formik.handleSubmit();
@@ -42,7 +42,9 @@ export const ProfilePage: FC = () => {
         Profile 1
         <Fields.Text
           name="first_name"
+          label="Имя"
           placeholder="Имя"
+          characterLimit={10}
         />
       </FormikProvider>
     </div>
