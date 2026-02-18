@@ -1,4 +1,9 @@
-import { type FC, type MouseEvent, useEffect } from 'react';
+import {
+  type FC,
+  type MouseEvent,
+  type ChangeEvent,
+  useEffect,
+} from 'react'
 import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 import { useFormik, FormikProvider } from 'formik';
@@ -15,12 +20,18 @@ import {
   useSelector
 } from '../../store'
 import {
+  changeUserAvatar,
   changeUserDataThunk,
   fetchUserThunk,
   selectUser
-} from '../../slices/userSlice';
+} from '../../slices/userSlice'
 import type { IUser } from '../../types';
-import { URL_BASE, URL_LOGIN, URL_LOGOUT } from '../../constants/urls';
+import {
+  URL_BASE,
+  URL_BASE_IMG,
+  URL_LOGIN,
+  URL_LOGOUT
+} from '../../constants/urls'
 
 const INITIAL_VALUES: Partial<IUser> = {
   first_name: '',
@@ -59,7 +70,6 @@ export const ProfilePage: FC = () => {
     validateOnMount: true,
     enableReinitialize: true,
     onSubmit: (values) => {
-      console.log({ values })
       formik.setSubmitting(false);
       dispatch(changeUserDataThunk(values));
     },
@@ -67,9 +77,20 @@ export const ProfilePage: FC = () => {
 
   const onSubmitForm = (event: MouseEvent<HTMLButtonElement>) => {
     event?.preventDefault();
-    console.log('Submit');
     formik?.handleSubmit();
   };
+
+  const handleAvatarChange = (event: ChangeEvent<HTMLInputElement>) => {
+    if (
+      event.target
+      && event.target instanceof HTMLInputElement
+      && event.target.files
+    ) {
+      const formData = new FormData();
+      formData.append('avatar', event.target.files[0]);
+      dispatch(changeUserAvatar(formData));
+    }
+  }
 
   /* Удалить, для тестирования (начало) */
   useEffect(() => {
@@ -91,7 +112,6 @@ export const ProfilePage: FC = () => {
         credentials: 'include',
       },
     );
-    console.log('login', { result });
   };
 
   const onLogout = async () => {
@@ -102,7 +122,6 @@ export const ProfilePage: FC = () => {
         credentials: 'include',
       },
     );
-    console.log('logout', { result });
   };
   /* удалить, для тестирования (конец) */
 
@@ -111,6 +130,25 @@ export const ProfilePage: FC = () => {
       <div className={styles.wrapper}>
         <h3>Профиль</h3>
         <div className={styles.form}>
+          <div className={styles.avatar}>
+            <div className={styles.image}>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleAvatarChange}
+              />
+              <div className={styles.mask}>
+                Поменять аватар
+              </div>
+              {user?.avatar && (
+                <img
+                  src={`${URL_BASE_IMG}${user.avatar}`}
+                  alt="avatar"
+                />
+              )}
+            </div>
+          </div>
+
           <FormikProvider value={formik}>
             <div className={styles.field}>
               <Fields.Text

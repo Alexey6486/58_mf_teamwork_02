@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, type PayloadAction } from '@reduxjs/tool
 import type { RootState } from '../store'
 import type { IUser } from '../types'
 import {
+  URL_AVATAR,
   URL_BASE,
   URL_PROFILE,
   URL_USER_DATA
@@ -79,12 +80,28 @@ export const changeUserDataThunk = createAsyncThunk(
   }
 )
 
+export const changeUserAvatar = createAsyncThunk(
+  'user/changeUserAvatar',
+  async (avatar: FormData) => {
+    const url = `${URL_BASE}${URL_AVATAR}`
+    return fetch(
+      url,
+      {
+        method: 'PUT',
+        body: avatar,
+        credentials: 'include',
+      }
+    ).then(res => res.json())
+  }
+)
+
 export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {},
   extraReducers: builder => {
     builder
+      // Handle fetch user data
       .addCase(fetchUserThunk.pending.type, state => {
         state.data = null
         state.isLoading = true
@@ -110,7 +127,19 @@ export const userSlice = createSlice({
       })
       .addCase(changeUserDataThunk.rejected.type, (state) => {
         state.isLoading = false
-      });
+      })
+
+    // Handle user avatar change
+    .addCase(changeUserAvatar.pending.type, (state) => {
+        state.isLoading = true
+      })
+    .addCase(changeUserAvatar.fulfilled.type, (state, { payload }: PayloadAction<IUser>) => {
+      state.data = payload;
+      state.isLoading = false
+    })
+    .addCase(changeUserAvatar.rejected.type, (state) => {
+      state.isLoading = false
+    });
   },
 })
 
