@@ -1,10 +1,11 @@
 import { createAsyncThunk, createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import type { RootState } from '../store'
-import type { IUser } from '../types'
+import type { IUser, IUserPassword } from '../types'
 import {
   URL_AVATAR,
   URL_BASE,
   URL_PROFILE,
+  URL_PSW,
   URL_USER_DATA
 } from '../constants/urls'
 
@@ -78,7 +79,7 @@ export const changeUserDataThunk = createAsyncThunk(
       }
     ).then(res => res.json())
   }
-)
+);
 
 export const changeUserAvatar = createAsyncThunk(
   'user/changeUserAvatar',
@@ -93,7 +94,25 @@ export const changeUserAvatar = createAsyncThunk(
       }
     ).then(res => res.json())
   }
-)
+);
+
+export const changeUserPasswordThunk = createAsyncThunk(
+  'user/changeUserPasswordThunk',
+  async (userData: Partial<IUserPassword>) => {
+    const url = `${URL_BASE}${URL_PSW}`
+    return fetch(
+      url,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+        credentials: 'include',
+      }
+    ).then(res => res.json())
+  }
+);
 
 export const userSlice = createSlice({
   name: 'user',
@@ -138,6 +157,17 @@ export const userSlice = createSlice({
       state.isLoading = false
     })
     .addCase(changeUserAvatar.rejected.type, (state) => {
+      state.isLoading = false
+    })
+
+    // Handle user password change
+    .addCase(changeUserPasswordThunk.pending.type, (state) => {
+        state.isLoading = true
+      })
+    .addCase(changeUserPasswordThunk.fulfilled.type, (state) => {
+      state.isLoading = false
+    })
+    .addCase(changeUserPasswordThunk.rejected.type, (state) => {
       state.isLoading = false
     });
   },

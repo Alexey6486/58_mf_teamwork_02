@@ -1,7 +1,10 @@
 import type { AppDispatch, RootState } from './store'
 
 import { initMainPage, MainPage } from './pages/Main'
-import { ProfilePage } from './pages'
+import {
+  PasswordChange,
+  ProfilePage
+} from './pages'
 import { initFriendsPage, FriendsPage } from './pages/FriendsPage'
 import { initNotFoundPage, NotFoundPage } from './pages/NotFound'
 
@@ -15,14 +18,25 @@ export type PageInitArgs = {
   ctx: PageInitContext
 }
 
+export const ROUTES = {
+  main: '/',
+  profile: '/profile',
+  password: '/profile/password',
+}
+
 export const routes = [
   {
-    path: '/profile',
+    path: ROUTES.profile,
     Component: ProfilePage,
     fetchData: () => null,
   },
   {
-    path: '/',
+    path: ROUTES.password,
+    Component: PasswordChange,
+    fetchData: () => null,
+  },
+  {
+    path: ROUTES.main,
     Component: MainPage,
     fetchData: initMainPage,
   },

@@ -33,7 +33,7 @@ const TextField = ({
   characterLimit,
   showTextCounter,
   onChangeShowCounter,
-  // type,
+  type,
   // placeholder,
   // disabled,
 }: FieldAttributes<TextFieldProps> & { showTextCounter: boolean; onChangeShowCounter: (value: boolean) => void }) => (
@@ -79,7 +79,7 @@ const TextField = ({
           {label}
         </label>
       )}
-      <input className={styles.input} name={field.name} type='text' onChange={handleChange} value={field.value || ''} onFocus={handleFocus} onBlur={handleBlur} />
+      <input className={styles.input} name={field.name} type={type} onChange={handleChange} value={field.value || ''} onFocus={handleFocus} onBlur={handleBlur} />
       {(error?.error && error?.helperText) && (
         <div className={styles.error}>{error?.helperText}</div>
       )}

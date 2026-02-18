@@ -8,3 +8,9 @@ export interface IUser {
   phone: string
   avatar: string
 }
+
+export interface IUserPassword {
+  oldPassword: string
+  newPassword: string
+  confirmedPassword: string
+}

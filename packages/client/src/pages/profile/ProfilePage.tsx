@@ -4,6 +4,7 @@ import {
   type ChangeEvent,
   useEffect,
 } from 'react'
+import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 import { useFormik, FormikProvider } from 'formik';
@@ -18,20 +19,21 @@ import styles from './styles.module.scss';
 import {
   type AppDispatch,
   useSelector
-} from '../../store'
+} from '../../store';
 import {
   changeUserAvatar,
   changeUserDataThunk,
   fetchUserThunk,
   selectUser
-} from '../../slices/userSlice'
+} from '../../slices/userSlice';
 import type { IUser } from '../../types';
 import {
   URL_BASE,
   URL_BASE_IMG,
   URL_LOGIN,
   URL_LOGOUT
-} from '../../constants/urls'
+} from '../../constants/urls';
+import { ROUTES } from '../../routes'
 
 const INITIAL_VALUES: Partial<IUser> = {
   first_name: '',
@@ -62,7 +64,7 @@ const profileFormSchema = Yup.object().shape({
 export const ProfilePage: FC = () => {
   const user = useSelector(selectUser)
   const dispatch = useDispatch<AppDispatch>();
-  console.log({ user })
+  const navigate = useNavigate()
 
   const formik = useFormik<Partial<IUser>>({
     initialValues: user || INITIAL_VALUES,
@@ -90,6 +92,10 @@ export const ProfilePage: FC = () => {
       formData.append('avatar', event.target.files[0]);
       dispatch(changeUserAvatar(formData));
     }
+  };
+
+  const toPasswordChange = () => {
+    navigate(ROUTES.password);
   }
 
   /* Удалить, для тестирования (начало) */
@@ -98,7 +104,7 @@ export const ProfilePage: FC = () => {
   }, []);
 
   const onLogin = async () => {
-    const result = await fetch(
+    await fetch(
       `${URL_BASE}${URL_LOGIN}`,
       {
         method: 'POST',
@@ -115,7 +121,7 @@ export const ProfilePage: FC = () => {
   };
 
   const onLogout = async () => {
-    const result = await fetch(
+    await fetch(
       `${URL_BASE}${URL_LOGOUT}`,
       {
         method: 'POST',
@@ -202,7 +208,7 @@ export const ProfilePage: FC = () => {
 
             <div className={styles.buttons}>
               <button type="submit" onClick={onSubmitForm}>Сохранить</button>
-              <button>Изменить пароль</button>
+              <button onClick={toPasswordChange}>Изменить пароль</button>
               <button>Назад</button>
               <button onClick={onLogin}>авторизоваться (тест)</button>
               <button onClick={onLogout}>выйти (тест)</button>
