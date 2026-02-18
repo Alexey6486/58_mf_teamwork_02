@@ -1,13 +1,13 @@
 import { useState, type ReactElement, type ChangeEvent, type FocusEvent } from 'react'
 import {
   Field,
-  ErrorMessage,
   type FieldAttributes,
   type FormikErrors,
   type FormikValues
 } from 'formik'
 import { getError } from './errors'
 import type { FieldMetaProps } from 'formik/dist/types'
+import styles from './styles.module.scss';
 
 export interface IInputProps {
   disabled: boolean
@@ -76,17 +76,17 @@ const TextField = ({
   return (
     <>
       {label && (
-        <label>
+        <label className={styles.label}>
           {label}
         </label>
       )}
-      <input name={field.name} type='text' onChange={handleChange} value={field.value || ''} onFocus={handleFocus} onBlur={handleBlur} />
-      <div>
-        <div>{error?.helperText}</div>
-        {characterLimit && showTextCounter && (
-          <div>{`${(field.value || '').length}/${characterLimit}`}</div>
-        )}
-      </div>
+      <input className={styles.input} name={field.name} type='text' onChange={handleChange} value={field.value || ''} onFocus={handleFocus} onBlur={handleBlur} />
+      {(error?.error && error?.helperText) && (
+        <div className={styles.error}>{error?.helperText}</div>
+      )}
+      {characterLimit && showTextCounter && (
+        <div className={styles.limit}>{`${(field.value || '').length}/${characterLimit}`}</div>
+      )}
     </>
   );
 };
