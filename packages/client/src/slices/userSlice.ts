@@ -15,11 +15,23 @@ import {
 export interface UserState {
   data: IUser | null
   isLoading: boolean
+  error: {
+    status: string | null
+    message: string | null
+    data: unknown
+    isNetworkError: boolean
+  },
 }
 
 const initialState: UserState = {
   data: null,
   isLoading: false,
+  error: {
+    status: null,
+    message: null,
+    data: null,
+    isNetworkError: false,
+  },
 }
 
 // Chain sample:
@@ -48,18 +60,55 @@ const initialState: UserState = {
 
 export const fetchUserThunk = createAsyncThunk(
   'user/fetchUserDataThunk',
-  async (_: void) => {
-    const url = `${URL_BASE}${URL_USER_DATA}`
-    return fetch(
-      url,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
+  async (_: void, { rejectWithValue }) => {
+    try {
+      const url = `${URL_BASE}${URL_USER_DATA}`
+      const response = await fetch(
+        url,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+        }
+      );
+
+      if (!response.ok) {
+        let errorData = null;
+        try {
+          errorData = await response.json();
+        } catch (e: unknown) {
+          errorData = { message: response.statusText };
+        }
+
+        return rejectWithValue({
+          status: response.status,
+          data: errorData,
+          message: errorData?.message || `HTTP error: ${response.status} ${response.statusText}`,
+        });
       }
-    ).then(res => res.json())
+
+      return await response.json();
+    }
+    catch (error: unknown) {
+      let errorMessage = 'Network error.';
+
+      if (error instanceof Error) {
+        errorMessage = error.message;
+
+        return rejectWithValue({
+          status: null,
+          message: errorMessage,
+          data: null,
+        });
+      }
+
+      return rejectWithValue({
+        status: null,
+        message: errorMessage,
+      });
+    }
   }
 );
 
@@ -110,7 +159,9 @@ export const changeUserPasswordThunk = createAsyncThunk(
         body: JSON.stringify(userData),
         credentials: 'include',
       }
-    ).then(res => res.json())
+    ).then(res => {
+      return res.json();
+    })
   }
 );
 
@@ -121,18 +172,18 @@ export const userSlice = createSlice({
   extraReducers: builder => {
     builder
       // Handle fetch user data
-      .addCase(fetchUserThunk.pending.type, state => {
+      .addCase(fetchUserThunk.pending, state => {
         state.data = null
         state.isLoading = true
       })
       .addCase(
-        fetchUserThunk.fulfilled.type,
+        fetchUserThunk.fulfilled,
         (state, { payload }: PayloadAction<IUser>) => {
           state.data = payload
           state.isLoading = false
         }
       )
-      .addCase(fetchUserThunk.rejected.type, state => {
+      .addCase(fetchUserThunk.rejected, state => {
         state.isLoading = false
       })
 

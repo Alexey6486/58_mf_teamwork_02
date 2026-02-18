@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import viteTailwind from 'vite-plugin-tailwindcss'
 import dotenv from 'dotenv'
 import path from 'path'
 dotenv.config()
@@ -19,5 +20,8 @@ export default defineConfig({
   ssr: {
     format: 'cjs',
   },
-  plugins: [react()],
+  plugins: [
+    react(),
+    viteTailwind(),
+  ],
 })

@@ -15,7 +15,6 @@ import {
   REGEX,
   VALIDATION_MSG
 } from '../../validations';
-import styles from './styles.module.scss';
 import {
   type AppDispatch,
   useSelector
@@ -34,6 +33,7 @@ import {
   URL_LOGOUT
 } from '../../constants/urls';
 import { ROUTES } from '../../routes'
+import styles from './styles.module.scss';
 
 const INITIAL_VALUES: Partial<IUser> = {
   first_name: '',
@@ -57,8 +57,6 @@ const profileFormSchema = Yup.object().shape({
     .concat(regexpValidation(REGEX.email, VALIDATION_MSG.email)),
   phone: requiredString()
     .concat(regexpValidation(REGEX.phone, VALIDATION_MSG.phone)),
-
-  // email: regexpValidation(REGEX.email, VALIDATION_MSG.email),
 });
 
 export const ProfilePage: FC = () => {

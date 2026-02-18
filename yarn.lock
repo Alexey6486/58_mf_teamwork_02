@@ -8131,6 +8131,11 @@ table@^6.9.0:
     string-width "^4.2.3"
     strip-ansi "^6.0.1"
 
+tailwindcss@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-4.2.0.tgz#fe0a67ddebe0c383096f68d22c677ae8af428ded"
+  integrity sha512-yYzTZ4++b7fNYxFfpnberEEKu43w44aqDMNM9MHMmcKuCH7lL8jJ4yJ7LGHv7rSwiqM0nkiobF9I6cLlpS2P7Q==
+
 tar-stream@~2.2.0:
   version "2.2.0"
   resolved "https://registry.npmjs.org/tar-stream/-/tar-stream-2.2.0.tgz"
@@ -8594,6 +8599,11 @@ vary@^1, vary@~1.1.2:
   version "1.1.2"
   resolved "https://registry.npmjs.org/vary/-/vary-1.1.2.tgz"
   integrity sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==
+
+vite-plugin-tailwindcss@^0.0.0-0:
+  version "0.0.0-0"
+  resolved "https://registry.yarnpkg.com/vite-plugin-tailwindcss/-/vite-plugin-tailwindcss-0.0.0-0.tgz#b657a2f9cfb63820accb74e8f41be462371deb46"
+  integrity sha512-vb84O0cUAN8a79KiL3lPcHrvJ6ODZrjex3ekS4TgxBhyJJzf53mkBbT/LfUKhJ7jsz160Ml3e4lyqNLOdE7bgQ==
 
 vite@^4.4.9:
   version "4.4.9"
