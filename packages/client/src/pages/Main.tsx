@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import { Helmet } from 'react-helmet'
 
 import { useSelector } from '../store'
-import { fetchUserThunk, selectUser } from '../slices/userSlice'
+import { fetchUserThunk, selectUser } from '../slices/user-slice'
 import { Header } from '../components/Header'
 import { usePage } from '../hooks/usePage'
 import type { PageInitArgs } from '../routes'

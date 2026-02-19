@@ -24,7 +24,7 @@ import {
   changeUserDataThunk,
   fetchUserThunk,
   selectUser
-} from '../../slices/userSlice';
+} from '../../slices/user-slice'
 import type { IUser } from '../../types';
 import {
   URL_BASE,
@@ -95,39 +95,6 @@ export const ProfilePage: FC = () => {
   const toPasswordChange = () => {
     navigate(ROUTES.password);
   }
-
-  /* Удалить, для тестирования (начало) */
-  useEffect(() => {
-    dispatch(fetchUserThunk());
-  }, []);
-
-  const onLogin = async () => {
-    await fetch(
-      `${URL_BASE}${URL_LOGIN}`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          login: 'axel',
-          password: 'baRKm1n0',
-        }),
-        credentials: 'include',
-      },
-    );
-  };
-
-  const onLogout = async () => {
-    await fetch(
-      `${URL_BASE}${URL_LOGOUT}`,
-      {
-        method: 'POST',
-        credentials: 'include',
-      },
-    );
-  };
-  /* удалить, для тестирования (конец) */
 
   return (
     <div className={styles.container}>
@@ -208,8 +175,6 @@ export const ProfilePage: FC = () => {
               <button type="submit" onClick={onSubmitForm}>Сохранить</button>
               <button onClick={toPasswordChange}>Изменить пароль</button>
               <button>Назад</button>
-              <button onClick={onLogin}>авторизоваться (тест)</button>
-              <button onClick={onLogout}>выйти (тест)</button>
             </div>
           </FormikProvider>
         </div>

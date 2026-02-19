@@ -13,7 +13,7 @@ import {
 } from '../../types';
 import {
   changeUserPasswordThunk
-} from '../../slices/userSlice';
+} from '../../slices/user-slice';
 import {
   REGEX,
   VALIDATION_MSG,
@@ -53,7 +53,10 @@ export const PasswordChange: FC = () => {
     enableReinitialize: true,
     onSubmit: (values) => {
       formik.setSubmitting(false);
-      dispatch(changeUserPasswordThunk(values));
+      dispatch(changeUserPasswordThunk({
+        oldPassword: values.oldPassword,
+        newPassword: values.newPassword,
+      }));
       formik.resetForm();
     },
   });

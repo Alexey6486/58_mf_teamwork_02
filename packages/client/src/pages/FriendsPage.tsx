@@ -7,7 +7,7 @@ import {
   selectFriends,
   selectIsLoadingFriends,
 } from '../slices/friendsSlice'
-import { fetchUserThunk, selectUser } from '../slices/userSlice'
+import { fetchUserThunk, selectUser } from '../slices/user-slice'
 import type { PageInitArgs } from '../routes'
 import { usePage } from '../hooks/usePage'
 
@@ -29,7 +29,7 @@ export const FriendsPage = () => {
         <>
           <h3>Информация о пользователе:</h3>{' '}
           <p>
-            {user.name} {user.secondName}
+            {user.first_name} {user.second_name}
           </p>
         </>
       ) : (
