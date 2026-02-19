@@ -21,13 +21,14 @@ export const thunkCreator = <T, P = void>(
           return rejectWithValue({
             status: response.status,
             data: errorData,
-            message: errorData?.message || `HTTP error: ${response.status} ${response.statusText}`,
+            message:
+              errorData?.message ||
+              `HTTP error: ${response.status} ${response.statusText}`,
           });
         }
 
         return await response.json();
-      }
-      catch (error: unknown) {
+      } catch (error: unknown) {
         let errorMessage = 'Network error.';
 
         if (error instanceof Error) {
@@ -45,6 +46,6 @@ export const thunkCreator = <T, P = void>(
           message: errorMessage,
         });
       }
-    },
+    }
   );
 };

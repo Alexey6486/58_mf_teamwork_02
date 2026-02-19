@@ -1,6 +1,6 @@
-import * as Yup from 'yup'
+import * as Yup from 'yup';
 
-export const confirmedPasswordValidation = (message?: string) => (
+export const confirmedPasswordValidation = (message?: string) =>
   Yup.string()
     .nullable()
     .test(
@@ -8,6 +8,5 @@ export const confirmedPasswordValidation = (message?: string) => (
       message || 'Ошибка валидации',
       (value, context) => {
         return value === context.parent.newPassword;
-      },
-    )
-);
+      }
+    );

@@ -1,25 +1,15 @@
-import {
-  type FC,
-  type MouseEvent
-} from 'react';
+import { type FC, type MouseEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  FormikProvider,
-  useFormik
-} from 'formik';
+import { FormikProvider, useFormik } from 'formik';
 import * as Yup from 'yup';
-import {
-  type IUserPassword
-} from '../../types';
-import {
-  changeUserPasswordThunk
-} from '../../slices/user-slice';
+import { type IUserPassword } from '../../types';
+import { changeUserPasswordThunk } from '../../slices/user-slice';
 import {
   REGEX,
   VALIDATION_MSG,
   regexpValidation,
   requiredString,
-  confirmedPasswordValidation
+  confirmedPasswordValidation,
 } from '../../validations';
 import { useDispatch } from 'react-redux';
 import { type AppDispatch } from '../../store';
@@ -34,12 +24,15 @@ const INITIAL_VALUES: Partial<IUserPassword> = {
 };
 
 const passwordFormSchema = Yup.object().shape({
-  oldPassword: requiredString()
-    .concat(regexpValidation(REGEX.psw, VALIDATION_MSG.psw)),
-  newPassword: requiredString()
-    .concat(regexpValidation(REGEX.psw, VALIDATION_MSG.psw)),
-  confirmedPassword: requiredString()
-    .concat(confirmedPasswordValidation(VALIDATION_MSG.c_psw)),
+  oldPassword: requiredString().concat(
+    regexpValidation(REGEX.psw, VALIDATION_MSG.psw)
+  ),
+  newPassword: requiredString().concat(
+    regexpValidation(REGEX.psw, VALIDATION_MSG.psw)
+  ),
+  confirmedPassword: requiredString().concat(
+    confirmedPasswordValidation(VALIDATION_MSG.c_psw)
+  ),
 });
 
 export const PasswordChange: FC = () => {
@@ -51,12 +44,14 @@ export const PasswordChange: FC = () => {
     validationSchema: passwordFormSchema,
     validateOnMount: true,
     enableReinitialize: true,
-    onSubmit: (values) => {
+    onSubmit: values => {
       formik.setSubmitting(false);
-      dispatch(changeUserPasswordThunk({
-        oldPassword: values.oldPassword,
-        newPassword: values.newPassword,
-      }));
+      dispatch(
+        changeUserPasswordThunk({
+          oldPassword: values.oldPassword,
+          newPassword: values.newPassword,
+        })
+      );
       formik.resetForm();
     },
   });
@@ -68,7 +63,7 @@ export const PasswordChange: FC = () => {
 
   const toProfile = () => {
     navigate(ROUTES.profile);
-  }
+  };
 
   return (
     <div className={styles.container}>
@@ -99,7 +94,9 @@ export const PasswordChange: FC = () => {
             </div>
 
             <div className={styles.buttons}>
-              <button type="submit" onClick={onSubmitForm}>Сохранить</button>
+              <button type="submit" onClick={onSubmitForm}>
+                Сохранить
+              </button>
               <button onClick={toProfile}>Назад</button>
             </div>
           </FormikProvider>

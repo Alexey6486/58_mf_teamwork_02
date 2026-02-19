@@ -1,9 +1,4 @@
-import {
-  type FC,
-  type MouseEvent,
-  type ChangeEvent,
-  useEffect,
-} from 'react'
+import { type FC, type MouseEvent, type ChangeEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
@@ -13,26 +8,17 @@ import {
   requiredString,
   regexpValidation,
   REGEX,
-  VALIDATION_MSG
+  VALIDATION_MSG,
 } from '../../validations';
-import {
-  type AppDispatch,
-  useSelector
-} from '../../store';
+import { type AppDispatch, useSelector } from '../../store';
 import {
   changeUserAvatar,
   changeUserDataThunk,
-  fetchUserThunk,
-  selectUser
-} from '../../slices/user-slice'
+  selectUser,
+} from '../../slices/user-slice';
 import type { IUser } from '../../types';
-import {
-  URL_BASE,
-  URL_BASE_IMG,
-  URL_LOGIN,
-  URL_LOGOUT
-} from '../../constants/urls';
-import { ROUTES } from '../../routes'
+import { URL_BASE_IMG } from '../../constants/urls';
+import { ROUTES } from '../../routes';
 import styles from './styles.module.scss';
 
 const INITIAL_VALUES: Partial<IUser> = {
@@ -41,35 +27,41 @@ const INITIAL_VALUES: Partial<IUser> = {
   display_name: '',
   login: '',
   email: '',
-  phone: ''
+  phone: '',
 };
 
 const profileFormSchema = Yup.object().shape({
-  first_name: requiredString()
-    .concat(regexpValidation(REGEX.name, VALIDATION_MSG.name)),
-  second_name: requiredString()
-    .concat(regexpValidation(REGEX.name, VALIDATION_MSG.name)),
-  display_name: requiredString()
-    .concat(regexpValidation(REGEX.name, VALIDATION_MSG.name)),
-  login: requiredString()
-    .concat(regexpValidation(REGEX.login, VALIDATION_MSG.login)),
-  email: requiredString()
-    .concat(regexpValidation(REGEX.email, VALIDATION_MSG.email)),
-  phone: requiredString()
-    .concat(regexpValidation(REGEX.phone, VALIDATION_MSG.phone)),
+  first_name: requiredString().concat(
+    regexpValidation(REGEX.name, VALIDATION_MSG.name)
+  ),
+  second_name: requiredString().concat(
+    regexpValidation(REGEX.name, VALIDATION_MSG.name)
+  ),
+  display_name: requiredString().concat(
+    regexpValidation(REGEX.name, VALIDATION_MSG.name)
+  ),
+  login: requiredString().concat(
+    regexpValidation(REGEX.login, VALIDATION_MSG.login)
+  ),
+  email: requiredString().concat(
+    regexpValidation(REGEX.email, VALIDATION_MSG.email)
+  ),
+  phone: requiredString().concat(
+    regexpValidation(REGEX.phone, VALIDATION_MSG.phone)
+  ),
 });
 
 export const ProfilePage: FC = () => {
-  const user = useSelector(selectUser)
+  const user = useSelector(selectUser);
   const dispatch = useDispatch<AppDispatch>();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const formik = useFormik<Partial<IUser>>({
     initialValues: user || INITIAL_VALUES,
     validationSchema: profileFormSchema,
     validateOnMount: true,
     enableReinitialize: true,
-    onSubmit: (values) => {
+    onSubmit: values => {
       formik.setSubmitting(false);
       dispatch(changeUserDataThunk(values));
     },
@@ -82,9 +74,9 @@ export const ProfilePage: FC = () => {
 
   const handleAvatarChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (
-      event.target
-      && event.target instanceof HTMLInputElement
-      && event.target.files
+      event.target &&
+      event.target instanceof HTMLInputElement &&
+      event.target.files
     ) {
       const formData = new FormData();
       formData.append('avatar', event.target.files[0]);
@@ -94,7 +86,7 @@ export const ProfilePage: FC = () => {
 
   const toPasswordChange = () => {
     navigate(ROUTES.password);
-  }
+  };
 
   return (
     <div className={styles.container}>
@@ -108,14 +100,9 @@ export const ProfilePage: FC = () => {
                 accept="image/*"
                 onChange={handleAvatarChange}
               />
-              <div className={styles.mask}>
-                Поменять аватар
-              </div>
+              <div className={styles.mask}>Поменять аватар</div>
               {user?.avatar && (
-                <img
-                  src={`${URL_BASE_IMG}${user.avatar}`}
-                  alt="avatar"
-                />
+                <img src={`${URL_BASE_IMG}${user.avatar}`} alt="avatar" />
               )}
             </div>
           </div>
@@ -172,7 +159,9 @@ export const ProfilePage: FC = () => {
             </div>
 
             <div className={styles.buttons}>
-              <button type="submit" onClick={onSubmitForm}>Сохранить</button>
+              <button type="submit" onClick={onSubmitForm}>
+                Сохранить
+              </button>
               <button onClick={toPasswordChange}>Изменить пароль</button>
               <button>Назад</button>
             </div>

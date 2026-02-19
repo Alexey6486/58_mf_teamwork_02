@@ -1,9 +1,9 @@
-import { useSelector } from './store'
+import { useSelector } from './store';
 
-import { selectUser } from './slices/user-slice'
+import { selectUser } from './slices/user-slice';
 
 const App = () => {
-  const user = useSelector(selectUser)
+  const user = useSelector(selectUser);
 
   return (
     <div>
@@ -16,7 +16,7 @@ const App = () => {
         <p>Пользователь не найден!</p>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;
