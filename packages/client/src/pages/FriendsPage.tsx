@@ -1,35 +1,38 @@
-import { Helmet } from 'react-helmet'
+import { Helmet } from 'react-helmet';
 
-import { useSelector } from '../store'
-import { Header } from '../components/Header'
+import { useSelector } from '../store';
+import { Header } from '../components/Header';
 import {
   fetchFriendsThunk,
   selectFriends,
   selectIsLoadingFriends,
-} from '../slices/friendsSlice'
-import { fetchUserThunk, selectUser } from '../slices/userSlice'
-import type { PageInitArgs } from '../routes'
-import { usePage } from '../hooks/usePage'
+} from '../slices/friendsSlice';
+import { fetchUserThunk, selectUser } from '../slices/user-slice';
+import type { PageInitArgs } from '../routes';
+import { usePage } from '../hooks/usePage';
 
 export const FriendsPage = () => {
-  const friends = useSelector(selectFriends)
-  const isLoading = useSelector(selectIsLoadingFriends)
-  const user = useSelector(selectUser)
+  const friends = useSelector(selectFriends);
+  const isLoading = useSelector(selectIsLoadingFriends);
+  const user = useSelector(selectUser);
 
-  usePage({ initPage: initFriendsPage })
+  usePage({ initPage: initFriendsPage });
   return (
     <div className="App">
       <Helmet>
         <meta charSet="utf-8" />
         <title>Список друзей</title>
-        <meta name="description" content="Страница со списком друзей и с информацией о пользователе"/>
+        <meta
+          name="description"
+          content="Страница со списком друзей и с информацией о пользователе"
+        />
       </Helmet>
       <Header />
       {user ? (
         <>
           <h3>Информация о пользователе:</h3>{' '}
           <p>
-            {user.name} {user.secondName}
+            {user.first_name} {user.second_name}
           </p>
         </>
       ) : (
@@ -47,13 +50,13 @@ export const FriendsPage = () => {
         </ul>
       )}
     </div>
-  )
-}
+  );
+};
 
 export const initFriendsPage = ({ dispatch, state }: PageInitArgs) => {
-  const queue: Array<Promise<unknown>> = [dispatch(fetchFriendsThunk())]
+  const queue: Array<Promise<unknown>> = [dispatch(fetchFriendsThunk())];
   if (!selectUser(state)) {
-    queue.push(dispatch(fetchUserThunk()))
+    queue.push(dispatch(fetchUserThunk()));
   }
-  return Promise.all(queue)
-}
+  return Promise.all(queue);
+};
