@@ -1,7 +1,7 @@
 import { type FC, type MouseEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FormikProvider, useFormik } from 'formik';
 import * as Yup from 'yup';
+import { FormikProvider, useFormik } from 'formik';
 import type { IAuthorizationForm } from '../../types';
 import {
   REGEX,
@@ -11,6 +11,7 @@ import {
 } from '../../validations';
 import { Fields } from '../../fields';
 import { ROUTES } from '../../routes';
+
 import styles from './styles.module.scss';
 
 const INITIAL_VALUES: IAuthorizationForm = {

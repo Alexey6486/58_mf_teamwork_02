@@ -1,6 +1,6 @@
 import { type FC } from 'react';
-import { ROUTES } from '../../routes';
 import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '../../routes';
 
 import styles from './styles.module.scss';
 

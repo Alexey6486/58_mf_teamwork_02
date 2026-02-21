@@ -1,14 +1,14 @@
 import type { AppDispatch, RootState } from './store';
-
 import { initMainPage, MainPage } from './pages/Main';
 import {
   AuthorizationPage,
   PasswordChange,
   ProfilePage,
   RegistrationPage,
+  initNotFoundPage,
+  NotFoundPage,
 } from './pages';
 import { initFriendsPage, FriendsPage } from './pages/FriendsPage';
-import { initNotFoundPage, NotFoundPage } from './pages/error/NotFound';
 
 export type PageInitContext = {
   clientToken?: string;
