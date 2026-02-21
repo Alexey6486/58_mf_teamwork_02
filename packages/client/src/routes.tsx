@@ -1,7 +1,12 @@
 import type { AppDispatch, RootState } from './store';
 
 import { initMainPage, MainPage } from './pages/Main';
-import { PasswordChange, ProfilePage } from './pages';
+import {
+  AuthorizationPage,
+  PasswordChange,
+  ProfilePage,
+  RegistrationPage,
+} from './pages';
 import { initFriendsPage, FriendsPage } from './pages/FriendsPage';
 import { initNotFoundPage, NotFoundPage } from './pages/error/NotFound';
 
@@ -19,6 +24,8 @@ export const ROUTES = {
   main: '/',
   profile: '/profile',
   password: '/profile/password',
+  authorization: '/authorization',
+  registration: '/registration',
 };
 
 export const routes = [
@@ -30,6 +37,16 @@ export const routes = [
   {
     path: ROUTES.password,
     Component: PasswordChange,
+    fetchData: () => null,
+  },
+  {
+    path: ROUTES.authorization,
+    Component: AuthorizationPage,
+    fetchData: () => null,
+  },
+  {
+    path: ROUTES.registration,
+    Component: RegistrationPage,
     fetchData: () => null,
   },
   {
