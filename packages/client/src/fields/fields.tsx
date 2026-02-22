@@ -84,10 +84,12 @@ const TextField =
     return (
       <>
         {label && (
-          <label className="mb-2 text-black dark:text-white">{label}</label>
+          <label className="mb-2 text-main-black dark:text-main-white">
+            {label}
+          </label>
         )}
         <input
-          className="text-black p-1"
+          className="text-main-black p-3 shadow-inset-light dark:bg-input-dark dark:shadow-inset-dark rounded-main-radius"
           name={field.name}
           type={type}
           onChange={handleChange}
@@ -96,12 +98,12 @@ const TextField =
           onBlur={handleBlur}
         />
         {error?.error && error?.helperText && (
-          <div className="mt-2 text-red-500 dark:text-red-400">
+          <div className="mt-1 text-main-red-light dark:text-main-red-dark">
             {error?.helperText}
           </div>
         )}
         {characterLimit && showTextCounter && (
-          <div className="mt-2 text-black dark:text-white">{`${
+          <div className="mt-1 text-main-black dark:text-main-white">{`${
             (field.value || '').length
           }/${characterLimit}`}</div>
         )}

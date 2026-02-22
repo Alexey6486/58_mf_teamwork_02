@@ -1,6 +1,5 @@
 import type { AppDispatch, RootState } from './store';
 import { useParams } from 'react-router-dom';
-import { initMainPage, MainPage } from './pages/Main';
 import {
   AuthorizationPage,
   PasswordChange,
@@ -47,8 +46,8 @@ export const routes = [
   },
   {
     path: ROUTES.main,
-    Component: MainPage,
-    fetchData: initMainPage,
+    Component: () => <div>Main</div>,
+    fetchData: () => null,
   },
   {
     path: ROUTES.profile,

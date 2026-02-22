@@ -11,6 +11,17 @@ import {
 } from '../../validations';
 import { Fields } from '../../fields';
 import { ROUTES } from '../../routes';
+import {
+  APP_TITLE_CLASS,
+  BTN_CLASS,
+  BTN_GROUP_CLASS,
+  FIELD_CLASS,
+  FIELD_GROUP_CLASS,
+  FORM_CONTAINER_CLASS,
+  FORM_PAGE_CONTAINER_CLASS,
+  FORM_TITLE_CLASS,
+  FORM_WRAPPER_CLASS,
+} from '../../constants/style-groups';
 
 const INITIAL_VALUES: IAuthorizationForm = {
   login: '',
@@ -50,32 +61,28 @@ export const AuthorizationPage: FC = () => {
   };
 
   return (
-    <div className="bg-cyan-200 h-screen flex justify-center items-center dark:bg-cyan-950">
-      <div className="bg-slate-50 flex flex-col p-10 justify-center items-center w-80 border rounded shadow-lg dark:bg-slate-600">
-        <h3 className="mb-6 text-lg font-bold text-black dark:text-white">
-          Авторизация
-        </h3>
-        <div className="flex flex-col justify-between h-min-72 text-gray-400 dark:text-white">
+    <div className={FORM_PAGE_CONTAINER_CLASS}>
+      <div className={FORM_CONTAINER_CLASS}>
+        <h3 className={APP_TITLE_CLASS}>Flip 7</h3>
+        <div className={FORM_WRAPPER_CLASS}>
           <FormikProvider value={formik}>
-            <div className="flex flex-col mb-6">
-              <div className="flex flex-col mb-6">
+            <div className={FIELD_GROUP_CLASS}>
+              <div className={FIELD_CLASS}>
                 <Fields.Text name="login" type="text" label="Логин" />
               </div>
-              <div className="flex flex-col">
+              <div className={FIELD_CLASS}>
                 <Fields.Text name="password" type="password" label="Пароль" />
               </div>
             </div>
 
-            <div className="mt-6">
+            <div className={BTN_GROUP_CLASS}>
               <button
-                className="text-black p-1 border rounded bg-sky-300 mb-6 w-full dark:bg-sky-900 dark:text-white"
+                className={BTN_CLASS}
                 type="submit"
                 onClick={onSubmitForm}>
                 Авторизоваться
               </button>
-              <button
-                className="text-black p-1 border rounded bg-sky-300 w-full dark:bg-sky-900 dark:text-white"
-                onClick={toRegistration}>
+              <button className={BTN_CLASS} onClick={toRegistration}>
                 Зарегистрироваться
               </button>
             </div>
