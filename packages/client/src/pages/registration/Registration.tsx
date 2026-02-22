@@ -2,21 +2,19 @@ import { type FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../routes';
 
-import styles from './styles.module.scss';
-
 export const RegistrationPage: FC = () => {
   const navigate = useNavigate();
 
   const toAuthorization = () => {
-    navigate(ROUTES.authorization);
+    navigate(ROUTES.login);
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.wrapper}>
+    <div className="">
+      <div className="">
         <h3>Регистрация</h3>
-        <div className={styles.form}>
-          <div className={styles.buttons}>
+        <div className="">
+          <div className="">
             <button onClick={toAuthorization}>Назад</button>
           </div>
         </div>

@@ -22,10 +22,10 @@ export type PageInitArgs = {
 };
 
 export const ROUTES = {
-  main: '/',
+  main: '/main',
   profile: '/profile',
   password: '/profile/password',
-  login: '/login',
+  login: '/',
   signup: '/sign-up',
   game: '/game',
   leaderboard: '/leaderboard',

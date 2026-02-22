@@ -12,8 +12,6 @@ import {
 import { Fields } from '../../fields';
 import { ROUTES } from '../../routes';
 
-import styles from './styles.module.scss';
-
 const INITIAL_VALUES: IAuthorizationForm = {
   login: '',
   password: '',
@@ -48,27 +46,38 @@ export const AuthorizationPage: FC = () => {
   };
 
   const toRegistration = () => {
-    navigate(ROUTES.registration);
+    navigate(ROUTES.signup);
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.wrapper}>
-        <h3>Авторизация</h3>
-        <div className={styles.form}>
+    <div className="bg-cyan-200 h-screen flex justify-center items-center dark:bg-cyan-950">
+      <div className="bg-slate-50 flex flex-col p-10 justify-center items-center w-80 border rounded shadow-lg dark:bg-slate-600">
+        <h3 className="mb-6 text-lg font-bold text-black dark:text-white">
+          Авторизация
+        </h3>
+        <div className="flex flex-col justify-between h-min-72 text-gray-400 dark:text-white">
           <FormikProvider value={formik}>
-            <div className={styles.field}>
-              <Fields.Text name="login" type="text" label="Логин" />
-            </div>
-            <div className={styles.field}>
-              <Fields.Text name="password" type="password" label="Пароль" />
+            <div className="flex flex-col mb-6">
+              <div className="flex flex-col mb-6">
+                <Fields.Text name="login" type="text" label="Логин" />
+              </div>
+              <div className="flex flex-col">
+                <Fields.Text name="password" type="password" label="Пароль" />
+              </div>
             </div>
 
-            <div className={styles.buttons}>
-              <button type="submit" onClick={onSubmitForm}>
+            <div className="mt-6">
+              <button
+                className="text-black p-1 border rounded bg-sky-300 mb-6 w-full dark:bg-sky-900 dark:text-white"
+                type="submit"
+                onClick={onSubmitForm}>
                 Авторизоваться
               </button>
-              <button onClick={toRegistration}>Зарегистрироваться</button>
+              <button
+                className="text-black p-1 border rounded bg-sky-300 w-full dark:bg-sky-900 dark:text-white"
+                onClick={toRegistration}>
+                Зарегистрироваться
+              </button>
             </div>
           </FormikProvider>
         </div>
