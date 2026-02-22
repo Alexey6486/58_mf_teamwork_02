@@ -1,4 +1,5 @@
 import type { AppDispatch, RootState } from './store';
+import { useParams } from 'react-router-dom';
 import { initMainPage, MainPage } from './pages/Main';
 import {
   AuthorizationPage,
@@ -7,8 +8,8 @@ import {
   RegistrationPage,
   initNotFoundPage,
   NotFoundPage,
+  Error500,
 } from './pages';
-import { initFriendsPage, FriendsPage } from './pages/FriendsPage';
 
 export type PageInitContext = {
   clientToken?: string;
@@ -24,11 +25,31 @@ export const ROUTES = {
   main: '/',
   profile: '/profile',
   password: '/profile/password',
-  authorization: '/authorization',
-  registration: '/registration',
+  login: '/login',
+  signup: '/sign-up',
+  game: '/game',
+  leaderboard: '/leaderboard',
+  forum: '/forum',
+  topic: '/forum/:topicId',
+  error500: '/error',
 };
 
 export const routes = [
+  {
+    path: ROUTES.login,
+    Component: AuthorizationPage,
+    fetchData: () => null,
+  },
+  {
+    path: ROUTES.signup,
+    Component: RegistrationPage,
+    fetchData: () => null,
+  },
+  {
+    path: ROUTES.main,
+    Component: MainPage,
+    fetchData: initMainPage,
+  },
   {
     path: ROUTES.profile,
     Component: ProfilePage,
@@ -40,24 +61,29 @@ export const routes = [
     fetchData: () => null,
   },
   {
-    path: ROUTES.authorization,
-    Component: AuthorizationPage,
+    path: ROUTES.game,
+    Component: () => <div>GAME</div>,
     fetchData: () => null,
   },
   {
-    path: ROUTES.registration,
-    Component: RegistrationPage,
+    path: ROUTES.leaderboard,
+    Component: () => <div>Leader Board</div>,
     fetchData: () => null,
   },
   {
-    path: ROUTES.main,
-    Component: MainPage,
-    fetchData: initMainPage,
+    path: ROUTES.forum,
+    Component: () => <div>Forum</div>,
+    fetchData: () => null,
   },
   {
-    path: '/friends',
-    Component: FriendsPage,
-    fetchData: initFriendsPage,
+    path: ROUTES.topic,
+    Component: () => <div>Topic number {useParams().topicId}</div>,
+    fetchData: () => null,
+  },
+  {
+    path: ROUTES.error500,
+    Component: Error500,
+    fetchData: () => null,
   },
   {
     path: '*',
