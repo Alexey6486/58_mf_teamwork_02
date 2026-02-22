@@ -23,7 +23,6 @@ import {
   BTN_CLASS,
   BTN_GROUP_CLASS,
   FIELD_CLASS,
-  FIELD_GROUP_CLASS,
   FORM_CONTAINER_CLASS,
   FORM_PAGE_CONTAINER_CLASS,
   FORM_TITLE_CLASS,
@@ -96,13 +95,7 @@ export const ProfilePage: FC = () => {
   const toPasswordChange = () => {
     navigate(ROUTES.password);
   };
-  // position: relative;
-  // width: 100px;
-  // height: 100px;
-  // border-radius: 50%;
-  // background-color: #dedede;
-  // cursor: pointer;
-  // overflow: hidden;
+
   return (
     <div className={FORM_PAGE_CONTAINER_CLASS}>
       <div className={FORM_CONTAINER_CLASS}>

@@ -19,7 +19,6 @@ import {
   FIELD_GROUP_CLASS,
   FORM_CONTAINER_CLASS,
   FORM_PAGE_CONTAINER_CLASS,
-  FORM_TITLE_CLASS,
   FORM_WRAPPER_CLASS,
 } from '../../constants/style-groups';
 
