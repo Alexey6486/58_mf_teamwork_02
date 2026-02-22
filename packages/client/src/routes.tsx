@@ -3,8 +3,9 @@ import type { AppDispatch, RootState } from './store';
 import { initMainPage, MainPage } from './pages/Main';
 import { PasswordChange, ProfilePage } from './pages';
 // import { initFriendsPage, FriendsPage } from './pages/FriendsPage';
-import { initNotFoundPage, NotFoundPage } from './pages/NotFound';
 import { useParams } from 'react-router-dom';
+import { initNotFoundPage, NotFoundPage } from './pages/error/NotFound';
+import { Error500 } from './pages/error/Error500'
 
 export type PageInitContext = {
   clientToken?: string;
@@ -77,7 +78,7 @@ export const routes = [
   },
   {
     path: ROUTES.error500,
-    Component: () => <div>Error500</div>,
+    Component: Error500,
     fetchData: () => null,
   },
   // {
@@ -89,5 +90,5 @@ export const routes = [
     path: '*',
     Component: NotFoundPage,
     fetchData: initNotFoundPage,
-  },
+  }
 ];
