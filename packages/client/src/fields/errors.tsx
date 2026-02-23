@@ -1,5 +1,4 @@
 import { type ReactNode } from 'react';
-import { isArray } from 'lodash-es';
 import { type FieldMetaProps, isObject } from 'formik';
 
 interface IError {
@@ -13,7 +12,7 @@ export const getError = (
 ): IError => {
   const text = meta.error || meta.initialError;
   const isError = (meta.touched || meta.initialTouched) && Boolean(text);
-  const errorText = isArray(text)
+  const errorText = Array.isArray(text)
     ? text.map(item => <span>{item}</span>)
     : isObject(text)
     ? Object.values(text)

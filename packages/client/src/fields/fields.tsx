@@ -89,7 +89,7 @@ const TextField =
           </label>
         )}
         <input
-          className="text-main-black p-3 shadow-inset-light dark:bg-input-dark dark:shadow-inset-dark rounded-main-radius"
+          className="w-72 text-main-black p-3 shadow-inset-light dark:bg-input-dark dark:shadow-inset-dark rounded-main-radius"
           name={field.name}
           type={type}
           onChange={handleChange}
@@ -98,7 +98,7 @@ const TextField =
           onBlur={handleBlur}
         />
         {error?.error && error?.helperText && (
-          <div className="mt-1 text-main-red-light dark:text-main-red-dark">
+          <div className="w-72 mt-1 text-main-red-light dark:text-main-red-dark">
             {error?.helperText}
           </div>
         )}

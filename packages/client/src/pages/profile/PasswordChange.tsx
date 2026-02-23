@@ -12,7 +12,7 @@ import {
   confirmedPasswordValidation,
 } from '../../validations';
 import { useDispatch } from 'react-redux';
-import { type AppDispatch } from '../../store';
+import { type AppDispatch } from '../../store/store';
 import { Fields } from '../../fields';
 import { ROUTES } from '../../routes';
 import {

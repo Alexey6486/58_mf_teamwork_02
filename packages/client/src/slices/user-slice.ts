@@ -1,5 +1,5 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import type { RootState } from '../store';
+import type { RootState } from '../store/store';
 import type { IUser, IUserPassword } from '../types';
 import {
   URL_AVATAR,
@@ -10,9 +10,6 @@ import {
 } from '../constants/urls';
 import { ERequestMethods } from '../enums';
 import { thunkCreator } from './thunk-creator';
-
-// TODO разобораться с этими переменными
-// import { SERVER_HOST } from '../constants'
 
 interface UserState {
   data: Partial<IUser> | null;
@@ -61,8 +58,8 @@ export const changeUserDataThunk = thunkCreator<Partial<IUser>, Partial<IUser>>(
   }
 );
 
-export const changeUserAvatar = thunkCreator<Partial<IUser>, FormData>(
-  'user/changeUserAvatar',
+export const changeUserAvatarThunk = thunkCreator<Partial<IUser>, FormData>(
+  'user/changeUserAvatarThunk',
   async avatar => {
     return fetch(`${URL_BASE}${URL_AVATAR}`, {
       method: ERequestMethods.PUT,
@@ -89,7 +86,11 @@ export const changeUserPasswordThunk = thunkCreator<
 export const userSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {},
+  reducers: {
+    setUsers: (state, { payload }: PayloadAction<Partial<IUser>>) => {
+      state.data = payload;
+    },
+  },
   extraReducers: builder => {
     builder
       // Handle fetch user data
@@ -124,17 +125,17 @@ export const userSlice = createSlice({
       })
 
       // Handle user avatar change
-      .addCase(changeUserAvatar.pending.type, state => {
+      .addCase(changeUserAvatarThunk.pending.type, state => {
         state.isLoading = true;
       })
       .addCase(
-        changeUserAvatar.fulfilled.type,
+        changeUserAvatarThunk.fulfilled.type,
         (state, { payload }: PayloadAction<Partial<IUser>>) => {
           state.data = payload;
           state.isLoading = false;
         }
       )
-      .addCase(changeUserAvatar.rejected.type, state => {
+      .addCase(changeUserAvatarThunk.rejected.type, state => {
         state.isLoading = false;
       })
 
@@ -151,6 +152,7 @@ export const userSlice = createSlice({
   },
 });
 
+export const { setUsers } = userSlice.actions;
 export const selectUser = (state: RootState) => state.user.data;
 
 export default userSlice.reducer;

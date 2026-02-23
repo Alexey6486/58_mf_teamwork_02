@@ -17,9 +17,9 @@ import {
   createFetchRequest,
   createUrl,
 } from './entry-server.utils';
-import { reducer } from './store';
+import { reducer } from './store/store';
 import { routes } from './routes';
-import { setPageHasBeenInitializedOnServer } from './slices/ssrSlice';
+import { setPageHasBeenInitializedOnServer } from './slices/ssr-slice';
 
 export const render = async (req: ExpressRequest) => {
   const { query, dataRoutes } = createStaticHandler(routes);

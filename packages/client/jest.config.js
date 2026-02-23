@@ -9,4 +9,7 @@ export default {
     __SERVER_PORT__: process.env.SERVER_PORT,
     __EXTERNAL_SERVER_URL__: Number(process.env.SERVER_PORT) || 3001,
   },
+  moduleNameMapper: {
+    '\\.(css|scss|sass)$': 'identity-obj-proxy'
+  }
 };

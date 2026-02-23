@@ -11,6 +11,10 @@ export default {
         'outer-light': '0px 0px 4px 1px rgba(0,0,0,0.1)',
         'outer-dark': '0px 0px 6px 1px rgba(0,0,0,0.2)',
       },
+      fill: {
+        'path-light': 'rgb(30, 41, 59)',
+        'path-dark': 'rgb(248, 250, 252)',
+      },
       borderColor: {
         'btn-light': 'rgb(3, 105, 161)',
         'btn-dark': 'rgb(30, 41, 59)',
