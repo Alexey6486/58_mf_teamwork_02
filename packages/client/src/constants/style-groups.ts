@@ -1,10 +1,11 @@
 export const FORM_PAGE_CONTAINER_CLASS =
   'h-screen flex justify-center items-center bg-main-light dark:bg-main-dark';
 export const FORM_CONTAINER_CLASS =
-  'flex flex-col justify-center items-center min-w-96 p-10 bg-form-light bg-form-light border border-form-light rounded-main-radius shadow-outer-light dark:shadow-outer-dark dark:bg-form-dark dark:border-form-dark';
+  'relative flex flex-col justify-center items-center min-w-96 p-10 bg-form-light bg-form-light border border-form-light rounded-main-radius shadow-outer-light dark:shadow-outer-dark dark:bg-form-dark dark:border-form-dark';
 export const FORM_WRAPPER_CLASS =
   'flex flex-col justify-between w-full h-min-72';
 export const FIELD_CLASS = 'flex flex-col mb-6 last:mb-0';
+export const FIELD_PR_CLASS = 'flex flex-col mb-6 mr-4 last:mr-0';
 export const FIELD_GROUP_CLASS = 'flex flex-col';
 export const BTN_GROUP_CLASS =
   'mt-10 flex flex-col justify-center items-center';
