@@ -52,6 +52,8 @@ module.exports = {
     ]
   },
   ignorePatterns: [
-    "packages/client/server/index.js"
+    "packages/client/server/index.js",
+    "packages/client/dist",
+    "packages/server/dist"
   ]
 }
