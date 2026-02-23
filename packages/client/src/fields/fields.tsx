@@ -12,7 +12,6 @@ import {
 } from 'formik';
 import { getError } from './errors';
 import type { FieldMetaProps } from 'formik/dist/types';
-import styles from './styles.module.scss';
 
 export interface IInputProps {
   disabled?: boolean;
@@ -40,9 +39,7 @@ const TextField =
     showTextCounter,
     onChangeShowCounter,
     type,
-  }: // placeholder,
-  // disabled,
-  FieldAttributes<TextFieldProps> & {
+  }: FieldAttributes<TextFieldProps> & {
     showTextCounter: boolean;
     onChangeShowCounter: (value: boolean) => void;
   }) =>
@@ -86,9 +83,13 @@ const TextField =
 
     return (
       <>
-        {label && <label className={styles.label}>{label}</label>}
+        {label && (
+          <label className="mb-2 text-main-black dark:text-main-white">
+            {label}
+          </label>
+        )}
         <input
-          className={styles.input}
+          className="text-main-black p-3 shadow-inset-light dark:bg-input-dark dark:shadow-inset-dark rounded-main-radius"
           name={field.name}
           type={type}
           onChange={handleChange}
@@ -97,10 +98,12 @@ const TextField =
           onBlur={handleBlur}
         />
         {error?.error && error?.helperText && (
-          <div className={styles.error}>{error?.helperText}</div>
+          <div className="mt-1 text-main-red-light dark:text-main-red-dark">
+            {error?.helperText}
+          </div>
         )}
         {characterLimit && showTextCounter && (
-          <div className={styles.limit}>{`${
+          <div className="mt-1 text-main-black dark:text-main-white">{`${
             (field.value || '').length
           }/${characterLimit}`}</div>
         )}

@@ -1,11 +1,14 @@
 import type { AppDispatch, RootState } from './store';
-
-import { initMainPage, MainPage } from './pages/Main';
-import { PasswordChange, ProfilePage } from './pages';
-// import { initFriendsPage, FriendsPage } from './pages/FriendsPage';
 import { useParams } from 'react-router-dom';
-import { initNotFoundPage, NotFoundPage } from './pages/error/NotFound';
-import { Error500 } from './pages/error/Error500'
+import {
+  AuthorizationPage,
+  PasswordChange,
+  ProfilePage,
+  RegistrationPage,
+  initNotFoundPage,
+  NotFoundPage,
+  Error500,
+} from './pages';
 
 export type PageInitContext = {
   clientToken?: string;
@@ -18,10 +21,10 @@ export type PageInitArgs = {
 };
 
 export const ROUTES = {
-  main: '/',
+  main: '/main',
   profile: '/profile',
   password: '/profile/password',
-  login: '/login',
+  login: '/',
   signup: '/sign-up',
   game: '/game',
   leaderboard: '/leaderboard',
@@ -33,18 +36,18 @@ export const ROUTES = {
 export const routes = [
   {
     path: ROUTES.login,
-    Component: () => <div>LoginPage</div>,
+    Component: AuthorizationPage,
     fetchData: () => null,
   },
   {
     path: ROUTES.signup,
-    Component: () => <div>Signup</div>,
+    Component: RegistrationPage,
     fetchData: () => null,
   },
   {
     path: ROUTES.main,
-    Component: MainPage,
-    fetchData: initMainPage,
+    Component: () => <div>Main</div>,
+    fetchData: () => null,
   },
   {
     path: ROUTES.profile,
@@ -81,14 +84,9 @@ export const routes = [
     Component: Error500,
     fetchData: () => null,
   },
-  // {
-  //   path: '/friends',
-  //   Component: requireAuth(FriendsPage),
-  //   fetchData: initFriendsPage,
-  // },
   {
     path: '*',
     Component: NotFoundPage,
     fetchData: initNotFoundPage,
-  }
+  },
 ];

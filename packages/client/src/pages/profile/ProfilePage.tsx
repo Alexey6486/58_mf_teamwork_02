@@ -19,7 +19,15 @@ import {
 import type { IUser } from '../../types';
 import { URL_BASE_IMG } from '../../constants/urls';
 import { ROUTES } from '../../routes';
-import styles from './styles.module.scss';
+import {
+  BTN_CLASS,
+  BTN_GROUP_CLASS,
+  FIELD_CLASS,
+  FORM_CONTAINER_CLASS,
+  FORM_PAGE_CONTAINER_CLASS,
+  FORM_TITLE_CLASS,
+  FORM_WRAPPER_CLASS,
+} from '../../constants/style-groups';
 
 const INITIAL_VALUES: Partial<IUser> = {
   first_name: '',
@@ -89,81 +97,98 @@ export const ProfilePage: FC = () => {
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.wrapper}>
-        <h3>Профиль</h3>
-        <div className={styles.form}>
-          <div className={styles.avatar}>
-            <div className={styles.image}>
+    <div className={FORM_PAGE_CONTAINER_CLASS}>
+      <div className={FORM_CONTAINER_CLASS}>
+        <h3 className={FORM_TITLE_CLASS}>Профиль</h3>
+        <div className={FORM_WRAPPER_CLASS}>
+          <div className="w-full flex flex-col justify-center items-center mb-5">
+            <div className="relative w-[100px] h-[100px] rounded-full bg-gray-200 cursor-pointer overflow-hidden group">
               <input
                 type="file"
                 accept="image/*"
                 onChange={handleAvatarChange}
+                className="relative z-30 opacity-0 w-full h-full cursor-pointer"
               />
-              <div className={styles.mask}>Поменять аватар</div>
+              <div className="absolute top-0 left-0 z-20 hidden group-hover:flex flex items-center justify-center w-full h-full bg-black/20 break-anywhere text-white text-center">
+                Поменять аватар
+              </div>
               {user?.avatar && (
-                <img src={`${URL_BASE_IMG}${user.avatar}`} alt="avatar" />
+                <img
+                  className="absolute top-0 left-0 z-10 w-full h-full"
+                  src={`${URL_BASE_IMG}${user.avatar}`}
+                  alt="avatar"
+                />
               )}
             </div>
           </div>
 
           <FormikProvider value={formik}>
-            <div className={styles.field}>
-              <Fields.Text
-                name="first_name"
-                type="text"
-                label="Имя"
-                placeholder="Имя"
-                characterLimit={10}
-              />
+            <div className="flex">
+              <div className="mr-8">
+                <div className={FIELD_CLASS}>
+                  <Fields.Text
+                    name="first_name"
+                    type="text"
+                    label="Имя"
+                    placeholder="Имя"
+                    characterLimit={10}
+                  />
+                </div>
+                <div className={FIELD_CLASS}>
+                  <Fields.Text
+                    name="second_name"
+                    type="text"
+                    label="Фамилия"
+                    placeholder="Фамилия"
+                  />
+                </div>
+                <div className={FIELD_CLASS}>
+                  <Fields.Text
+                    name="display_name"
+                    type="text"
+                    label="Ник"
+                    placeholder="Ник"
+                  />
+                </div>
+              </div>
+              <div>
+                <div className={FIELD_CLASS}>
+                  <Fields.Text
+                    name="login"
+                    type="text"
+                    label="Логин"
+                    placeholder="Логин"
+                  />
+                </div>
+                <div className={FIELD_CLASS}>
+                  <Fields.Text
+                    name="email"
+                    type="email"
+                    label="Почта"
+                    placeholder="Почта"
+                  />
+                </div>
+                <div className={FIELD_CLASS}>
+                  <Fields.Text
+                    name="phone"
+                    type="text"
+                    label="Телефон"
+                    placeholder="Телефон"
+                  />
+                </div>
+              </div>
             </div>
-            <div className={styles.field}>
-              <Fields.Text
-                name="second_name"
-                type="text"
-                label="Фамилия"
-                placeholder="Фамилия"
-              />
-            </div>
-            <div className={styles.field}>
-              <Fields.Text
-                name="display_name"
-                type="text"
-                label="Ник"
-                placeholder="Ник"
-              />
-            </div>
-            <div className={styles.field}>
-              <Fields.Text
-                name="login"
-                type="text"
-                label="Логин"
-                placeholder="Логин"
-              />
-            </div>
-            <div className={styles.field}>
-              <Fields.Text
-                name="email"
-                type="email"
-                label="Почта"
-                placeholder="Почта"
-              />
-            </div>
-            <div className={styles.field}>
-              <Fields.Text
-                name="phone"
-                type="text"
-                label="Телефон"
-                placeholder="Телефон"
-              />
-            </div>
-
-            <div className={styles.buttons}>
-              <button type="submit" onClick={onSubmitForm}>
+            <div className={BTN_GROUP_CLASS}>
+              <button
+                className={BTN_CLASS}
+                type="submit"
+                onClick={onSubmitForm}>
                 Сохранить
               </button>
-              <button onClick={toPasswordChange}>Изменить пароль</button>
-              <button>Назад</button>
+              <button className={BTN_CLASS} onClick={toPasswordChange}>
+                Изменить пароль
+              </button>
+              <button className={BTN_CLASS}>Назад</button>
             </div>
           </FormikProvider>
         </div>
