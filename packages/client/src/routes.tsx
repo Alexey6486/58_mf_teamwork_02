@@ -1,5 +1,5 @@
-import type { AppDispatch, RootState } from './store';
-import { useParams } from 'react-router-dom';
+import type { AppDispatch, RootState } from './store/store';
+import { Navigate, useLocation, useParams } from 'react-router-dom';
 import {
   AuthorizationPage,
   PasswordChange,
@@ -10,6 +10,8 @@ import {
   Error500,
   GamePage,
 } from './pages';
+import { useIsAuthed } from './hooks';
+import { useEffect, useState } from 'react';
 
 export type PageInitContext = {
   clientToken?: string;
@@ -34,6 +36,27 @@ export const ROUTES = {
   error500: '/error',
 };
 
+const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
+  const location = useLocation();
+  const { isAuthed } = useIsAuthed();
+
+  const [shouldNavigate, setShouldNavigate] = useState(false);
+
+  useEffect(() => {
+    setShouldNavigate(true);
+  }, []);
+
+  if (shouldNavigate) {
+    if (!isAuthed) {
+      return <Navigate to={ROUTES.login} replace state={{ from: location }} />;
+    }
+
+    return children;
+  }
+
+  return null;
+};
+
 export const routes = [
   {
     path: ROUTES.login,
@@ -52,17 +75,29 @@ export const routes = [
   },
   {
     path: ROUTES.profile,
-    Component: ProfilePage,
+    element: (
+      <ProtectedRoute>
+        <ProfilePage />
+      </ProtectedRoute>
+    ),
     fetchData: () => null,
   },
   {
     path: ROUTES.password,
-    Component: PasswordChange,
+    element: (
+      <ProtectedRoute>
+        <PasswordChange />
+      </ProtectedRoute>
+    ),
     fetchData: () => null,
   },
   {
     path: ROUTES.game,
-    Component: GamePage,
+    element: (
+      <ProtectedRoute>
+        <GamePage />
+      </ProtectedRoute>
+    ),
     fetchData: () => null,
   },
   {

@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
-import { useDispatch, useSelector, useStore } from '../store';
+import { useDispatch, useSelector, useStore } from '../store/store';
 import {
   setPageHasBeenInitializedOnServer,
   selectPageHasBeenInitializedOnServer,
-} from '../slices/ssrSlice';
+} from '../slices/ssr-slice';
 import type { PageInitArgs, PageInitContext } from '../routes';
 
 const getCookie = (name: string) => {

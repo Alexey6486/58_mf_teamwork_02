@@ -98,7 +98,7 @@ const TextField =
           onBlur={handleBlur}
         />
         {error?.error && error?.helperText && (
-          <div className="mt-1 text-main-red-light dark:text-main-red-dark">
+          <div className="max-w-72 mt-1 text-main-red-light dark:text-main-red-dark">
             {error?.helperText}
           </div>
         )}

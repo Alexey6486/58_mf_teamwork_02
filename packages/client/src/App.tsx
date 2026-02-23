@@ -1,4 +1,4 @@
-import { useSelector } from './store';
+import { useSelector } from './store/store';
 
 import { selectUser } from './slices/user-slice';
 

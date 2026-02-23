@@ -1,4 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { safeJsonParse } from '../utils';
 
 export const thunkCreator = <T, P = void>(
   typePrefix: string,
@@ -27,7 +28,7 @@ export const thunkCreator = <T, P = void>(
           });
         }
 
-        return await response.json();
+        return await safeJsonParse(response);
       } catch (error: unknown) {
         let errorMessage = 'Network error.';
 

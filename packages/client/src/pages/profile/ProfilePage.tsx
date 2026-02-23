@@ -10,9 +10,9 @@ import {
   REGEX,
   VALIDATION_MSG,
 } from '../../validations';
-import { type AppDispatch, useSelector } from '../../store';
+import { type AppDispatch, useSelector } from '../../store/store';
 import {
-  changeUserAvatar,
+  changeUserAvatarThunk,
   changeUserDataThunk,
   selectUser,
 } from '../../slices/user-slice';
@@ -28,6 +28,7 @@ import {
   FORM_TITLE_CLASS,
   FORM_WRAPPER_CLASS,
 } from '../../constants/style-groups';
+import { logoutThunk } from '../../slices/auth-slice';
 
 const INITIAL_VALUES: Partial<IUser> = {
   first_name: '',
@@ -88,12 +89,20 @@ export const ProfilePage: FC = () => {
     ) {
       const formData = new FormData();
       formData.append('avatar', event.target.files[0]);
-      dispatch(changeUserAvatar(formData));
+      dispatch(changeUserAvatarThunk(formData));
     }
   };
 
   const toPasswordChange = () => {
     navigate(ROUTES.password);
+  };
+
+  const toMain = () => {
+    navigate(ROUTES.main);
+  };
+
+  const handleLogout = () => {
+    dispatch(logoutThunk());
   };
 
   return (
@@ -188,7 +197,12 @@ export const ProfilePage: FC = () => {
               <button className={BTN_CLASS} onClick={toPasswordChange}>
                 Изменить пароль
               </button>
-              <button className={BTN_CLASS}>Назад</button>
+              <button className={BTN_CLASS} onClick={toMain}>
+                Назад
+              </button>
+              <button className={BTN_CLASS} onClick={handleLogout}>
+                Выйти из профиля
+              </button>
             </div>
           </FormikProvider>
         </div>
