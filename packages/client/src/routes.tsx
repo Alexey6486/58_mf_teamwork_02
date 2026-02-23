@@ -8,6 +8,7 @@ import {
   initNotFoundPage,
   NotFoundPage,
   Error500,
+  GamePage,
 } from './pages';
 
 export type PageInitContext = {
@@ -61,7 +62,7 @@ export const routes = [
   },
   {
     path: ROUTES.game,
-    Component: () => <div>GAME</div>,
+    Component: GamePage,
     fetchData: () => null,
   },
   {
