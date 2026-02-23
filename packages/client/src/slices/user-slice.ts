@@ -86,7 +86,11 @@ export const changeUserPasswordThunk = thunkCreator<
 export const userSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {},
+  reducers: {
+    setUsers: (state, { payload }: PayloadAction<Partial<IUser>>) => {
+      state.data = payload;
+    },
+  },
   extraReducers: builder => {
     builder
       // Handle fetch user data
@@ -148,6 +152,7 @@ export const userSlice = createSlice({
   },
 });
 
+export const { setUsers } = userSlice.actions;
 export const selectUser = (state: RootState) => state.user.data;
 
 export default userSlice.reducer;

@@ -1,4 +1,9 @@
-import { type FC, type MouseEvent, type ChangeEvent } from 'react';
+import {
+  type FC,
+  type MouseEvent,
+  type ChangeEvent,
+  useEffect
+} from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
@@ -15,7 +20,8 @@ import {
   changeUserAvatarThunk,
   changeUserDataThunk,
   selectUser,
-} from '../../slices/user-slice';
+  setUsers
+} from '../../slices/user-slice'
 import type { IUser } from '../../types';
 import { URL_BASE_IMG } from '../../constants/urls';
 import { ROUTES } from '../../routes';
@@ -30,6 +36,7 @@ import {
   FORM_WRAPPER_CLASS
 } from '../../constants/style-groups'
 import { logoutThunk } from '../../slices/auth-slice';
+import { LS_KEY } from '../../constants/auth'
 
 const INITIAL_VALUES: Partial<IUser> = {
   first_name: '',
@@ -105,6 +112,13 @@ export const ProfilePage: FC = () => {
   const handleLogout = () => {
     dispatch(logoutThunk());
   };
+
+  useEffect(() => {
+    const user = localStorage.getItem(LS_KEY);
+    if (user) {
+      dispatch(setUsers(JSON.parse(user)));
+    }
+  }, []);
 
   return (
     <div className={FORM_PAGE_CONTAINER_CLASS}>
