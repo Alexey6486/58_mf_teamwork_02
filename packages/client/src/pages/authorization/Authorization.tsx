@@ -70,7 +70,7 @@ export const AuthorizationPage: FC = () => {
 
   useEffect(() => {
     if (isAuthed || (user !== null && user.id)) {
-      navigate(ROUTES.profile);
+      navigate(ROUTES.main);
     }
   }, [isAuthed, user]);
 

@@ -22,3 +22,5 @@ export const TOGGLE_BTN_INACTIVE_CLASS =
 export const TITLE_CLASS = 'font-bold text-main-blue dark:text-main-white';
 export const APP_TITLE_CLASS = `${TITLE_CLASS} text-5xl mb-12`;
 export const FORM_TITLE_CLASS = `${TITLE_CLASS} text-3xl mb-8 `;
+
+export const BTN_MENU_CLASS = 'w-fit px-10 py-3 hover:bg-btn-light hover:text-white';

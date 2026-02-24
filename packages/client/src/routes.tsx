@@ -9,6 +9,7 @@ import {
   NotFoundPage,
   Error500,
   GamePage,
+  MainPage
 } from './pages';
 import { useIsAuthed } from './hooks';
 import { useEffect, useState } from 'react';
@@ -70,7 +71,11 @@ export const routes = [
   },
   {
     path: ROUTES.main,
-    Component: () => <div>Main</div>,
+    element: (
+      <ProtectedRoute>
+        <MainPage />
+      </ProtectedRoute>
+    ),
     fetchData: () => null,
   },
   {
