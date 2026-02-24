@@ -11,6 +11,14 @@ export const BTN_GROUP_CLASS =
   'mt-10 flex flex-col justify-center items-center';
 export const BTN_CLASS =
   'shadow-md max-w-60 w-full text-main-white p-2 border border-btn-light rounded-main-radius bg-btn-light mb-6 last:mb-0 dark:text-main-white dark:bg-btn-dark dark:border-btn-dark';
+export const COUNTER_BTN_CLASS =
+  'w-8 h-8 rounded-full border border-btn-light bg-btn-light text-main-white dark:bg-btn-dark dark:border-btn-dark disabled:opacity-40';
+export const TOGGLE_BTN_BASE_CLASS =
+  'flex-1 p-2 border rounded-main-radius font-bold transition-colors';
+export const TOGGLE_BTN_ACTIVE_CLASS =
+  'bg-btn-light text-main-white border-btn-light dark:bg-btn-dark dark:border-btn-dark';
+export const TOGGLE_BTN_INACTIVE_CLASS =
+  'bg-transparent text-main-blue border-btn-light dark:text-main-white dark:border-btn-dark';
 export const TITLE_CLASS = 'font-bold text-main-blue dark:text-main-white';
 export const APP_TITLE_CLASS = `${TITLE_CLASS} text-5xl mb-12`;
 export const FORM_TITLE_CLASS = `${TITLE_CLASS} text-3xl mb-8 `;
