@@ -4,3 +4,4 @@ export { AuthorizationPage } from './authorization';
 export { RegistrationPage } from './registration';
 export { NotFoundPage, initNotFoundPage, Error500 } from './error';
 export { GamePage } from './game';
+export { MainPage } from './main';
