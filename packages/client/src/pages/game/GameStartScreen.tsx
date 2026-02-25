@@ -2,18 +2,18 @@ import { type FC, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   APP_TITLE_CLASS,
-  BTN_CLASS,
   BTN_GROUP_CLASS,
   COUNTER_BTN_CLASS,
   FORM_CONTAINER_CLASS,
   FORM_PAGE_CONTAINER_CLASS,
+  FORM_TITLE_CLASS,
   TITLE_CLASS,
   TOGGLE_BTN_ACTIVE_CLASS,
   TOGGLE_BTN_BASE_CLASS,
   TOGGLE_BTN_INACTIVE_CLASS,
 } from '../../constants/style-groups';
+import { Button } from '../../components/Button';
 import { MAX_PLAYERS, MIN_PLAYERS, PlayerType, type GameConfig } from './types';
-import { Modal } from '../../components/Modal';
 import { ROUTES } from '../../routes';
 
 const PLAYER_TYPE_LABELS: Record<PlayerType, string> = {
@@ -27,8 +27,6 @@ type GameStartScreenProps = {
 
 export const GameStartScreen: FC<GameStartScreenProps> = ({ onStart }) => {
   const navigate = useNavigate();
-  const [isRulesOpen, setIsRulesOpen] = useState(false);
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [playerType, setPlayerType] = useState<PlayerType>(PlayerType.Computer);
   const [playerCount, setPlayerCount] = useState(MIN_PLAYERS);
 
@@ -59,66 +57,46 @@ export const GameStartScreen: FC<GameStartScreenProps> = ({ onStart }) => {
           </button>
         </div>
         <h1 className={APP_TITLE_CLASS}>Flip 7</h1>
-        <div className={BTN_GROUP_CLASS}>
-          <button className={BTN_CLASS} onClick={() => setIsSettingsOpen(true)}>
-            Начать игру
-          </button>
-          <button className={BTN_CLASS} onClick={() => setIsRulesOpen(true)}>
-            Правила
-          </button>
-        </div>
-      </div>
-
-      {isSettingsOpen && (
-        <Modal title="Настройки игры" onClose={() => setIsSettingsOpen(false)} closeLabel="Отмена">
-          <div className="flex flex-col gap-6 w-full mb-6">
-            <div className="flex flex-col gap-2 items-center">
-              <span className={`${TITLE_CLASS} text-center`}>Игроки</span>
-              <div className="flex gap-2 w-full">
-                {[PlayerType.Computer, PlayerType.Human].map(type => (
-                  <button
-                    key={type}
-                    className={`${TOGGLE_BTN_BASE_CLASS} ${playerType === type ? TOGGLE_BTN_ACTIVE_CLASS : TOGGLE_BTN_INACTIVE_CLASS}`}
-                    onClick={() => setPlayerType(type)}>
-                    {PLAYER_TYPE_LABELS[type]}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {playerType === PlayerType.Computer && (
-              <div className="flex flex-col gap-2 items-center">
-                <span className={`${TITLE_CLASS} text-center`}>Количество игроков</span>
-                <div className="flex items-center gap-4">
-                  <button
-                    className={COUNTER_BTN_CLASS}
-                    onClick={() => handlePlayerCountChange(-1)}
-                    disabled={playerCount <= MIN_PLAYERS}>
-                    −
-                  </button>
-                  <span className={`${TITLE_CLASS} text-xl w-4 text-center`}>
-                    {playerCount}
-                  </span>
-                  <button
-                    className={COUNTER_BTN_CLASS}
-                    onClick={() => handlePlayerCountChange(1)}
-                    disabled={playerCount >= MAX_PLAYERS}>
-                    +
-                  </button>
-                </div>
-              </div>
-            )}
+        <h2 className={FORM_TITLE_CLASS}>Настройки игры</h2>
+        <div className="flex flex-col gap-6 w-full">
+          <div className="flex gap-2 w-full">
+            {[PlayerType.Computer, PlayerType.Human].map(type => (
+              <button
+                key={type}
+                className={`${TOGGLE_BTN_BASE_CLASS} ${playerType === type ? TOGGLE_BTN_ACTIVE_CLASS : TOGGLE_BTN_INACTIVE_CLASS}`}
+                onClick={() => setPlayerType(type)}>
+                {PLAYER_TYPE_LABELS[type]}
+              </button>
+            ))}
           </div>
 
-          <button className={BTN_CLASS} onClick={handleStart}>
-            Начать игру
-          </button>
-        </Modal>
-      )}
-
-      {isRulesOpen && (
-        <Modal title="Правила игры" onClose={() => setIsRulesOpen(false)} />
-      )}
+          {playerType === PlayerType.Computer && (
+            <div className="flex flex-col gap-2 items-center">
+              <span className={`${TITLE_CLASS} text-center`}>Количество игроков</span>
+              <div className="flex items-center gap-4">
+                <button
+                  className={COUNTER_BTN_CLASS}
+                  onClick={() => handlePlayerCountChange(-1)}
+                  disabled={playerCount <= MIN_PLAYERS}>
+                  −
+                </button>
+                <span className={`${TITLE_CLASS} text-xl w-4 text-center`}>
+                  {playerCount}
+                </span>
+                <button
+                  className={COUNTER_BTN_CLASS}
+                  onClick={() => handlePlayerCountChange(1)}
+                  disabled={playerCount >= MAX_PLAYERS}>
+                  +
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+        <div className={BTN_GROUP_CLASS}>
+          <Button onClick={handleStart} content="Начать игру" />
+        </div>
+      </div>
     </div>
   );
 };
