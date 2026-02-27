@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import type { AppDispatch, RootState } from './store/store';
 import { Navigate, useLocation, useParams } from 'react-router-dom';
 import {
@@ -13,7 +14,6 @@ import {
   LeaderboardPage,
 } from './pages';
 import { useIsAuthed } from './hooks';
-import { useEffect, useState } from 'react';
 
 export type PageInitContext = {
   clientToken?: string;
@@ -62,14 +62,9 @@ const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
 export const routes = [
   {
     path: ROUTES.login,
-    Component: LeaderboardPage,
+    Component: AuthorizationPage,
     fetchData: () => null,
   },
-  // {
-  //   path: ROUTES.login,
-  //   Component: AuthorizationPage,
-  //   fetchData: () => null,
-  // },
   {
     path: ROUTES.signup,
     Component: RegistrationPage,
@@ -113,7 +108,11 @@ export const routes = [
   },
   {
     path: ROUTES.leaderboard,
-    Component: () => <div>Leader Board</div>,
+    element: (
+      <ProtectedRoute>
+        <LeaderboardPage />
+      </ProtectedRoute>
+    ),
     fetchData: () => null,
   },
   {

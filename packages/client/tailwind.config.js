@@ -29,6 +29,7 @@ export default {
         'main-light': '#e0f2fe',
         'main-dark': '#374151',
         'input-dark': '#d1d5db',
+        'row-light': '#f2f2f2',
       },
       borderRadius: {
         'main-radius': '10px',
