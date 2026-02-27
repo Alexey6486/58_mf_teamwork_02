@@ -14,3 +14,12 @@ export interface IUserPassword {
   newPassword: string;
   confirmedPassword: string;
 }
+
+export interface IRegistrationForm extends IUser {
+  newPassword: string;
+  confirmedPassword: string;
+}
+
+export interface IRegistrationDto extends IUser {
+  password: string;
+}

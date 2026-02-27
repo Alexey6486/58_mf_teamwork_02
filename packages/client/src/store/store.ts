@@ -37,7 +37,7 @@ export const store = configureStore({
 });
 
 listenerMiddleware.startListening({
-  predicate: (action) => {
+  predicate: action => {
     return action.type === 'auth/loginThunk/fulfilled';
   },
   effect: async (action, listenerApi) => {
@@ -51,13 +51,27 @@ listenerMiddleware.startListening({
 });
 
 listenerMiddleware.startListening({
-  predicate: (action) => {
+  predicate: action => {
     return action.type === 'auth/logoutThunk/fulfilled';
   },
   effect: async () => {
     try {
       localStorage.removeItem(LS_KEY);
       window.location.replace(ROUTES.login);
+    } catch (error) {
+      console.error('Failed to remove user data:', error);
+    }
+  },
+});
+
+listenerMiddleware.startListening({
+  predicate: action => {
+    return action.type === 'auth/signupThunk/fulfilled';
+  },
+  effect: async (action, listenerApi) => {
+    try {
+      const userData = await listenerApi.dispatch(fetchUserThunk()).unwrap();
+      localStorage.setItem(LS_KEY, JSON.stringify(userData));
     } catch (error) {
       console.error('Failed to fetch user data:', error);
     }

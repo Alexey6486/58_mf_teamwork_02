@@ -23,7 +23,7 @@ import {
   FORM_WRAPPER_CLASS,
 } from '../../constants/style-groups';
 import { type AppDispatch, useSelector } from '../../store/store';
-import { loginThunk } from '../../slices/auth-slice';
+import { loginThunk, logoutThunk } from '../../slices/auth-slice';
 import { selectUser } from '../../slices/user-slice';
 import { useIsAuthed } from '../../hooks';
 
@@ -71,6 +71,8 @@ export const AuthorizationPage: FC = () => {
   useEffect(() => {
     if (isAuthed || (user !== null && user.id)) {
       navigate(ROUTES.main);
+    } else {
+      dispatch(logoutThunk());
     }
   }, [isAuthed, user]);
 

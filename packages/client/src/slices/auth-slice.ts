@@ -1,9 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { IAuthorizationForm, IUser } from '../types';
 import { thunkCreator } from './thunk-creator';
-import { URL_BASE, URL_LOGIN, URL_LOGOUT } from '../constants/urls';
+import { URL_BASE, URL_LOGIN, URL_LOGOUT, URL_SIGNUP } from '../constants/urls';
 import { ERequestMethods } from '../enums';
 import { type RootState } from '../store/store';
+import { type IRegistrationDto } from '../types/user';
 
 interface IAuthState {
   data: IUser | null;
@@ -49,6 +50,20 @@ export const logoutThunk = thunkCreator<string>('auth/logoutThunk', async _ => {
   });
 });
 
+export const signupThunk = thunkCreator<string, Partial<IRegistrationDto>>(
+  'auth/signupThunk',
+  async regForm => {
+    return fetch(`${URL_BASE}${URL_SIGNUP}`, {
+      method: ERequestMethods.POST,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(regForm),
+      credentials: 'include' as RequestCredentials,
+    });
+  }
+);
+
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -79,6 +94,17 @@ export const authSlice = createSlice({
       })
       .addCase(logoutThunk.rejected, state => {
         state.data = null;
+        state.isLoading = false;
+      })
+
+      // Handle signup
+      .addCase(signupThunk.pending, state => {
+        state.isLoading = true;
+      })
+      .addCase(signupThunk.fulfilled, state => {
+        state.isLoading = false;
+      })
+      .addCase(signupThunk.rejected, state => {
         state.isLoading = false;
       });
   },

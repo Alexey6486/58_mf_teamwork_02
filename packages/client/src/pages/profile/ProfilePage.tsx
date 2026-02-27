@@ -1,9 +1,4 @@
-import {
-  type FC,
-  type MouseEvent,
-  type ChangeEvent,
-  useEffect
-} from 'react'
+import { type FC, type MouseEvent, type ChangeEvent, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
@@ -20,9 +15,9 @@ import {
   changeUserAvatarThunk,
   changeUserDataThunk,
   selectUser,
-  setUsers
-} from '../../slices/user-slice'
-import type { IUser } from '../../types';
+  setUsers,
+} from '../../slices/user-slice';
+import { type IUser } from '../../types';
 import { URL_BASE_IMG } from '../../constants/urls';
 import { ROUTES } from '../../routes';
 import {
@@ -33,10 +28,10 @@ import {
   FORM_CONTAINER_CLASS,
   FORM_PAGE_CONTAINER_CLASS,
   FORM_TITLE_CLASS,
-  FORM_WRAPPER_CLASS
-} from '../../constants/style-groups'
+  FORM_WRAPPER_CLASS,
+} from '../../constants/style-groups';
 import { logoutThunk } from '../../slices/auth-slice';
-import { LS_KEY } from '../../constants/auth'
+import { LS_KEY } from '../../constants/auth';
 
 const INITIAL_VALUES: Partial<IUser> = {
   first_name: '',
@@ -125,16 +120,33 @@ export const ProfilePage: FC = () => {
       <div className={FORM_CONTAINER_CLASS}>
         <div className="w-full flex justify-between absolute pl-8 pr-8 top-12 left-0">
           <button onClick={toMain}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-              <title>Arrow-back SVG Icon</title>
-              <path className="fill-path-light dark:fill-path-dark" d="M21 11H6.414l5.293-5.293l-1.414-1.414L2.586 12l7.707 7.707l1.414-1.414L6.414 13H21z"/>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24">
+              <title>To main page</title>
+              <path
+                className="fill-path-light dark:fill-path-dark"
+                d="M21 11H6.414l5.293-5.293l-1.414-1.414L2.586 12l7.707 7.707l1.414-1.414L6.414 13H21z"
+              />
             </svg>
           </button>
           <button onClick={handleLogout}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-              <title>Log-in SVG Icon</title>
-              <path className="fill-path-light dark:fill-path-dark" d="m13 16l5-4l-5-4v3H4v2h9z"/>
-              <path className="fill-path-light dark:fill-path-dark" d="M20 3h-9c-1.103 0-2 .897-2 2v4h2V5h9v14h-9v-4H9v4c0 1.103.897 2 2 2h9c1.103 0 2-.897 2-2V5c0-1.103-.897-2-2-2"/>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24">
+              <title>Logout</title>
+              <path
+                className="fill-path-light dark:fill-path-dark"
+                d="m13 16l5-4l-5-4v3H4v2h9z"
+              />
+              <path
+                className="fill-path-light dark:fill-path-dark"
+                d="M20 3h-9c-1.103 0-2 .897-2 2v4h2V5h9v14h-9v-4H9v4c0 1.103.897 2 2 2h9c1.103 0 2-.897 2-2V5c0-1.103-.897-2-2-2"
+              />
             </svg>
           </button>
         </div>
@@ -170,7 +182,6 @@ export const ProfilePage: FC = () => {
                     type="text"
                     label="Имя"
                     placeholder="Имя"
-                    characterLimit={10}
                   />
                 </div>
                 <div className={FIELD_CLASS}>
