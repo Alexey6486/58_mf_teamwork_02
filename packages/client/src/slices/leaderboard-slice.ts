@@ -103,13 +103,10 @@ export const leaderboardSlice = createSlice({
         state.data = [];
         state.isLoading = true;
       })
-      .addCase(
-        fetchLeaderboardThunk.fulfilled,
-        (state, { payload }: PayloadAction<ILeaderboard[]>) => {
-          state.data = MOCK;
-          state.isLoading = false;
-        }
-      )
+      .addCase(fetchLeaderboardThunk.fulfilled, state => {
+        state.data = MOCK;
+        state.isLoading = false;
+      })
       .addCase(fetchLeaderboardThunk.rejected, state => {
         state.data = [];
         state.isLoading = false;

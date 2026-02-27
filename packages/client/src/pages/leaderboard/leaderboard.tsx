@@ -1,7 +1,6 @@
 import { type FC, memo, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { cloneDeep } from 'lodash-es';
 import {
   fetchLeaderboardThunk,
   selectLeaderboard,
@@ -9,7 +8,7 @@ import {
 } from '../../slices/leaderboard-slice';
 import { type AppDispatch, useSelector } from '../../store/store';
 import { type ILeaderboard, type TSortDirection } from '../../types';
-import { bubbleObjectSort, isArray } from '../../utils';
+import { bubbleObjectSort, cloneDeep, isArray } from '../../utils';
 import {
   FORM_CONTAINER_CLASS,
   FORM_TITLE_CLASS,
