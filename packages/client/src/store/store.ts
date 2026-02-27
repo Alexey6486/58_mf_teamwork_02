@@ -9,6 +9,7 @@ import { configureStore, createListenerMiddleware } from '@reduxjs/toolkit';
 import ssrReducer from '../slices/ssr-slice';
 import userReducer, { fetchUserThunk } from '../slices/user-slice';
 import authReducer from '../slices/auth-slice';
+import leaderboardReducer from '../slices/leaderboard-slice';
 import { LS_KEY } from '../constants/auth';
 import { ROUTES } from '../routes';
 
@@ -24,6 +25,7 @@ export const reducer = combineReducers({
   ssr: ssrReducer,
   user: userReducer,
   auth: authReducer,
+  leaderboard: leaderboardReducer,
 });
 
 export const listenerMiddleware = createListenerMiddleware<RootState>();

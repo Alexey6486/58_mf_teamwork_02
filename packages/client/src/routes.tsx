@@ -9,7 +9,8 @@ import {
   NotFoundPage,
   Error500,
   GamePage,
-  MainPage
+  MainPage,
+  LeaderboardPage,
 } from './pages';
 import { useIsAuthed } from './hooks';
 import { useEffect, useState } from 'react';
@@ -61,9 +62,14 @@ const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
 export const routes = [
   {
     path: ROUTES.login,
-    Component: AuthorizationPage,
+    Component: LeaderboardPage,
     fetchData: () => null,
   },
+  // {
+  //   path: ROUTES.login,
+  //   Component: AuthorizationPage,
+  //   fetchData: () => null,
+  // },
   {
     path: ROUTES.signup,
     Component: RegistrationPage,

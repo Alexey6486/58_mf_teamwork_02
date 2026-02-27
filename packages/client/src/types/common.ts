@@ -1,1 +1,2 @@
 export type TNullable<T> = T | null;
+export type TSortDirection = 'desc' | 'asc';
