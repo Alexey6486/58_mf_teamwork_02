@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { AppDispatch, RootState } from './store/store';
 import { Navigate, useLocation, useParams } from 'react-router-dom';
-// import type { AppDispatch, RootState } from './store';
 import {
   AuthorizationPage,
   PasswordChange,
@@ -15,8 +14,6 @@ import {
   LeaderboardPage,
 } from './pages';
 import { useIsAuthed } from './hooks';
-import { ForumPage } from './pages/forum/Forum'
-import { TopicPage } from './pages/topic/Topic'
 
 export type PageInitContext = {
   clientToken?: string;
@@ -37,7 +34,7 @@ export const ROUTES = {
   game: '/game',
   leaderboard: '/leaderboard',
   forum: '/forum',
-  topic: '/forum/:id',
+  topic: '/forum/:topicId',
   error500: '/error',
 };
 
@@ -120,12 +117,12 @@ export const routes = [
   },
   {
     path: ROUTES.forum,
-    Component: ForumPage,
+    Component: () => <div>Forum</div>,
     fetchData: () => null,
   },
   {
     path: ROUTES.topic,
-    Component: TopicPage,
+    Component: () => <div>Topic number {useParams().topicId}</div>,
     fetchData: () => null,
   },
   {
