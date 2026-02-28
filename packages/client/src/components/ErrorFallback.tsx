@@ -2,8 +2,8 @@ import { type FallbackProps } from 'react-error-boundary';
 import {
   FORM_PAGE_CONTAINER_CLASS,
   FORM_TITLE_CLASS,
-  TITLE_CLASS
-} from '../constants/style-groups'
+  TITLE_CLASS,
+} from '../constants/style-groups';
 
 function typeGuard<T extends object, K extends keyof T>(
   propertyName: K
@@ -26,9 +26,7 @@ export const ErrorFallback = ({ error }: FallbackProps) => {
     ? error.message
     : 'Unknown error';
 
-  const errorStack = isErrorWithStack(error)
-    ? error.stack
-    : 'undefined';
+  const errorStack = isErrorWithStack(error) ? error.stack : 'undefined';
 
   return (
     <div className={FORM_PAGE_CONTAINER_CLASS}>

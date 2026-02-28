@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import type { AppDispatch, RootState } from './store/store';
 import { Navigate, useLocation, useParams } from 'react-router-dom';
 import {
@@ -9,10 +10,10 @@ import {
   NotFoundPage,
   Error500,
   GamePage,
-  MainPage
+  MainPage,
+  LeaderboardPage,
 } from './pages';
 import { useIsAuthed } from './hooks';
-import { useEffect, useState } from 'react';
 
 export type PageInitContext = {
   clientToken?: string;
@@ -107,7 +108,11 @@ export const routes = [
   },
   {
     path: ROUTES.leaderboard,
-    Component: () => <div>Leader Board</div>,
+    element: (
+      <ProtectedRoute>
+        <LeaderboardPage />
+      </ProtectedRoute>
+    ),
     fetchData: () => null,
   },
   {
