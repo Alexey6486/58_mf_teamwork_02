@@ -103,7 +103,7 @@ export default class GameProcessor {
           this.players.current().getRoundScore() +
             // @ts-ignore
             this.players.current().getTotalScore() >=
-          20
+          200
         ) {
           this.commitRoundScores();
           this.winner = this.players.current();
