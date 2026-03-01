@@ -13,7 +13,14 @@ import {
   TOGGLE_BTN_INACTIVE_CLASS,
 } from '../../constants/style-groups';
 import { Button } from '../../components/Button';
-import { MAX_PLAYERS, MIN_PLAYERS, PlayerType, type GameConfig } from './types';
+import {
+  ComputerPlayerDifficulty,
+  type GameConfig,
+  MAX_PLAYERS,
+  MIN_PLAYERS,
+  type PlayerConfig,
+  PlayerType,
+} from './types';
 import { ROUTES } from '../../routes';
 
 const PLAYER_TYPE_LABELS: Record<PlayerType, string> = {
@@ -38,9 +45,24 @@ export const GameStartScreen: FC<GameStartScreenProps> = ({ onStart }) => {
   };
 
   const handleStart = () => {
+    // const config: GameConfig = getMockConfig();
+    const players: PlayerConfig[] = [
+      { name: 'Игрок 1', type: PlayerType.Human },
+    ];
+    if (playerType === PlayerType.Human)
+      players.push({ name: 'Игрок 2', type: PlayerType.Human });
+    else {
+      for (let i = 0; i < playerCount - 1; i++)
+        players.push({
+          name: `Компьютер ${i + 1}`,
+          type: PlayerType.Computer,
+          difficulty: ComputerPlayerDifficulty.NORMAL,
+        });
+    }
+
     const config: GameConfig = {
-      playerType,
-      playerCount: playerType === PlayerType.Human ? 1 : playerCount,
+      playerCount: players.length,
+      players: players,
     };
     onStart(config);
   };
@@ -50,9 +72,16 @@ export const GameStartScreen: FC<GameStartScreenProps> = ({ onStart }) => {
       <div className={FORM_CONTAINER_CLASS}>
         <div className="w-full flex justify-start absolute pl-8 pr-8 top-12 left-0">
           <button onClick={() => navigate(ROUTES.main)}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24">
               <title>Arrow-back SVG Icon</title>
-              <path className="fill-path-light dark:fill-path-dark" d="M21 11H6.414l5.293-5.293l-1.414-1.414L2.586 12l7.707 7.707l1.414-1.414L6.414 13H21z"/>
+              <path
+                className="fill-path-light dark:fill-path-dark"
+                d="M21 11H6.414l5.293-5.293l-1.414-1.414L2.586 12l7.707 7.707l1.414-1.414L6.414 13H21z"
+              />
             </svg>
           </button>
         </div>
@@ -63,7 +92,11 @@ export const GameStartScreen: FC<GameStartScreenProps> = ({ onStart }) => {
             {[PlayerType.Computer, PlayerType.Human].map(type => (
               <button
                 key={type}
-                className={`${TOGGLE_BTN_BASE_CLASS} ${playerType === type ? TOGGLE_BTN_ACTIVE_CLASS : TOGGLE_BTN_INACTIVE_CLASS}`}
+                className={`${TOGGLE_BTN_BASE_CLASS} ${
+                  playerType === type
+                    ? TOGGLE_BTN_ACTIVE_CLASS
+                    : TOGGLE_BTN_INACTIVE_CLASS
+                }`}
                 onClick={() => setPlayerType(type)}>
                 {PLAYER_TYPE_LABELS[type]}
               </button>
@@ -72,7 +105,9 @@ export const GameStartScreen: FC<GameStartScreenProps> = ({ onStart }) => {
 
           {playerType === PlayerType.Computer && (
             <div className="flex flex-col gap-2 items-center">
-              <span className={`${TITLE_CLASS} text-center`}>Количество игроков</span>
+              <span className={`${TITLE_CLASS} text-center`}>
+                Количество игроков
+              </span>
               <div className="flex items-center gap-4">
                 <button
                   className={COUNTER_BTN_CLASS}
