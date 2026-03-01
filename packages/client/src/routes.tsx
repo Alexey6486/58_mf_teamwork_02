@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { AppDispatch, RootState } from './store/store';
-import { Navigate, useLocation, useParams } from 'react-router-dom';
-// import type { AppDispatch, RootState } from './store';
+import { Navigate, useLocation } from 'react-router-dom';
 import {
   AuthorizationPage,
   PasswordChange,
