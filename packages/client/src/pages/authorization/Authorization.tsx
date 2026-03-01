@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { FormikProvider, useFormik } from 'formik';
 import { useDispatch } from 'react-redux';
+import { Logo } from '../../components/Logo/Logo'
 import type { IAuthorizationForm } from '../../types';
 import {
   REGEX,
@@ -13,7 +14,6 @@ import {
 import { Fields } from '../../fields';
 import { ROUTES } from '../../routes';
 import {
-  APP_TITLE_CLASS,
   BTN_CLASS,
   BTN_GROUP_CLASS,
   FIELD_CLASS,
@@ -79,7 +79,7 @@ export const AuthorizationPage: FC = () => {
   return (
     <div className={FORM_PAGE_CONTAINER_CLASS}>
       <div className={FORM_CONTAINER_CLASS}>
-        <h3 className={APP_TITLE_CLASS}>Flip 7</h3>
+        <Logo />
         <div className={FORM_WRAPPER_CLASS}>
           <FormikProvider value={formik}>
             <div className={FIELD_GROUP_CLASS}>
