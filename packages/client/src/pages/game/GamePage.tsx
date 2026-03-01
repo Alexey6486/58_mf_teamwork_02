@@ -31,6 +31,11 @@ export const GamePage: FC = () => {
     setGameState(GameState.Playing);
   };
 
+  const handleRestart = () => {
+    setGameConfig(DEFAULT_GAME_CONFIG);
+    setGameState(GameState.Start);
+  };
+
   const handleFinish = (result: GameResult) => {
     setGameResult(result);
     setGameState(GameState.Finished);
