@@ -16,12 +16,11 @@ import { Button } from '../../components/Button';
 import {
   ComputerPlayerDifficulty,
   type GameConfig,
-  MAX_PLAYERS,
-  MIN_PLAYERS,
   type PlayerConfig,
   PlayerType,
 } from './types';
 import { ROUTES } from '../../routes';
+import { MAX_PLAYERS, MIN_PLAYERS } from '../../constants/game';
 
 const PLAYER_TYPE_LABELS: Record<PlayerType, string> = {
   [PlayerType.Human]: 'Человек',

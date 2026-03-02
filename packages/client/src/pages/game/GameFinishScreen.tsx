@@ -4,7 +4,6 @@ import {
   FORM_CONTAINER_CLASS,
   FORM_PAGE_CONTAINER_CLASS,
   FORM_TITLE_CLASS,
-  TITLE_CLASS,
 } from '../../constants/style-groups';
 
 interface GameFinishScreenProps {

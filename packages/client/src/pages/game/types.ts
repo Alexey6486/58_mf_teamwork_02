@@ -36,9 +36,6 @@ export type GameResult = {
   players: { name: string; totalScore: number }[];
 };
 
-export const MIN_PLAYERS = 2;
-export const MAX_PLAYERS = 8;
-
 export const DEFAULT_GAME_CONFIG: GameConfig = {
   players: [],
   playerCount: 0,

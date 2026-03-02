@@ -1,5 +1,5 @@
 import APlayerProcessor from './APlayerProcessor';
-import { ComputerPlayerDifficulty, type ICard } from '../../types';
+import { ComputerPlayerDifficulty, type ICard } from '../types';
 
 export default class ComputerPlayerProcessor extends APlayerProcessor {
   private difficulty: ComputerPlayerDifficulty;

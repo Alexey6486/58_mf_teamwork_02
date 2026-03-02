@@ -1,8 +1,9 @@
-import LinkedList from '../../../../utils/LinkedList';
+import LinkedList from '../../../utils/LinkedList';
 import type APlayerProcessor from './APlayerProcessor';
 import HumanPlayerProcessor from './HumanPlayerProcessor';
 import ComputerPlayerProcessor from './ComputerPlayerProcessor';
-import { CardType, type GameConfig, type ICard, PlayerType } from '../../types';
+import { CardType, type GameConfig, type ICard, PlayerType } from '../types';
+import { SCORES_TO_FINISH_GAME_VALUE } from '../../../constants/game';
 
 export default class GameProcessor {
   private players;
@@ -103,7 +104,7 @@ export default class GameProcessor {
           this.players.current().getRoundScore() +
             // @ts-ignore
             this.players.current().getTotalScore() >=
-          200
+          SCORES_TO_FINISH_GAME_VALUE
         ) {
           this.commitRoundScores();
           this.winner = this.players.current();

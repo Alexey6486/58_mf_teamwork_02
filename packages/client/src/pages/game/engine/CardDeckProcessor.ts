@@ -1,6 +1,6 @@
-import Queue from '../../../../utils/Queue';
+import Queue from '../../../utils/Queue';
 import { getCardDeckConfig } from './CardDeckConfig';
-import { type ICard } from '../../types';
+import { type ICard } from '../types';
 
 export default class CardDeckProcessor {
   private cardDeck = new Queue<ICard>();
@@ -8,11 +8,9 @@ export default class CardDeckProcessor {
 
   private _generateCardIndex(max: number) {
     const attemps = Math.floor(Math.random() * 10) + 1;
-    console.log('attemps', attemps);
     let index = 0;
     for (let i = 0; i < attemps; i++) index += Math.random() * max;
     index = Math.floor(index / attemps);
-    console.log('index', index);
     return index;
   }
 

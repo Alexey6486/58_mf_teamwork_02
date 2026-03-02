@@ -1,4 +1,4 @@
-import { CardType, type ICard } from '../../types';
+import { CardType, type ICard } from '../types';
 
 export const getCardDeckConfig = () => {
   const cards: ICard[] = [];
@@ -8,7 +8,5 @@ export const getCardDeckConfig = () => {
       cards.push({ value: i, type: CardType.SIMPLE });
     }
   }
-  console.log(cards);
-
   return cards;
 };

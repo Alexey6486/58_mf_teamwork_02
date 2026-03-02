@@ -3,26 +3,31 @@
 @tailwind utilities;
 
 * {
-  margin: 0;
+    margin: 0;
+}
+
+canvas {
+    width: 100%;
+    height: 100%;
 }
 
 .custom-scroll {
-  scrollbar-width: thin;
-  scrollbar-color: rgb(0 0 0 / 30%) transparent;
+    scrollbar-width: thin;
+    scrollbar-color: rgb(0 0 0 / 30%) transparent;
 }
 
 .custom-scroll::-webkit-scrollbar {
-  width: 8px;
-  background: transparent;
+    width: 8px;
+    background: transparent;
 }
 
 .custom-scroll::-webkit-scrollbar-thumb {
-  background: rgb(0 0 0 / 30%);
-  border-radius: 4px;
-  opacity: 0;
-  transition: opacity 0.2s;
+    background: rgb(0 0 0 / 30%);
+    border-radius: 4px;
+    opacity: 0;
+    transition: opacity 0.2s;
 }
 
 .custom-scroll:hover::-webkit-scrollbar-thumb {
-  opacity: 1;
+    opacity: 1;
 }

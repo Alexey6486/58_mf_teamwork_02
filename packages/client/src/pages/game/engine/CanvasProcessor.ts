@@ -1,5 +1,5 @@
 // ─── Константы цветов ───────────────────────────────────────────────────
-import { type PlayerData } from '../../types';
+import { type PlayerData } from '../types';
 
 const BLUE = '#3B82F6';
 const BLUE_DARK = '#2563EB';
@@ -189,7 +189,11 @@ export default class CanvasProcessor {
     isCurrent: boolean,
     isFinished: boolean
   ) {
-    const bgColor = isCurrent ? CURRENT_BG : isFinished ? FINISHED_BG : PANEL_BG;
+    const bgColor = isCurrent
+      ? CURRENT_BG
+      : isFinished
+      ? FINISHED_BG
+      : PANEL_BG;
     const borderColor = isCurrent ? BTN_GREEN : isFinished ? RED : WHITE_10;
     const lineW = isCurrent || isFinished ? 2 : 1;
 
@@ -507,7 +511,15 @@ export default class CanvasProcessor {
     const dCardW = Math.round(46 * 0.8 * 0.8);
     const dCardH = Math.round(66 * 0.8 * 0.9);
 
-    this.drawDeck(discardCx, discardCy, dCardW, dCardH, RED, RED_DARK, discardCount);
+    this.drawDeck(
+      discardCx,
+      discardCy,
+      dCardW,
+      dCardH,
+      RED,
+      RED_DARK,
+      discardCount
+    );
 
     this.ctx.fillStyle = TEXT_MUTED;
     this.ctx.font = '12px sans-serif';

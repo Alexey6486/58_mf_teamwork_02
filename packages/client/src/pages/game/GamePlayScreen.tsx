@@ -6,20 +6,22 @@ import {
   useRef,
   useState,
 } from 'react';
-import styles from './styles.module.scss';
-import GameProcessor from './engine/components/GameProcessor';
-import CardDeckProcessor from './engine/components/CardDeckProcessor';
+import GameProcessor from './engine/GameProcessor';
+import CardDeckProcessor from './engine/CardDeckProcessor';
 import {
   CardType,
   type GameConfig,
   type GameResult,
   type PlayerData,
 } from './types';
-import ComputerPlayerProcessor from './engine/components/ComputerPlayerProcessor';
-import { FORM_PAGE_CONTAINER_CLASS } from '../../constants/style-groups';
-import CanvasProcessor, {
-  type Rect,
-} from './engine/components/CanvasProcessor';
+import ComputerPlayerProcessor from './engine/ComputerPlayerProcessor';
+import {
+  FORM_PAGE_CONTAINER_CLASS,
+  GAME_CANVAS_CONTAINER_CLASS,
+  GAME_MAIN_CONTAINER_CLASS,
+} from '../../constants/style-groups';
+import CanvasProcessor, { type Rect } from './engine/CanvasProcessor';
+import { GAME_HEIGHT, GAME_WIDTH } from '../../constants/game';
 
 interface GamePlayScreenProps {
   config: GameConfig;
@@ -57,9 +59,6 @@ export const GamePlayScreen: FC<GamePlayScreenProps> = ({
   const discardCountRef = useRef(0);
 
   const advanceTurn = useCallback(() => {
-    // После каждого действия ход переходит к следующему активному игроку.
-    // Игроки с isInGame = false пропускаются.
-    // Если активных не осталось — диалог конца раунда и переход в новый раунд.
     if (gameProcessor.hasWinner()) {
       const winner = gameProcessor.getWinner();
       onFinish({
@@ -154,7 +153,7 @@ export const GamePlayScreen: FC<GamePlayScreenProps> = ({
       const x = (e.clientX - rect.left) * scaleX;
       const y = (e.clientY - rect.top) * scaleY;
 
-      // «Да» — начать следующий раунд (показывается только в диалоге конца раунда)
+      // Начать новый раунд
       if (roundEnded) {
         const confirmBtn = buttonsRef.current.confirm;
         if (
@@ -163,7 +162,6 @@ export const GamePlayScreen: FC<GamePlayScreenProps> = ({
           y >= confirmBtn.y &&
           y <= confirmBtn.y + confirmBtn.h
         ) {
-          // Фиксируем актуальное количество карт в сбросе перед началом нового раунда
           discardCountRef.current = cardDeckProcessor.getNumberOfCardsDrop();
           gameProcessor.getNextRound();
           setRoundEnded(false);
@@ -174,7 +172,7 @@ export const GamePlayScreen: FC<GamePlayScreenProps> = ({
       const drawBtn = buttonsRef.current.draw;
       const endBtn = buttonsRef.current.end;
 
-      // «Взять карту»
+      // Взять карту
       if (
         x >= drawBtn.x &&
         x <= drawBtn.x + drawBtn.w &&
@@ -193,7 +191,7 @@ export const GamePlayScreen: FC<GamePlayScreenProps> = ({
         }
       }
 
-      // «Закончить раунд»
+      // Закончить раунд
       if (
         x >= endBtn.x &&
         x <= endBtn.x + endBtn.w &&
@@ -217,12 +215,12 @@ export const GamePlayScreen: FC<GamePlayScreenProps> = ({
 
   return (
     <div className={FORM_PAGE_CONTAINER_CLASS}>
-      <div className={styles.container}>
-        <div className={styles.gamecontainer}>
+      <div className={GAME_MAIN_CONTAINER_CLASS}>
+        <div className={GAME_CANVAS_CONTAINER_CLASS}>
           <canvas
             ref={canvasRef}
-            width="1920px"
-            height="1080px"
+            width={GAME_WIDTH}
+            height={GAME_HEIGHT}
             onClick={handleCanvasClick}
           />
         </div>

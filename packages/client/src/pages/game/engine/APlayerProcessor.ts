@@ -1,5 +1,6 @@
-import Queue from '../../../../utils/Queue';
-import { CardType, type ICard } from '../../types';
+import Queue from '../../../utils/Queue';
+import { CardType, type ICard } from '../types';
+import { BONUS_SCORE_VALUE } from '../../../constants/game';
 
 export default abstract class APlayerProcessor {
   protected playerName: string;
@@ -41,7 +42,7 @@ export default abstract class APlayerProcessor {
       this.roundCards.toArray().forEach(card => {
         if (card.type == CardType.SIMPLE) score += card.value as number;
       });
-      if (this.roundScoreSuccess) score += 15;
+      if (this.roundScoreSuccess) score += BONUS_SCORE_VALUE;
     }
     this.roundScore = score;
     return score;
