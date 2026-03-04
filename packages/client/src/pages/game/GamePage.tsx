@@ -31,6 +31,10 @@ export const GamePage: FC = () => {
     setGameState(GameState.Playing);
   };
 
+  const handleRestart = () => {
+    setGameState(GameState.Playing);
+  };
+
   const handleFinish = (result: GameResult) => {
     setGameResult(result);
     setGameState(GameState.Finished);
@@ -75,7 +79,7 @@ export const GamePage: FC = () => {
           <GamePlayScreen config={gameConfig} onFinish={handleFinish} />
         )}
         {gameState === GameState.Finished && gameResult && (
-          <GameFinishScreen result={gameResult} />
+          <GameFinishScreen result={gameResult} onRestart={handleRestart} />
         )}
       </div>
     </>
