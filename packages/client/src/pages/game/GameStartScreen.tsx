@@ -21,6 +21,7 @@ import {
 } from './types';
 import { ROUTES } from '../../routes';
 import { MAX_PLAYERS, MIN_PLAYERS } from '../../constants/game';
+import { selectUser } from '../../slices/user-slice';
 import { useSelector } from '../../store/store';
 
 const PLAYER_TYPE_LABELS: Record<PlayerType, string> = {
@@ -34,8 +35,8 @@ type GameStartScreenProps = {
 
 export const GameStartScreen: FC<GameStartScreenProps> = ({ onStart }) => {
   const navigate = useNavigate();
-  const user = useSelector(state => state.user.data);
-  const userName = user?.display_name || user?.first_name || 'Игрок';
+  const { first_name, display_name } = useSelector(selectUser) || {};
+  const userName = display_name || first_name || 'Игрок';
   const [playerType, setPlayerType] = useState<PlayerType>(PlayerType.Computer);
   const [playerCount, setPlayerCount] = useState(MIN_PLAYERS);
 
