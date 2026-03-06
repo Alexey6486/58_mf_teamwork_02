@@ -21,7 +21,8 @@ import {
   FORM_CONTAINER_CLASS,
   FORM_PAGE_CONTAINER_CLASS,
   FORM_WRAPPER_CLASS,
-} from '../../constants/style-groups';
+  MAIN_CONTAINER_CLASS
+} from '../../constants/style-groups'
 import { type AppDispatch, useSelector } from '../../store/store';
 import { loginThunk, logoutThunk } from '../../slices/auth-slice';
 import { selectUser } from '../../slices/user-slice';
@@ -77,32 +78,34 @@ export const AuthorizationPage: FC = () => {
   }, [isAuthed, user]);
 
   return (
-    <div className={FORM_PAGE_CONTAINER_CLASS}>
-      <div className={FORM_CONTAINER_CLASS}>
-        <Logo />
-        <div className={FORM_WRAPPER_CLASS}>
-          <FormikProvider value={formik}>
-            <div className={FIELD_GROUP_CLASS}>
-              <div className={FIELD_CLASS}>
-                <Fields.Text name="login" type="text" label="Логин" />
+    <div className={MAIN_CONTAINER_CLASS}>
+      <div className={FORM_PAGE_CONTAINER_CLASS}>
+        <div className={FORM_CONTAINER_CLASS}>
+          <Logo />
+          <div className={FORM_WRAPPER_CLASS}>
+            <FormikProvider value={formik}>
+              <div className={FIELD_GROUP_CLASS}>
+                <div className={FIELD_CLASS}>
+                  <Fields.Text name="login" type="text" label="Логин" />
+                </div>
+                <div className={FIELD_CLASS}>
+                  <Fields.Text name="password" type="password" label="Пароль" />
+                </div>
               </div>
-              <div className={FIELD_CLASS}>
-                <Fields.Text name="password" type="password" label="Пароль" />
-              </div>
-            </div>
 
-            <div className={BTN_GROUP_CLASS}>
-              <button
-                className={BTN_CLASS}
-                type="submit"
-                onClick={onSubmitForm}>
-                Авторизоваться
-              </button>
-              <button className={BTN_CLASS} onClick={toRegistration}>
-                Зарегистрироваться
-              </button>
-            </div>
-          </FormikProvider>
+              <div className={BTN_GROUP_CLASS}>
+                <button
+                  className={BTN_CLASS}
+                  type="submit"
+                  onClick={onSubmitForm}>
+                  Авторизоваться
+                </button>
+                <button className={BTN_CLASS} onClick={toRegistration}>
+                  Зарегистрироваться
+                </button>
+              </div>
+            </FormikProvider>
+          </div>
         </div>
       </div>
     </div>

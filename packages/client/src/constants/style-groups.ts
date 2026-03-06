@@ -1,5 +1,6 @@
+export const MAIN_CONTAINER_CLASS = "p-4 h-screen dark:bg-form-dark";
 export const FORM_PAGE_CONTAINER_CLASS =
-  'h-screen flex justify-center items-center bg-main-light dark:bg-main-dark';
+  'flex justify-center items-center h-full rounded-md bg-main-light dark:bg-main-dark';
 export const FORM_CONTAINER_CLASS =
   'relative flex flex-col justify-center items-center min-w-96 p-10 bg-form-light bg-form-light border border-form-light rounded-main-radius shadow-outer-light dark:shadow-outer-dark dark:bg-form-dark dark:border-form-dark';
 export const FORM_WRAPPER_CLASS =

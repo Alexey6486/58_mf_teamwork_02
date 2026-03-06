@@ -24,7 +24,8 @@ import {
   FORM_PAGE_CONTAINER_CLASS,
   FORM_TITLE_CLASS,
   FORM_WRAPPER_CLASS,
-} from '../../constants/style-groups';
+  MAIN_CONTAINER_CLASS
+} from '../../constants/style-groups'
 
 const INITIAL_VALUES: Partial<IUserPassword> = {
   oldPassword: '',
@@ -75,46 +76,48 @@ export const PasswordChange: FC = () => {
   };
 
   return (
-    <div className={FORM_PAGE_CONTAINER_CLASS}>
-      <div className={FORM_CONTAINER_CLASS}>
-        <h3 className={FORM_TITLE_CLASS}>Изменить пароль</h3>
-        <div className={FORM_WRAPPER_CLASS}>
-          <FormikProvider value={formik}>
-            <div className={FIELD_GROUP_CLASS}>
-              <div className={FIELD_CLASS}>
-                <Fields.Text
-                  name="oldPassword"
-                  type="password"
-                  label="Старый пароль"
-                />
+    <div className={MAIN_CONTAINER_CLASS}>
+      <div className={FORM_PAGE_CONTAINER_CLASS}>
+        <div className={FORM_CONTAINER_CLASS}>
+          <h3 className={FORM_TITLE_CLASS}>Изменить пароль</h3>
+          <div className={FORM_WRAPPER_CLASS}>
+            <FormikProvider value={formik}>
+              <div className={FIELD_GROUP_CLASS}>
+                <div className={FIELD_CLASS}>
+                  <Fields.Text
+                    name="oldPassword"
+                    type="password"
+                    label="Старый пароль"
+                  />
+                </div>
+                <div className={FIELD_CLASS}>
+                  <Fields.Text
+                    name="newPassword"
+                    type="password"
+                    label="Новый пароль"
+                  />
+                </div>
+                <div className={FIELD_CLASS}>
+                  <Fields.Text
+                    name="confirmedPassword"
+                    type="password"
+                    label="Повторно новый пароль"
+                  />
+                </div>
               </div>
-              <div className={FIELD_CLASS}>
-                <Fields.Text
-                  name="newPassword"
-                  type="password"
-                  label="Новый пароль"
-                />
+              <div className={BTN_GROUP_CLASS}>
+                <button
+                  className={BTN_CLASS}
+                  type="submit"
+                  onClick={onSubmitForm}>
+                  Сохранить
+                </button>
+                <button className={BTN_CLASS} onClick={toProfile}>
+                  Назад
+                </button>
               </div>
-              <div className={FIELD_CLASS}>
-                <Fields.Text
-                  name="confirmedPassword"
-                  type="password"
-                  label="Повторно новый пароль"
-                />
-              </div>
-            </div>
-            <div className={BTN_GROUP_CLASS}>
-              <button
-                className={BTN_CLASS}
-                type="submit"
-                onClick={onSubmitForm}>
-                Сохранить
-              </button>
-              <button className={BTN_CLASS} onClick={toProfile}>
-                Назад
-              </button>
-            </div>
-          </FormikProvider>
+            </FormikProvider>
+          </div>
         </div>
       </div>
     </div>

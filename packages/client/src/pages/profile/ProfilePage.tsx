@@ -29,7 +29,8 @@ import {
   FORM_PAGE_CONTAINER_CLASS,
   FORM_TITLE_CLASS,
   FORM_WRAPPER_CLASS,
-} from '../../constants/style-groups';
+  MAIN_CONTAINER_CLASS
+} from '../../constants/style-groups'
 import { logoutThunk } from '../../slices/auth-slice';
 import { LS_KEY } from '../../constants/auth';
 
@@ -116,132 +117,134 @@ export const ProfilePage: FC = () => {
   }, []);
 
   return (
-    <div className={FORM_PAGE_CONTAINER_CLASS}>
-      <div className={FORM_CONTAINER_CLASS}>
-        <div className="w-full flex justify-between absolute pl-8 pr-8 top-12 left-0">
-          <button onClick={toMain}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24">
-              <title>To main page</title>
-              <path
-                className="fill-path-light dark:fill-path-dark"
-                d="M21 11H6.414l5.293-5.293l-1.414-1.414L2.586 12l7.707 7.707l1.414-1.414L6.414 13H21z"
-              />
-            </svg>
-          </button>
-          <button onClick={handleLogout}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24">
-              <title>Logout</title>
-              <path
-                className="fill-path-light dark:fill-path-dark"
-                d="m13 16l5-4l-5-4v3H4v2h9z"
-              />
-              <path
-                className="fill-path-light dark:fill-path-dark"
-                d="M20 3h-9c-1.103 0-2 .897-2 2v4h2V5h9v14h-9v-4H9v4c0 1.103.897 2 2 2h9c1.103 0 2-.897 2-2V5c0-1.103-.897-2-2-2"
-              />
-            </svg>
-          </button>
-        </div>
-        <h3 className={FORM_TITLE_CLASS}>Профиль</h3>
-        <div className={FORM_WRAPPER_CLASS}>
-          <div className="w-full flex flex-col justify-center items-center mb-5">
-            <div className="relative w-[100px] h-[100px] rounded-full bg-gray-200 cursor-pointer overflow-hidden group">
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleAvatarChange}
-                className="relative z-30 opacity-0 w-full h-full cursor-pointer"
-              />
-              <div className="absolute top-0 left-0 z-20 hidden group-hover:flex flex items-center justify-center w-full h-full bg-black/20 break-anywhere text-white text-center">
-                Поменять аватар
-              </div>
-              {user?.avatar && (
-                <img
-                  className="absolute top-0 left-0 z-10 w-full h-full"
-                  src={`${URL_BASE_IMG}${user.avatar}`}
-                  alt="avatar"
+    <div className={MAIN_CONTAINER_CLASS}>
+      <div className={FORM_PAGE_CONTAINER_CLASS}>
+        <div className={FORM_CONTAINER_CLASS}>
+          <div className="w-full flex justify-between absolute pl-8 pr-8 top-12 left-0">
+            <button onClick={toMain}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24">
+                <title>To main page</title>
+                <path
+                  className="fill-path-light dark:fill-path-dark"
+                  d="M21 11H6.414l5.293-5.293l-1.414-1.414L2.586 12l7.707 7.707l1.414-1.414L6.414 13H21z"
                 />
-              )}
-            </div>
+              </svg>
+            </button>
+            <button onClick={handleLogout}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24">
+                <title>Logout</title>
+                <path
+                  className="fill-path-light dark:fill-path-dark"
+                  d="m13 16l5-4l-5-4v3H4v2h9z"
+                />
+                <path
+                  className="fill-path-light dark:fill-path-dark"
+                  d="M20 3h-9c-1.103 0-2 .897-2 2v4h2V5h9v14h-9v-4H9v4c0 1.103.897 2 2 2h9c1.103 0 2-.897 2-2V5c0-1.103-.897-2-2-2"
+                />
+              </svg>
+            </button>
           </div>
+          <h3 className={FORM_TITLE_CLASS}>Профиль</h3>
+          <div className={FORM_WRAPPER_CLASS}>
+            <div className="w-full flex flex-col justify-center items-center mb-5">
+              <div className="relative w-[100px] h-[100px] rounded-full bg-gray-200 cursor-pointer overflow-hidden group">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleAvatarChange}
+                  className="relative z-30 opacity-0 w-full h-full cursor-pointer"
+                />
+                <div className="absolute top-0 left-0 z-20 hidden group-hover:flex flex items-center justify-center w-full h-full bg-black/20 break-anywhere text-white text-center">
+                  Поменять аватар
+                </div>
+                {user?.avatar && (
+                  <img
+                    className="absolute top-0 left-0 z-10 w-full h-full"
+                    src={`${URL_BASE_IMG}${user.avatar}`}
+                    alt="avatar"
+                  />
+                )}
+              </div>
+            </div>
 
-          <FormikProvider value={formik}>
-            <div className="flex flex-col">
-              <div className="w-full flex">
-                <div className={FIELD_PR_CLASS}>
-                  <Fields.Text
-                    name="first_name"
-                    type="text"
-                    label="Имя"
-                    placeholder="Имя"
-                  />
+            <FormikProvider value={formik}>
+              <div className="flex flex-col">
+                <div className="w-full flex">
+                  <div className={FIELD_PR_CLASS}>
+                    <Fields.Text
+                      name="first_name"
+                      type="text"
+                      label="Имя"
+                      placeholder="Имя"
+                    />
+                  </div>
+                  <div className={FIELD_CLASS}>
+                    <Fields.Text
+                      name="login"
+                      type="text"
+                      label="Логин"
+                      placeholder="Логин"
+                    />
+                  </div>
                 </div>
-                <div className={FIELD_CLASS}>
-                  <Fields.Text
-                    name="login"
-                    type="text"
-                    label="Логин"
-                    placeholder="Логин"
-                  />
+                <div className="w-full flex">
+                  <div className={FIELD_PR_CLASS}>
+                    <Fields.Text
+                      name="second_name"
+                      type="text"
+                      label="Фамилия"
+                      placeholder="Фамилия"
+                    />
+                  </div>
+                  <div className={FIELD_CLASS}>
+                    <Fields.Text
+                      name="email"
+                      type="email"
+                      label="Почта"
+                      placeholder="Почта"
+                    />
+                  </div>
+                </div>
+                <div className="w-full flex">
+                  <div className={FIELD_PR_CLASS}>
+                    <Fields.Text
+                      name="display_name"
+                      type="text"
+                      label="Ник"
+                      placeholder="Ник"
+                    />
+                  </div>
+                  <div className={FIELD_CLASS}>
+                    <Fields.Text
+                      name="phone"
+                      type="text"
+                      label="Телефон"
+                      placeholder="Телефон"
+                    />
+                  </div>
                 </div>
               </div>
-              <div className="w-full flex">
-                <div className={FIELD_PR_CLASS}>
-                  <Fields.Text
-                    name="second_name"
-                    type="text"
-                    label="Фамилия"
-                    placeholder="Фамилия"
-                  />
-                </div>
-                <div className={FIELD_CLASS}>
-                  <Fields.Text
-                    name="email"
-                    type="email"
-                    label="Почта"
-                    placeholder="Почта"
-                  />
-                </div>
+              <div className={BTN_GROUP_CLASS}>
+                <button
+                  className={BTN_CLASS}
+                  type="submit"
+                  onClick={onSubmitForm}>
+                  Сохранить
+                </button>
+                <button className={BTN_CLASS} onClick={toPasswordChange}>
+                  Изменить пароль
+                </button>
               </div>
-              <div className="w-full flex">
-                <div className={FIELD_PR_CLASS}>
-                  <Fields.Text
-                    name="display_name"
-                    type="text"
-                    label="Ник"
-                    placeholder="Ник"
-                  />
-                </div>
-                <div className={FIELD_CLASS}>
-                  <Fields.Text
-                    name="phone"
-                    type="text"
-                    label="Телефон"
-                    placeholder="Телефон"
-                  />
-                </div>
-              </div>
-            </div>
-            <div className={BTN_GROUP_CLASS}>
-              <button
-                className={BTN_CLASS}
-                type="submit"
-                onClick={onSubmitForm}>
-                Сохранить
-              </button>
-              <button className={BTN_CLASS} onClick={toPasswordChange}>
-                Изменить пароль
-              </button>
-            </div>
-          </FormikProvider>
+            </FormikProvider>
+          </div>
         </div>
       </div>
     </div>
