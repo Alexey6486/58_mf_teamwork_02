@@ -6,10 +6,11 @@ import { type AppDispatch, useSelector } from '../../store/store';
 import { selectUser } from '../../slices/user-slice';
 import { logoutThunk } from '../../slices/auth-slice';
 import { ENotificationPermissions } from '../../enums';
+import logo from '../../assets/images/logo.jpg';
 
 const TS_MIN = 60000;
 const TS_MAX = 70000;
-const IDLE_LIMIT = 5;
+const IDLE_LIMIT = 2;
 const MIN_IDLE_LIMIT = 2;
 const INTERVAL = 10000;
 const EVENTS = ['click', 'load', 'scroll', 'mousemove'];
@@ -65,7 +66,7 @@ export const IdleObserver: React.FC<Props> = ({
         if (delta >= idleMs - TS_MAX && delta < idleMs - TS_MIN) {
           showNotification({
             title: 'Flip 7',
-            icon: 'src/assets/images/logo.jpg',
+            icon: logo,
             body: 'Выход из профиля произойдет через 1 минуту',
             silent: true,
             onNotificationClick: () => null,
