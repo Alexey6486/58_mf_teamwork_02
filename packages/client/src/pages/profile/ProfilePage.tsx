@@ -29,10 +29,11 @@ import {
   FORM_PAGE_CONTAINER_CLASS,
   FORM_TITLE_CLASS,
   FORM_WRAPPER_CLASS,
-  MAIN_CONTAINER_CLASS
-} from '../../constants/style-groups'
+  MAIN_CONTAINER_CLASS,
+} from '../../constants/style-groups';
 import { logoutThunk } from '../../slices/auth-slice';
 import { LS_KEY } from '../../constants/auth';
+import { useNotification } from '../../hooks';
 
 const INITIAL_VALUES: Partial<IUser> = {
   first_name: '',
@@ -106,6 +107,7 @@ export const ProfilePage: FC = () => {
   };
 
   const handleLogout = () => {
+    console.log('logout');
     dispatch(logoutThunk());
   };
 

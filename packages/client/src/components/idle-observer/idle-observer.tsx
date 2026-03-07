@@ -49,6 +49,7 @@ export const IdleObserver: React.FC<Props> = ({
 
   useEffect(() => {
     if (user) {
+      clearSubscribes();
       getCurrentTimestamp();
 
       events.forEach(event => {
@@ -64,7 +65,7 @@ export const IdleObserver: React.FC<Props> = ({
         if (delta >= idleMs - TS_MAX && delta < idleMs - TS_MIN) {
           showNotification({
             title: 'Flip 7',
-            icon: 'src/assets/logo.jpg',
+            icon: 'src/assets/images/logo.jpg',
             body: 'Выход из профиля произойдет через 1 минуту',
             silent: true,
             onNotificationClick: () => null,
@@ -85,7 +86,7 @@ export const IdleObserver: React.FC<Props> = ({
     }
 
     return clearSubscribes;
-  }, [user]);
+  }, [user, permission]);
 
   return <></>;
 };
