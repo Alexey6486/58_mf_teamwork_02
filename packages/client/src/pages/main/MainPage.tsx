@@ -1,15 +1,18 @@
 import { useNavigate } from "react-router-dom";
-import { BTN_MENU_CLASS } from "../../constants/style-groups"
+import {
+  BTN_MENU_CLASS,
+  MAIN_CONTAINER_CLASS
+} from '../../constants/style-groups'
 import { Button } from "../../components/Button";
 
 export const MainPage = () => {
     const navigate = useNavigate();
 
     return(
-        <div className="p-4 h-screen dark:bg-form-dark">
+        <div className={MAIN_CONTAINER_CLASS}>
             <div className="flex flex-col justify-center items-center bg-main-light h-full rounded-md dark:bg-main-dark">
                 <div className="font-bold text-main-blue dark:text-main-white text-5xl mb-3">Flip 7</div>
-                <div className="flex bg-[#bae6fd] dark:bg-btn-dark dark:text-white w-fit mx-auto rounded-b-md 
+                <div className="flex bg-[#bae6fd] dark:bg-btn-dark dark:text-white w-fit mx-auto rounded-b-md
                     text-lg cursor-pointer border-t-2 border-main-blue dark:border-white">
                     <div className={`${BTN_MENU_CLASS} hover:rounded-bl-md`}
                         onClick={() => navigate('/forum')}>Форум</div>

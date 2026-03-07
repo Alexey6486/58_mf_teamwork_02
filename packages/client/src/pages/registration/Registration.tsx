@@ -23,7 +23,8 @@ import {
   FORM_PAGE_CONTAINER_CLASS,
   FORM_TITLE_CLASS,
   FORM_WRAPPER_CLASS,
-} from '../../constants/style-groups';
+  MAIN_CONTAINER_CLASS
+} from '../../constants/style-groups'
 import { selectUser } from '../../slices/user-slice';
 import { useIsAuthed } from '../../hooks';
 import { signupThunk } from '../../slices/auth-slice';
@@ -104,101 +105,103 @@ export const RegistrationPage: FC = () => {
   }, [isAuthed, user]);
 
   return (
-    <div className={FORM_PAGE_CONTAINER_CLASS}>
-      <div className={FORM_CONTAINER_CLASS}>
-        <div className="w-full flex justify-between absolute pl-8 pr-8 top-12 left-0">
-          <button onClick={toAuthorization}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24">
-              <title>Arrow-back SVG Icon</title>
-              <path
-                className="fill-path-light dark:fill-path-dark"
-                d="M21 11H6.414l5.293-5.293l-1.414-1.414L2.586 12l7.707 7.707l1.414-1.414L6.414 13H21z"
-              />
-            </svg>
-          </button>
-        </div>
-        <h3 className={FORM_TITLE_CLASS}>Регистрация</h3>
-        <div className={FORM_WRAPPER_CLASS}>
-          <FormikProvider value={formik}>
-            <div className="flex flex-col">
-              <div className="w-full flex">
-                <div className={FIELD_PR_CLASS}>
-                  <Fields.Text
-                    name="first_name"
-                    type="text"
-                    label="Имя"
-                    placeholder="Имя"
-                  />
+    <div className={MAIN_CONTAINER_CLASS}>
+      <div className={FORM_PAGE_CONTAINER_CLASS}>
+        <div className={FORM_CONTAINER_CLASS}>
+          <div className="w-full flex justify-between absolute pl-8 pr-8 top-12 left-0">
+            <button onClick={toAuthorization}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24">
+                <title>Arrow-back SVG Icon</title>
+                <path
+                  className="fill-path-light dark:fill-path-dark"
+                  d="M21 11H6.414l5.293-5.293l-1.414-1.414L2.586 12l7.707 7.707l1.414-1.414L6.414 13H21z"
+                />
+              </svg>
+            </button>
+          </div>
+          <h3 className={FORM_TITLE_CLASS}>Регистрация</h3>
+          <div className={FORM_WRAPPER_CLASS}>
+            <FormikProvider value={formik}>
+              <div className="flex flex-col">
+                <div className="w-full flex">
+                  <div className={FIELD_PR_CLASS}>
+                    <Fields.Text
+                      name="first_name"
+                      type="text"
+                      label="Имя"
+                      placeholder="Имя"
+                    />
+                  </div>
+                  <div className={FIELD_CLASS}>
+                    <Fields.Text
+                      name="second_name"
+                      type="text"
+                      label="Фамилия"
+                      placeholder="Фамилия"
+                    />
+                  </div>
                 </div>
-                <div className={FIELD_CLASS}>
-                  <Fields.Text
-                    name="second_name"
-                    type="text"
-                    label="Фамилия"
-                    placeholder="Фамилия"
-                  />
+                <div className="w-full flex">
+                  <div className={FIELD_PR_CLASS}>
+                    <Fields.Text
+                      name="login"
+                      type="text"
+                      label="Логин"
+                      placeholder="Логин"
+                    />
+                  </div>
+                  <div className={FIELD_CLASS}>
+                    <Fields.Text
+                      name="email"
+                      type="email"
+                      label="Почта"
+                      placeholder="Почта"
+                    />
+                  </div>
+                </div>
+                <div className="w-full flex">
+                  <div className={FIELD_PR_CLASS}>
+                    <Fields.Text
+                      name="phone"
+                      type="text"
+                      label="Телефон"
+                      placeholder="Телефон"
+                    />
+                  </div>
+                </div>
+                <div className="w-full flex">
+                  <div className={FIELD_PR_CLASS}>
+                    <Fields.Text
+                      name="newPassword"
+                      type="password"
+                      label="Пароль"
+                      placeholder="Пароль"
+                    />
+                  </div>
+                  <div className={FIELD_CLASS}>
+                    <Fields.Text
+                      name="confirmedPassword"
+                      type="password"
+                      label="Повторно пароль"
+                      placeholder="Повторно пароль"
+                    />
+                  </div>
                 </div>
               </div>
-              <div className="w-full flex">
-                <div className={FIELD_PR_CLASS}>
-                  <Fields.Text
-                    name="login"
-                    type="text"
-                    label="Логин"
-                    placeholder="Логин"
-                  />
-                </div>
-                <div className={FIELD_CLASS}>
-                  <Fields.Text
-                    name="email"
-                    type="email"
-                    label="Почта"
-                    placeholder="Почта"
-                  />
-                </div>
+              <div className={BTN_GROUP_CLASS}>
+                <button
+                  className={BTN_CLASS}
+                  type="submit"
+                  onClick={onSubmitForm}>
+                  Зарегистрироваться
+                </button>
               </div>
-              <div className="w-full flex">
-                <div className={FIELD_PR_CLASS}>
-                  <Fields.Text
-                    name="phone"
-                    type="text"
-                    label="Телефон"
-                    placeholder="Телефон"
-                  />
-                </div>
-              </div>
-              <div className="w-full flex">
-                <div className={FIELD_PR_CLASS}>
-                  <Fields.Text
-                    name="newPassword"
-                    type="password"
-                    label="Пароль"
-                    placeholder="Пароль"
-                  />
-                </div>
-                <div className={FIELD_CLASS}>
-                  <Fields.Text
-                    name="confirmedPassword"
-                    type="password"
-                    label="Повторно пароль"
-                    placeholder="Повторно пароль"
-                  />
-                </div>
-              </div>
-            </div>
-            <div className={BTN_GROUP_CLASS}>
-              <button
-                className={BTN_CLASS}
-                type="submit"
-                onClick={onSubmitForm}>
-                Зарегистрироваться
-              </button>
-            </div>
-          </FormikProvider>
+            </FormikProvider>
+          </div>
         </div>
       </div>
     </div>

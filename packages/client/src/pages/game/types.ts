@@ -1,5 +1,3 @@
-import { number, string } from 'yup';
-
 export enum PlayerType {
   Computer = 'computer',
   Human = 'human',

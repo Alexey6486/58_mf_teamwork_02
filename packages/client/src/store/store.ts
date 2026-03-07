@@ -10,7 +10,7 @@ import ssrReducer from '../slices/ssr-slice';
 import userReducer, { fetchUserThunk } from '../slices/user-slice';
 import authReducer from '../slices/auth-slice';
 import leaderboardReducer from '../slices/leaderboard-slice';
-import { LS_KEY } from '../constants/auth';
+import { LS_ACT, LS_KEY } from '../constants/auth';
 import { ROUTES } from '../routes';
 
 // Глобально декларируем в window наш ключик
@@ -58,6 +58,7 @@ listenerMiddleware.startListening({
   },
   effect: async () => {
     try {
+      localStorage.removeItem(LS_ACT);
       localStorage.removeItem(LS_KEY);
       window.location.replace(ROUTES.login);
     } catch (error) {
