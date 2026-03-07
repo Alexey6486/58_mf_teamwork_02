@@ -107,7 +107,6 @@ export const ProfilePage: FC = () => {
   };
 
   const handleLogout = () => {
-    console.log('logout');
     dispatch(logoutThunk());
   };
 
