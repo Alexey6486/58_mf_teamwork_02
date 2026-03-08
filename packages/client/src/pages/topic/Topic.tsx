@@ -8,7 +8,7 @@ import {
   MAIN_CONTAINER_CLASS
 } from '../../constants/style-groups';
 import { useDispatch, useSelector } from '../../store/store';
-import { addMessage } from '../../store/forum-slice';
+import { addMessage } from '../../slices/forum-slice';
 import { ROUTES } from '../../routes';
 
 export const TopicPage: FC = () => {

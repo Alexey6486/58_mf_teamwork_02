@@ -9,7 +9,7 @@ import {
 } from '../../constants/style-groups';
 import { ROUTES } from '../../routes';
 import { useDispatch, useSelector } from '../../store/store';
-import { addTopic } from '../../store/forum-slice';
+import { addTopic } from '../../slices/forum-slice';
 
 export const ForumPage: FC = () => {
   const navigate = useNavigate();

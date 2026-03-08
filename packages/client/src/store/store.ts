@@ -12,7 +12,7 @@ import authReducer from '../slices/auth-slice';
 import leaderboardReducer from '../slices/leaderboard-slice';
 import { LS_ACT, LS_KEY } from '../constants/auth';
 import { ROUTES } from '../routes';
-import { forumReducer, FORUM_LS_KEY } from './forum-slice';
+import { forumReducer, FORUM_LS_KEY } from '../slices/forum-slice';
 
 // Глобально декларируем в window наш ключик
 // и задаем ему тип такой же как у стейта в сторе
