@@ -13,9 +13,11 @@ import {
   FORM_CONTAINER_CLASS,
   FORM_PAGE_CONTAINER_CLASS,
   FORM_TITLE_CLASS,
-  MAIN_CONTAINER_CLASS
-} from '../../constants/style-groups'
+  MAIN_CONTAINER_CLASS,
+} from '../../constants/style-groups';
 import { ROUTES } from '../../routes';
+import { IconButton } from '../../components/IconButton';
+import { EIconButton } from '../../enums';
 
 type TRow = 'row' | 'header';
 type TLeaderboardRow = ILeaderboard & {
@@ -182,19 +184,11 @@ export const LeaderboardPage = () => {
       <div className={FORM_PAGE_CONTAINER_CLASS}>
         <div className={FORM_CONTAINER_CLASS}>
           <div className="w-full flex justify-between absolute pl-8 pr-8 top-12 left-0">
-            <button onClick={toMain}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24">
-                <title>To main page</title>
-                <path
-                  className="fill-path-light dark:fill-path-dark"
-                  d="M21 11H6.414l5.293-5.293l-1.414-1.414L2.586 12l7.707 7.707l1.414-1.414L6.414 13H21z"
-                />
-              </svg>
-            </button>
+            <IconButton
+              onClick={toMain}
+              iconName={EIconButton.BACK}
+              hoverName={'На главную страницу'}
+            />
           </div>
           <div className={FORM_TITLE_CLASS}>Таблица лидеров</div>
           <div className="mt-4 overflow-auto max-h-80 max-w-96 pl-2 pr-2 bg-form-light dark:bg-form-dark border border-form-light rounded-main-radius dark:border-form-dark">

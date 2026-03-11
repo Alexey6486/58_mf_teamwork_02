@@ -14,8 +14,8 @@ import {
   LeaderboardPage,
 } from './pages';
 import { useIsAuthed } from './hooks';
-import { ForumPage } from './pages/forum/Forum'
-import { TopicPage } from './pages/topic/Topic'
+import { ForumPage } from './pages/forum/Forum';
+import { TopicPage } from './pages/topic/Topic';
 
 export type PageInitContext = {
   clientToken?: string;
@@ -119,12 +119,20 @@ export const routes = [
   },
   {
     path: ROUTES.forum,
-    Component: ForumPage,
+    element: (
+      <ProtectedRoute>
+        <ForumPage />
+      </ProtectedRoute>
+    ),
     fetchData: () => null,
   },
   {
     path: ROUTES.topic,
-    Component: TopicPage,
+    element: (
+      <ProtectedRoute>
+        <TopicPage />
+      </ProtectedRoute>
+    ),
     fetchData: () => null,
   },
   {
@@ -134,7 +142,11 @@ export const routes = [
   },
   {
     path: '*',
-    Component: NotFoundPage,
+    element: (
+      <ProtectedRoute>
+        <NotFoundPage />
+      </ProtectedRoute>
+    ),
     fetchData: initNotFoundPage,
   },
 ];

@@ -23,6 +23,8 @@ import { ROUTES } from '../../routes';
 import { MAX_PLAYERS, MIN_PLAYERS } from '../../constants/game';
 import { selectUser } from '../../slices/user-slice';
 import { useSelector } from '../../store/store';
+import { IconButton } from '../../components/IconButton';
+import { EIconButton } from '../../enums';
 
 const PLAYER_TYPE_LABELS: Record<PlayerType, string> = {
   [PlayerType.Human]: 'Человек',
@@ -70,23 +72,19 @@ export const GameStartScreen: FC<GameStartScreenProps> = ({ onStart }) => {
     onStart(config);
   };
 
+  const toMain = () => {
+    navigate(ROUTES.main);
+  };
+
   return (
     <div className={FORM_PAGE_CONTAINER_CLASS}>
       <div className={FORM_CONTAINER_CLASS}>
         <div className="w-full flex justify-start absolute pl-8 pr-8 top-12 left-0">
-          <button onClick={() => navigate(ROUTES.main)}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24">
-              <title>Arrow-back SVG Icon</title>
-              <path
-                className="fill-path-light dark:fill-path-dark"
-                d="M21 11H6.414l5.293-5.293l-1.414-1.414L2.586 12l7.707 7.707l1.414-1.414L6.414 13H21z"
-              />
-            </svg>
-          </button>
+          <IconButton
+            onClick={toMain}
+            iconName={EIconButton.BACK}
+            hoverName={'На главную страницу'}
+          />
         </div>
         <h1 className={APP_TITLE_CLASS}>Flip 7</h1>
         <h2 className={FORM_TITLE_CLASS}>Настройки игры</h2>
