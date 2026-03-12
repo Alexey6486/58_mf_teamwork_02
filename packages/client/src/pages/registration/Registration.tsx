@@ -23,11 +23,13 @@ import {
   FORM_PAGE_CONTAINER_CLASS,
   FORM_TITLE_CLASS,
   FORM_WRAPPER_CLASS,
-  MAIN_CONTAINER_CLASS
-} from '../../constants/style-groups'
+  MAIN_CONTAINER_CLASS,
+} from '../../constants/style-groups';
 import { selectUser } from '../../slices/user-slice';
 import { useIsAuthed } from '../../hooks';
 import { signupThunk } from '../../slices/auth-slice';
+import { IconButton } from '../../components/IconButton';
+import { EIconButton } from '../../enums';
 
 const INITIAL_VALUES: Partial<IRegistrationForm> = {
   first_name: '',
@@ -109,19 +111,11 @@ export const RegistrationPage: FC = () => {
       <div className={FORM_PAGE_CONTAINER_CLASS}>
         <div className={FORM_CONTAINER_CLASS}>
           <div className="w-full flex justify-between absolute pl-8 pr-8 top-12 left-0">
-            <button onClick={toAuthorization}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24">
-                <title>Arrow-back SVG Icon</title>
-                <path
-                  className="fill-path-light dark:fill-path-dark"
-                  d="M21 11H6.414l5.293-5.293l-1.414-1.414L2.586 12l7.707 7.707l1.414-1.414L6.414 13H21z"
-                />
-              </svg>
-            </button>
+            <IconButton
+              onClick={toAuthorization}
+              iconName={EIconButton.BACK}
+              hoverName={'На страницу авторизации'}
+            />
           </div>
           <h3 className={FORM_TITLE_CLASS}>Регистрация</h3>
           <div className={FORM_WRAPPER_CLASS}>

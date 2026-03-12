@@ -24,8 +24,8 @@ import {
   FORM_PAGE_CONTAINER_CLASS,
   FORM_TITLE_CLASS,
   FORM_WRAPPER_CLASS,
-  MAIN_CONTAINER_CLASS
-} from '../../constants/style-groups'
+  MAIN_CONTAINER_CLASS,
+} from '../../constants/style-groups';
 
 const INITIAL_VALUES: Partial<IUserPassword> = {
   oldPassword: '',
