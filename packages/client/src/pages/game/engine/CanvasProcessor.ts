@@ -31,6 +31,7 @@ export default class CanvasProcessor {
   private ctx: CanvasRenderingContext2D;
   private canvasWidth: number;
   private canvasHeight: number;
+  private cardImages: Record<number, HTMLImageElement> = {};
 
   constructor(canvas: HTMLCanvasElement | null) {
     if (!canvas) throw new Error('Canvas must be defined');
@@ -41,6 +42,20 @@ export default class CanvasProcessor {
 
     this.canvasWidth = canvas.width;
     this.canvasHeight = canvas.height;
+
+    const backImg = new Image();
+    backImg.onload = () => {
+      this.cardImages[0] = backImg;
+    };
+    backImg.src = '/src/assets/images/cards/back.svg';
+
+    for(let i = 1; i <= 12; i++){
+      const img = new Image();
+      img.onload = () => {
+        this.cardImages[i] = img;
+      };
+      img.src = `/src/assets/images/cards/${i}.svg`;
+    }
   }
 
   getCanvasWidth() {
@@ -100,6 +115,29 @@ export default class CanvasProcessor {
     }
   }
 
+  drawImageCard(
+    x: number,
+    y: number,
+    w: number,
+    h: number,
+    value: number,
+  ){
+    const img = this.cardImages[value];
+    const isBack = value === 0;
+
+    if(img?.complete && img.naturalHeight !== 0){
+      this.ctx.save();
+      this.ctx.shadowColor = SHADOW;
+      this.ctx.shadowBlur = 4;
+      this.ctx.shadowOffsetX = 2;
+      this.ctx.shadowOffsetY = 2;
+      this.ctx.drawImage(img, x, y, w, h);
+      this.ctx.restore();
+    } else {
+      this.drawCard(x, y, w, h, !isBack ? CARD_BG : BLUE, `${!isBack ? value : ''}`);
+    }
+  }
+
   drawDeck(
     cx: number,
     cy: number,
@@ -138,7 +176,7 @@ export default class CanvasProcessor {
 
     const tx = cx - cardW / 2 + stackCards * offsetX;
     const ty = cy - cardH / 2;
-    this.drawCard(tx, ty, cardW, cardH, color);
+    this.drawImageCard(tx, ty, cardW, cardH, 0);
 
     if (count !== undefined) {
       this.ctx.fillStyle = TEXT_MUTED;
@@ -247,7 +285,7 @@ export default class CanvasProcessor {
       for (let i = 0; i < 7; i++) {
         const cx = cardsStartX + i * (cardW + cardGap);
         if (i < cards.length) {
-          this.drawCard(cx, cardsStartY, cardW, cardH, CARD_BG, `${cards[i]}`);
+          this.drawImageCard(cx, cardsStartY, cardW, cardH, cards[i]);
         } else {
           this.roundRect(cx, cardsStartY, cardW, cardH, 4);
           this.ctx.strokeStyle = WHITE_10;
@@ -275,6 +313,26 @@ export default class CanvasProcessor {
   ) {
     this.ctx.fillStyle = BG;
     this.ctx.fillRect(0, 0, W, H);
+
+    this.ctx.save();
+    this.ctx.translate(0, H);
+    this.ctx.rotate(Math.PI / 4);
+    this.ctx.font = 'bold 90px sans-serif';
+    this.ctx.fillStyle = 'rgba(59,130,246,0.06)';
+    this.ctx.textAlign = 'left';
+    this.ctx.textBaseline = 'bottom';
+
+    for(let offsetY = 0; offsetY < H; offsetY += 80) {
+      this.ctx.save();
+      this.ctx.translate(-offsetY * 3, H * 0.7);
+      this.ctx.rotate(-Math.PI / 3);         
+      
+      for(let x = 0; x < W * 1.7; x += 300) {
+        this.ctx.fillText('Flip 7', x, 0);
+      }
+      this.ctx.restore();
+    }
+    this.ctx.restore();
 
     const panelH = 160;
     const panelY = H - panelH;
@@ -479,7 +537,7 @@ export default class CanvasProcessor {
 
     roundCards.forEach((val, i) => {
       const cx = cardsStartX + i * (cardW + gap);
-      this.drawCard(cx, cardsY, cardW, cardH, CARD_BG, `${val}`);
+      this.drawImageCard(cx, cardsY, cardW, cardH, val);
     });
 
     for (let i = roundCards.length; i < maxCards; i++) {
