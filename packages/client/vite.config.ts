@@ -2,7 +2,10 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import dotenv from 'dotenv';
 import path from 'path';
+import { swPrecachePlugin } from './src/sw-precache-plugin';
 dotenv.config();
+
+const distClientDir = path.join(__dirname, 'dist/client');
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -14,10 +17,10 @@ export default defineConfig({
     __INTERNAL_SERVER_URL__: JSON.stringify(process.env.INTERNAL_SERVER_URL),
   },
   build: {
-    outDir: path.join(__dirname, 'dist/client'),
+    outDir: distClientDir,
   },
   ssr: {
     format: 'cjs',
   },
-  plugins: [react()],
+  plugins: [react(), swPrecachePlugin(distClientDir)],
 });

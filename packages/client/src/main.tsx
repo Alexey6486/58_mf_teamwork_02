@@ -10,6 +10,12 @@ import { ErrorFallback } from './components/ErrorFallback';
 import { IdleObserver } from './components/idle-observer/idle-observer';
 import '../style.css';
 
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js');
+  });
+}
+
 const router = createBrowserRouter(routes);
 
 ReactDOM.hydrateRoot(
