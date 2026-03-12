@@ -11,7 +11,6 @@ export function swPrecachePlugin(outDir: string): Plugin {
       const swPath = path.join(distClientDir, 'sw.js');
 
       if (!fs.existsSync(swPath)) {
-        console.warn('[sw-precache] sw.js not found in', distClientDir);
         return;
       }
 
