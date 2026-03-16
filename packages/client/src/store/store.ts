@@ -42,6 +42,23 @@ export const store = configureStore({
 
 listenerMiddleware.startListening({
   predicate: action => {
+    return (
+      action.type === 'user/changeUserAvatarThunk/fulfilled' ||
+      action.type === 'user/changeUserDataThunk/fulfilled'
+    );
+  },
+  effect: async () => {
+    try {
+      const { user } = store.getState();
+      localStorage.setItem(LS_KEY, JSON.stringify(user?.data));
+    } catch (error) {
+      console.error('Failed to save user data:', error);
+    }
+  },
+});
+
+listenerMiddleware.startListening({
+  predicate: action => {
     return action.type === 'auth/loginThunk/fulfilled';
   },
   effect: async (action, listenerApi) => {
