@@ -41,6 +41,10 @@ export default class GameProcessor {
     return this.players.toArray();
   }
 
+  getPlayerCount() {
+    return this.playerCount;
+  }
+
   getRoundNumber() {
     return this.roundNumber;
   }
