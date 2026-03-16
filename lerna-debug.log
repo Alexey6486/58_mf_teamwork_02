@@ -1,23 +1,0 @@
-0 silly argv {
-0 silly argv   _: [ 'add' ],
-0 silly argv   scope: 'client',
-0 silly argv   globs: [],
-0 silly argv   lernaVersion: '5.4.3',
-0 silly argv   '$0': 'node_modules\\lerna\\cli.js',
-0 silly argv   pkg: 'jest'
-0 silly argv }
-1 notice cli v5.4.3
-2 verbose rootPath C:\Users\alexe\WebstormProjects\58_mf_teamwork_02
-3 error JSONError: Expected double-quoted property name in JSON at position 687 while parsing '{  "name": "client",  "version": "0.' in packages\client\package.json
-3 error
-3 error [0m [90m 12 |[39m     [32m"format"[39m[33m:[39m [32m"prettier --write ."[39m[33m,[39m[0m
-3 error [0m [90m 13 |[39m     [32m"test"[39m[33m:[39m [32m"jest ./"[39m[33m,[39m[0m
-3 error [0m[31m[1m>[22m[39m[90m 14 |[39m     [90m// "test": "jest --config jest.config.ts ./"[39m[0m
-3 error [0m [90m    |[39m     [31m[1m^[22m[39m[0m
-3 error [0m [90m 15 |[39m   }[33m,[39m[0m
-3 error [0m [90m 16 |[39m   [32m"dependencies"[39m[33m:[39m {[0m
-3 error [0m [90m 17 |[39m     [32m"@reduxjs/toolkit"[39m[33m:[39m [32m"^1.9.5"[39m[33m,[39m[0m
-3 error
-3 error     at parseJson (C:\Users\alexe\WebstormProjects\58_mf_teamwork_02\node_modules\parse-json\index.js:29:21)
-3 error     at parse (C:\Users\alexe\WebstormProjects\58_mf_teamwork_02\node_modules\load-json-file\index.js:15:9)
-3 error     at module.exports (C:\Users\alexe\WebstormProjects\58_mf_teamwork_02\node_modules\load-json-file\index.js:18:47)

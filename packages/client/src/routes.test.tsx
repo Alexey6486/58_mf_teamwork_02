@@ -19,8 +19,10 @@ import {
 } from './slices/user-slice';
 import { LS_KEY } from './constants/auth';
 
-const RoutesTest = () => <div>Profile Page</div>;
-const AuthorizationPageTest = () => <div>Authorization Page</div>;
+const ProfilePageText = 'Profile Page';
+const AuthorizationPageText = 'Authorization Page';
+const ProfilePageTest = () => <div>{ProfilePageText}</div>;
+const AuthorizationPageTest = () => <div>{AuthorizationPageText}</div>;
 
 const createTestStore = () => {
   return configureStore({
@@ -44,7 +46,7 @@ const createTestStore = () => {
 const renderWithProviders = (
   component: React.ReactElement,
   {
-    route = '/',
+    route = ROUTES.login,
   } = {}
 ) => {
   window.history.pushState({}, 'Test page', route);
@@ -68,13 +70,13 @@ describe('Jest ProtectedRoute component test', () => {
     renderWithProviders(
       <Routes>
         <Route path={ROUTES.login} element={<AuthorizationPageTest />} />
-        <Route path={ROUTES.profile} element={<ProtectedRoute><RoutesTest /></ProtectedRoute>} />
+        <Route path={ROUTES.profile} element={<ProtectedRoute><ProfilePageTest /></ProtectedRoute>} />
       </Routes>,
       { route: ROUTES.profile }
     );
 
-    expect(screen.getByText('Authorization Page')).toBeInTheDocument();
-    expect(screen.queryByText('Profile Page')).not.toBeInTheDocument();
+    expect(screen.getByText(AuthorizationPageText)).toBeInTheDocument();
+    expect(screen.queryByText(ProfilePageText)).not.toBeInTheDocument();
   });
 
   test('if there is user data in localStorage - render protected component', () => {
@@ -84,12 +86,12 @@ describe('Jest ProtectedRoute component test', () => {
     renderWithProviders(
       <Routes>
         <Route path={ROUTES.login} element={<AuthorizationPageTest />} />
-        <Route path={ROUTES.profile} element={<ProtectedRoute><RoutesTest /></ProtectedRoute>} />
+        <Route path={ROUTES.profile} element={<ProtectedRoute><ProfilePageTest /></ProtectedRoute>} />
       </Routes>,
       { route: ROUTES.profile }
     );
 
-    expect(screen.queryByText('Authorization Page')).not.toBeInTheDocument();
-    expect(screen.getByText('Profile Page')).toBeInTheDocument();
+    expect(screen.queryByText(AuthorizationPageText)).not.toBeInTheDocument();
+    expect(screen.getByText(ProfilePageText)).toBeInTheDocument();
   });
 });

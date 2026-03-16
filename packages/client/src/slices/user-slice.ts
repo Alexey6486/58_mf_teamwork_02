@@ -11,7 +11,7 @@ import {
 import { ERequestMethods } from '../enums';
 import { thunkCreator } from './thunk-creator';
 
-export interface UserState {
+interface UserState {
   data: Partial<IUser> | null;
   isLoading: boolean;
   error: {
@@ -21,7 +21,7 @@ export interface UserState {
   };
 }
 
-export const userInitialState: UserState = {
+const initialState: UserState = {
   data: null,
   isLoading: false,
   error: {
@@ -85,7 +85,7 @@ export const changeUserPasswordThunk = thunkCreator<
 
 export const userSlice = createSlice({
   name: 'user',
-  initialState: userInitialState,
+  initialState,
   reducers: {
     setUsers: (state, { payload }: PayloadAction<Partial<IUser>>) => {
       state.data = payload;
