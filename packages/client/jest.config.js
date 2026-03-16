@@ -11,5 +11,6 @@ export default {
   },
   moduleNameMapper: {
     '\\.(css|scss|sass)$': 'identity-obj-proxy'
-  }
+  },
+  setupFilesAfterEnv: ["<rootDir>/src/setupTests.ts"],
 };

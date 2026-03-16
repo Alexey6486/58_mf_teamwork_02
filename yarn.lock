@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+"@adobe/css-tools@^4.4.0":
+  version "4.4.4"
+  resolved "https://registry.yarnpkg.com/@adobe/css-tools/-/css-tools-4.4.4.tgz#2856c55443d3d461693f32d2b96fb6ea92e1ffa9"
+  integrity sha512-Elp+iwUx5rN5+Y8xLt5/GRoG20WGoDCQ/1Fb+1LiGtvwbDavuSk0jhD/eZdckHAuzcDzccnkv+rEjyWfRx18gg==
+
 "@alloc/quick-lru@^5.2.0":
   version "5.2.0"
   resolved "https://registry.yarnpkg.com/@alloc/quick-lru/-/quick-lru-5.2.0.tgz#7bf68b20c0a350f936915fcae06f58e32007ce30"
@@ -2041,6 +2046,18 @@
     lz-string "^1.4.4"
     pretty-format "^27.0.2"
 
+"@testing-library/jest-dom@^6.9.1":
+  version "6.9.1"
+  resolved "https://registry.yarnpkg.com/@testing-library/jest-dom/-/jest-dom-6.9.1.tgz#7613a04e146dd2976d24ddf019730d57a89d56c2"
+  integrity sha512-zIcONa+hVtVSSep9UT3jZ5rizo2BsxgyDYU7WFD5eICBE7no3881HGeb/QkGfsJs6JTkY1aQhT7rIPC7e+0nnA==
+  dependencies:
+    "@adobe/css-tools" "^4.4.0"
+    aria-query "^5.0.0"
+    css.escape "^1.5.1"
+    dom-accessibility-api "^0.6.3"
+    picocolors "^1.1.1"
+    redent "^3.0.0"
+
 "@testing-library/react@^13.3.0":
   version "13.3.0"
   resolved "https://registry.npmjs.org/@testing-library/react/-/react-13.3.0.tgz"
@@ -3549,6 +3566,11 @@ css-tree@^3.1.0:
     mdn-data "2.12.2"
     source-map-js "^1.0.1"
 
+css.escape@^1.5.1:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/css.escape/-/css.escape-1.5.1.tgz#42e27d4fa04ae32f931a4b4d4191fa9cddee97cb"
+  integrity sha512-YUifsXXuknHlUsmlgyY0PKzgPOr7/FjCePfHNt0jxm83wHZi44VDMQ7/fGNkjY3/jV1MC+1CmZbaHzugyeRtpg==
+
 cssesc@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/cssesc/-/cssesc-3.0.0.tgz#37741919903b868565e1c09ea747445cd18983ee"
@@ -3779,6 +3801,11 @@ dom-accessibility-api@^0.5.9:
   version "0.5.14"
   resolved "https://registry.npmjs.org/dom-accessibility-api/-/dom-accessibility-api-0.5.14.tgz"
   integrity sha512-NMt+m9zFMPZe0JcY9gN224Qvk6qLIdqex29clBvc/y75ZBX9YA9wNK3frsYvu2DI1xcCIwxwnX+TlsJ2DSOADg==
+
+dom-accessibility-api@^0.6.3:
+  version "0.6.3"
+  resolved "https://registry.yarnpkg.com/dom-accessibility-api/-/dom-accessibility-api-0.6.3.tgz#993e925cc1d73f2c662e7d75dd5a5445259a8fd8"
+  integrity sha512-7ZgogeTnjuHbo+ct10G9Ffp0mif17idi0IyWNVA/wcwcm7NPOD/WEHVP3n7n3MhXqxoIYm8d6MuZohYWIZ4T3w==
 
 domexception@^4.0.0:
   version "4.0.0"
