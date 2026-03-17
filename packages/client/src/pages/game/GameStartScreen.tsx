@@ -76,9 +76,9 @@ export const GameStartScreen: FC<GameStartScreenProps> = ({ onStart }) => {
     for (let i = 0; i < newNameArr.length; i++) {
       newNameArr[i].name = `Игрок ${index + i + 1}`;
     }
-    setPlayersConfig(
-      playersConfig.toSpliced(index, playersConfig.length, ...newNameArr)
-    );
+    const updated = [...playersConfig];
+    updated.splice(index, playersConfig.length, ...newNameArr);
+    setPlayersConfig(updated);
   };
 
   const changePlayerType = (
@@ -99,7 +99,9 @@ export const GameStartScreen: FC<GameStartScreenProps> = ({ onStart }) => {
       newPlayer.difficulty = dif;
     }
 
-    setPlayersConfig(playersConfig.toSpliced(index, 1, newPlayer));
+    const updated = [...playersConfig];
+    updated.splice(index, 1, newPlayer);
+    setPlayersConfig(updated);
   };
 
   const handleStart = () => {
