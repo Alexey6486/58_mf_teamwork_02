@@ -111,7 +111,7 @@ export default class GameProcessor {
           SCORES_TO_FINISH_GAME_VALUE
         ) {
           this.commitRoundScores();
-          this.winner = this.players.current();
+          this.setWinner();
         }
       }
     }
@@ -127,5 +127,16 @@ export default class GameProcessor {
 
   hasWinner() {
     return this.winner !== null;
+  }
+
+  setWinner() {
+    if (this.players.current()) {
+      if (this.winner !== null) {
+        const winnerResults = this.winner.getTotalScore();
+        const currentResults = this.players.current()!.getTotalScore();
+        if (currentResults > winnerResults)
+          this.winner = this.players.current();
+      } else this.winner = this.players.current();
+    }
   }
 }
