@@ -40,7 +40,7 @@ export const ROUTES = {
   error500: '/error',
 };
 
-const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
+export const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   const location = useLocation();
   const { isAuthed } = useIsAuthed();
 
