@@ -23,6 +23,8 @@ import { ROUTES } from '../../routes';
 import { MAX_PLAYERS, MIN_PLAYERS } from '../../constants/game';
 import { IconButton } from '../../components/IconButton';
 import { EIconButton } from '../../enums';
+import { selectUser } from '../../slices/user-slice';
+import { useSelector } from '../../store/store';
 
 const COMPUTER_DIFFICULTY_LABELS: Record<ComputerPlayerDifficulty, string> = {
   [ComputerPlayerDifficulty.EASY]: 'Комп.Легкий',
@@ -34,9 +36,9 @@ type GameStartScreenProps = {
   onStart: (config: GameConfig) => void;
 };
 
-const getDefaultConfig = () => {
+const getDefaultConfig = (user: string) => {
   return [
-    { name: 'Игрок 1', type: PlayerType.Human },
+    { name: user, type: PlayerType.Human },
     {
       name: 'Игрок 2',
       type: PlayerType.Computer,
@@ -47,10 +49,12 @@ const getDefaultConfig = () => {
 
 export const GameStartScreen: FC<GameStartScreenProps> = ({ onStart }) => {
   const navigate = useNavigate();
+  const { first_name, display_name } = useSelector(selectUser) || {};
+  const userName = display_name || first_name || 'Игрок 1';
   // const [playerType, setPlayerType] = useState<PlayerType>(PlayerType.Computer);
   const [playerCount, setPlayerCount] = useState(MIN_PLAYERS);
   const [playersConfig, setPlayersConfig] = useState<PlayerConfig[]>(
-    getDefaultConfig()
+    getDefaultConfig(userName)
   );
 
   const handlePlayerCountChange = (delta: number) => {
