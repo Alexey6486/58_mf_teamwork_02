@@ -2,12 +2,12 @@ import { type FC, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   APP_TITLE_CLASS,
+  BTN_CLASS,
   BTN_GROUP_CLASS,
   COUNTER_BTN_CLASS,
   FORM_CONTAINER_CLASS,
   FORM_PAGE_CONTAINER_CLASS,
   FORM_TITLE_CLASS,
-  TITLE_CLASS,
   TOGGLE_BTN_ACTIVE_CLASS,
   TOGGLE_BTN_BASE_CLASS,
   TOGGLE_BTN_INACTIVE_CLASS,
@@ -21,26 +21,41 @@ import {
 } from './types';
 import { ROUTES } from '../../routes';
 import { MAX_PLAYERS, MIN_PLAYERS } from '../../constants/game';
-import { selectUser } from '../../slices/user-slice';
-import { useSelector } from '../../store/store';
 import { IconButton } from '../../components/IconButton';
 import { EIconButton } from '../../enums';
+import { selectUser } from '../../slices/user-slice';
+import { useSelector } from '../../store/store';
 
-const PLAYER_TYPE_LABELS: Record<PlayerType, string> = {
-  [PlayerType.Human]: 'Человек',
-  [PlayerType.Computer]: 'Компьютер',
+const COMPUTER_DIFFICULTY_LABELS: Record<ComputerPlayerDifficulty, string> = {
+  [ComputerPlayerDifficulty.EASY]: 'Комп.Легкий',
+  [ComputerPlayerDifficulty.NORMAL]: 'Комп.Средний',
+  [ComputerPlayerDifficulty.HARD]: 'Комп.Тяжелый',
 };
 
 type GameStartScreenProps = {
   onStart: (config: GameConfig) => void;
 };
 
+const getDefaultConfig = (user: string) => {
+  return [
+    { name: user, type: PlayerType.Human },
+    {
+      name: 'Игрок 2',
+      type: PlayerType.Computer,
+      difficulty: ComputerPlayerDifficulty.NORMAL,
+    },
+  ] as PlayerConfig[];
+};
+
 export const GameStartScreen: FC<GameStartScreenProps> = ({ onStart }) => {
   const navigate = useNavigate();
   const { first_name, display_name } = useSelector(selectUser) || {};
-  const userName = display_name || first_name || 'Игрок';
-  const [playerType, setPlayerType] = useState<PlayerType>(PlayerType.Computer);
+  const userName = display_name || first_name || 'Игрок 1';
+  // const [playerType, setPlayerType] = useState<PlayerType>(PlayerType.Computer);
   const [playerCount, setPlayerCount] = useState(MIN_PLAYERS);
+  const [playersConfig, setPlayersConfig] = useState<PlayerConfig[]>(
+    getDefaultConfig(userName)
+  );
 
   const handlePlayerCountChange = (delta: number) => {
     const next = playerCount + delta;
@@ -49,25 +64,54 @@ export const GameStartScreen: FC<GameStartScreenProps> = ({ onStart }) => {
     }
   };
 
-  const handleStart = () => {
-    // const config: GameConfig = getMockConfig();
-    const players: PlayerConfig[] = [
-      { name: userName, type: PlayerType.Human },
-    ];
-    if (playerType === PlayerType.Human)
-      players.push({ name: 'Игрок 2', type: PlayerType.Human });
-    else {
-      for (let i = 0; i < playerCount - 1; i++)
-        players.push({
-          name: `Компьютер ${i + 1}`,
-          type: PlayerType.Computer,
-          difficulty: ComputerPlayerDifficulty.NORMAL,
-        });
+  const fillPlayer = () => {
+    handlePlayerCountChange(1);
+    const newPlayer: PlayerConfig = {
+      name: `Игрок ${playerCount}`,
+      type: PlayerType.Human,
+    };
+    playersConfig.push(newPlayer);
+    setPlayersConfig(playersConfig);
+  };
+
+  const removePlayer = (index: number) => {
+    handlePlayerCountChange(-1);
+    const newNameArr = playersConfig.slice(index + 1);
+    for (let i = 0; i < newNameArr.length; i++) {
+      newNameArr[i].name = `Игрок ${index + i + 1}`;
+    }
+    const updated = [...playersConfig];
+    updated.splice(index, playersConfig.length, ...newNameArr);
+    setPlayersConfig(updated);
+  };
+
+  const changePlayerType = (
+    player: PlayerConfig,
+    type: PlayerType,
+    index: number,
+    dif?: ComputerPlayerDifficulty
+  ) => {
+    const newPlayer = player;
+
+    if (type === PlayerType.Human && player.type === PlayerType.Computer) {
+      (newPlayer.type = type), delete newPlayer.difficulty;
+    }
+    if (type === PlayerType.Computer && player.type === PlayerType.Human) {
+      (newPlayer.type = type), (newPlayer.difficulty = dif);
+    }
+    if (type === player.type && dif) {
+      newPlayer.difficulty = dif;
     }
 
+    const updated = [...playersConfig];
+    updated.splice(index, 1, newPlayer);
+    setPlayersConfig(updated);
+  };
+
+  const handleStart = () => {
     const config: GameConfig = {
-      playerCount: players.length,
-      players: players,
+      players: playersConfig,
+      playerCount: playerCount,
     };
     onStart(config);
   };
@@ -89,45 +133,66 @@ export const GameStartScreen: FC<GameStartScreenProps> = ({ onStart }) => {
         <h1 className={APP_TITLE_CLASS}>Flip 7</h1>
         <h2 className={FORM_TITLE_CLASS}>Настройки игры</h2>
         <div className="flex flex-col gap-6 w-full">
-          <div className="flex gap-2 w-full">
-            {[PlayerType.Computer, PlayerType.Human].map(type => (
-              <button
-                key={type}
-                className={`${TOGGLE_BTN_BASE_CLASS} ${
-                  playerType === type
-                    ? TOGGLE_BTN_ACTIVE_CLASS
-                    : TOGGLE_BTN_INACTIVE_CLASS
-                }`}
-                onClick={() => setPlayerType(type)}>
-                {PLAYER_TYPE_LABELS[type]}
-              </button>
-            ))}
-          </div>
-
-          {playerType === PlayerType.Computer && (
-            <div className="flex flex-col gap-2 items-center">
-              <span className={`${TITLE_CLASS} text-center`}>
-                Количество игроков
-              </span>
-              <div className="flex items-center gap-4">
-                <button
-                  className={COUNTER_BTN_CLASS}
-                  onClick={() => handlePlayerCountChange(-1)}
-                  disabled={playerCount <= MIN_PLAYERS}>
-                  −
-                </button>
-                <span className={`${TITLE_CLASS} text-xl w-4 text-center`}>
-                  {playerCount}
-                </span>
-                <button
-                  className={COUNTER_BTN_CLASS}
-                  onClick={() => handlePlayerCountChange(1)}
-                  disabled={playerCount >= MAX_PLAYERS}>
-                  +
-                </button>
-              </div>
+          <div>
+            <div>
+              {playersConfig.map((player, index) => (
+                <div key={index}>
+                  <span>{player.name}</span>
+                  <div className="flex gap-2 w-full">
+                    <button
+                      className={`${TOGGLE_BTN_BASE_CLASS} ${
+                        player.type === 'human'
+                          ? TOGGLE_BTN_ACTIVE_CLASS
+                          : TOGGLE_BTN_INACTIVE_CLASS
+                      }`}
+                      onClick={() =>
+                        changePlayerType(player, PlayerType.Human, index)
+                      }>
+                      Человек
+                    </button>
+                    <div>
+                      {[
+                        ComputerPlayerDifficulty.EASY,
+                        ComputerPlayerDifficulty.NORMAL,
+                        ComputerPlayerDifficulty.HARD,
+                      ].map(dif => (
+                        <button
+                          className={`${TOGGLE_BTN_BASE_CLASS} ${
+                            player.difficulty === dif
+                              ? TOGGLE_BTN_ACTIVE_CLASS
+                              : TOGGLE_BTN_INACTIVE_CLASS
+                          }`}
+                          onClick={() =>
+                            changePlayerType(
+                              player,
+                              PlayerType.Computer,
+                              index,
+                              dif
+                            )
+                          }>
+                          {COMPUTER_DIFFICULTY_LABELS[dif]}
+                        </button>
+                      ))}
+                    </div>
+                    <button
+                      className={COUNTER_BTN_CLASS}
+                      onClick={() => removePlayer(index)}
+                      disabled={playerCount <= 2}>
+                      -
+                    </button>
+                  </div>
+                </div>
+              ))}
             </div>
-          )}
+            <div className={BTN_GROUP_CLASS}>
+              <button
+                className={BTN_CLASS}
+                onClick={() => fillPlayer()}
+                disabled={playerCount >= MAX_PLAYERS}>
+                Добавить игрока
+              </button>
+            </div>
+          </div>
         </div>
         <div className={BTN_GROUP_CLASS}>
           <Button onClick={handleStart} content="Начать игру" />

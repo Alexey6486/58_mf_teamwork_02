@@ -59,22 +59,22 @@ export const GamePlayScreen: FC<GamePlayScreenProps> = ({
   const discardCountRef = useRef(0);
 
   const advanceTurn = useCallback(() => {
-    if (gameProcessor.hasWinner()) {
-      const winner = gameProcessor.getWinner();
-      onFinish({
-        winnerName: winner!.getName(),
-        players: gameProcessor
-          .getPlayers()
-          .map(p => ({ name: p.getName(), totalScore: p.getTotalScore() }))
-          .sort((a, b) => b.totalScore - a.totalScore),
-      });
-      return;
-    }
-
     const next = gameProcessor.getNextInRoundPlayer();
     if (next === null) {
       gameProcessor.commitRoundScores();
       setRoundEnded(true);
+
+      if (gameProcessor.hasWinner()) {
+        const winner = gameProcessor.getWinner();
+        onFinish({
+          winnerName: winner!.getName(),
+          players: gameProcessor
+            .getPlayers()
+            .map(p => ({ name: p.getName(), totalScore: p.getTotalScore() }))
+            .sort((a, b) => b.totalScore - a.totalScore),
+        });
+        return;
+      }
     } else {
       if (next instanceof ComputerPlayerProcessor) {
         if (

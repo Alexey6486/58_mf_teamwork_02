@@ -26,6 +26,7 @@ export default abstract class APlayerProcessor {
     this.roundCards = new Queue<ICard>();
     this.roundScore = 0;
     this.roundScoreFailure = false;
+    this.roundScoreSuccess = false;
   }
 
   public invalidateRoundResults() {
@@ -40,7 +41,7 @@ export default abstract class APlayerProcessor {
     let score = 0;
     if (!this.roundScoreFailure) {
       this.roundCards.toArray().forEach(card => {
-        if (card.type == CardType.SIMPLE) score += card.value as number;
+        if (card.type === CardType.SIMPLE) score += card.value as number;
       });
       if (this.roundScoreSuccess) score += BONUS_SCORE_VALUE;
     }
@@ -93,7 +94,7 @@ export default abstract class APlayerProcessor {
   public getSimpleCardsNumber() {
     return this.roundCards
       .toArray()
-      .filter(card => card.type == CardType.SIMPLE).length;
+      .filter(card => card.type === CardType.SIMPLE).length;
   }
 
   public abstract wantsToPlay(cardDeck: ICard[], cardDrop: ICard[]): boolean;
