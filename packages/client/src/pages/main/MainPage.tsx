@@ -4,6 +4,7 @@ import {
   MAIN_CONTAINER_CLASS
 } from '../../constants/style-groups'
 import { Button } from "../../components/Button";
+import { PageInitArgs } from '../../routes'
 
 export const MainPage = () => {
     const navigate = useNavigate();
@@ -37,3 +38,5 @@ export const MainPage = () => {
         </div>
     );
 };
+
+export const initMainPage = async (_: PageInitArgs) => Promise.resolve();

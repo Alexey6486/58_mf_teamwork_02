@@ -12,7 +12,10 @@ import {
   requiredString,
 } from '../../validations';
 import { Fields } from '../../fields';
-import { ROUTES } from '../../routes';
+import {
+  PageInitArgs,
+  ROUTES
+} from '../../routes'
 import {
   BTN_CLASS,
   BTN_GROUP_CLASS,
@@ -111,3 +114,5 @@ export const AuthorizationPage: FC = () => {
     </div>
   );
 };
+
+export const initAuthPage = async (_: PageInitArgs) => Promise.resolve();

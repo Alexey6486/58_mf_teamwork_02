@@ -1,2 +1,2 @@
-export { ProfilePage } from './ProfilePage';
-export { PasswordChange } from './PasswordChange';
+export { ProfilePage, initProfilePage } from './ProfilePage';
+export { PasswordChange, initPasswordChangePage } from './PasswordChange';

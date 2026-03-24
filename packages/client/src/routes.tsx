@@ -12,10 +12,20 @@ import {
   GamePage,
   MainPage,
   LeaderboardPage,
+  initGamePage,
+  initLeaderBoardPage,
+  initProfilePage,
+  initMainPage,
+  initErrorPage,
+  initAuthPage,
+  initPasswordChangePage,
+  initRegistrationPage,
+  ForumPage,
+  initForumPage,
+  TopicPage,
+  initTopicPage,
 } from './pages';
 import { useIsAuthed } from './hooks';
-import { ForumPage } from './pages/forum/Forum';
-import { TopicPage } from './pages/topic/Topic';
 
 export type PageInitContext = {
   clientToken?: string;
@@ -65,12 +75,12 @@ export const routes = [
   {
     path: ROUTES.login,
     Component: AuthorizationPage,
-    fetchData: () => null,
+    fetchData: initAuthPage,
   },
   {
     path: ROUTES.signup,
     Component: RegistrationPage,
-    fetchData: () => null,
+    fetchData: initRegistrationPage,
   },
   {
     path: ROUTES.main,
@@ -79,7 +89,7 @@ export const routes = [
         <MainPage />
       </ProtectedRoute>
     ),
-    fetchData: () => null,
+    fetchData: initMainPage,
   },
   {
     path: ROUTES.profile,
@@ -88,7 +98,7 @@ export const routes = [
         <ProfilePage />
       </ProtectedRoute>
     ),
-    fetchData: () => null,
+    fetchData: initProfilePage,
   },
   {
     path: ROUTES.password,
@@ -97,7 +107,7 @@ export const routes = [
         <PasswordChange />
       </ProtectedRoute>
     ),
-    fetchData: () => null,
+    fetchData: initPasswordChangePage,
   },
   {
     path: ROUTES.game,
@@ -106,7 +116,7 @@ export const routes = [
         <GamePage />
       </ProtectedRoute>
     ),
-    fetchData: () => null,
+    fetchData: initGamePage,
   },
   {
     path: ROUTES.leaderboard,
@@ -115,7 +125,7 @@ export const routes = [
         <LeaderboardPage />
       </ProtectedRoute>
     ),
-    fetchData: () => null,
+    fetchData: initLeaderBoardPage,
   },
   {
     path: ROUTES.forum,
@@ -124,7 +134,7 @@ export const routes = [
         <ForumPage />
       </ProtectedRoute>
     ),
-    fetchData: () => null,
+    fetchData: initForumPage,
   },
   {
     path: ROUTES.topic,
@@ -133,12 +143,12 @@ export const routes = [
         <TopicPage />
       </ProtectedRoute>
     ),
-    fetchData: () => null,
+    fetchData: initTopicPage,
   },
   {
     path: ROUTES.error500,
     Component: Error500,
-    fetchData: () => null,
+    fetchData: initErrorPage,
   },
   {
     path: '*',

@@ -7,7 +7,10 @@ import {
   FORM_PAGE_CONTAINER_CLASS,
   MAIN_CONTAINER_CLASS,
 } from '../../constants/style-groups';
-import { ROUTES } from '../../routes';
+import {
+  PageInitArgs,
+  ROUTES
+} from '../../routes'
 import { useDispatch, useSelector } from '../../store/store';
 import { addTopic } from '../../slices/forum-slice';
 import { IconButton } from '../../components/IconButton';
@@ -98,3 +101,5 @@ export const ForumPage: FC = () => {
     </div>
   );
 };
+
+export const initForumPage = async (_: PageInitArgs) => Promise.resolve();

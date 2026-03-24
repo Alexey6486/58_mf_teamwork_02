@@ -5,6 +5,7 @@ import {
 } from '../../constants/style-groups';
 import { IconButton } from '../../components/IconButton';
 import { EIconButton } from '../../enums';
+import { PageInitArgs } from '../../routes'
 
 export const Error500 = () => {
   const navigate = useNavigate();
@@ -32,3 +33,5 @@ export const Error500 = () => {
     </div>
   );
 };
+
+export const initErrorPage = async (_: PageInitArgs) => Promise.resolve();

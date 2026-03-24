@@ -19,7 +19,10 @@ import {
 } from '../../slices/user-slice';
 import { type IUser } from '../../types';
 import { URL_BASE_IMG } from '../../constants/urls';
-import { ROUTES } from '../../routes';
+import {
+  PageInitArgs,
+  ROUTES
+} from '../../routes'
 import {
   BTN_CLASS,
   BTN_GROUP_CLASS,
@@ -35,6 +38,7 @@ import { logoutThunk } from '../../slices/auth-slice';
 import { LS_KEY } from '../../constants/auth';
 import { IconButton } from '../../components/IconButton';
 import { EIconButton } from '../../enums';
+import { initAuthPage } from '../authorization/Authorization'
 
 const INITIAL_VALUES: Partial<IUser> = {
   first_name: '',
@@ -232,3 +236,5 @@ export const ProfilePage: FC = () => {
     </div>
   );
 };
+
+export const initProfilePage = async (_: PageInitArgs) => Promise.resolve();

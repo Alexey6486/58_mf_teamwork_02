@@ -14,7 +14,10 @@ import {
 import { useDispatch } from 'react-redux';
 import { type AppDispatch } from '../../store/store';
 import { Fields } from '../../fields';
-import { ROUTES } from '../../routes';
+import {
+  PageInitArgs,
+  ROUTES
+} from '../../routes'
 import {
   BTN_CLASS,
   BTN_GROUP_CLASS,
@@ -123,3 +126,5 @@ export const PasswordChange: FC = () => {
     </div>
   );
 };
+
+export const initPasswordChangePage = async (_: PageInitArgs) => Promise.resolve();

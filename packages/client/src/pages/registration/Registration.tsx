@@ -13,7 +13,10 @@ import {
 } from '../../validations';
 import { type AppDispatch, useSelector } from '../../store/store';
 import { type IRegistrationForm } from '../../types';
-import { ROUTES } from '../../routes';
+import {
+  PageInitArgs,
+  ROUTES
+} from '../../routes'
 import {
   BTN_CLASS,
   BTN_GROUP_CLASS,
@@ -201,3 +204,5 @@ export const RegistrationPage: FC = () => {
     </div>
   );
 };
+
+export const initRegistrationPage = async (_: PageInitArgs) => Promise.resolve();

@@ -100,7 +100,7 @@ async function createServer() {
             isJSON: true,
           })}</script>`
         );
-
+      console.log({ html })
       // Завершаем запрос и отдаём HTML-страницу
       res.status(200).set({ 'Content-Type': 'text/html' }).end(html);
     } catch (e) {
