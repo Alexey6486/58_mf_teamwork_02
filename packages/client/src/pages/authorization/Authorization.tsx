@@ -1,9 +1,13 @@
-import { type FC, type MouseEvent, useEffect } from 'react';
+import {
+  type FC,
+  type MouseEvent,
+  useEffect
+} from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { FormikProvider, useFormik } from 'formik';
 import { useDispatch } from 'react-redux';
-import { Logo } from '../../components/Logo/Logo'
+import { Logo } from '../../components/Logo/Logo';
 import type { IAuthorizationForm } from '../../types';
 import {
   REGEX,
@@ -15,7 +19,7 @@ import { Fields } from '../../fields';
 import {
   type PageInitArgs,
   ROUTES
-} from '../../routes'
+} from '../../routes';
 import {
   BTN_CLASS,
   BTN_GROUP_CLASS,
@@ -25,11 +29,10 @@ import {
   FORM_PAGE_CONTAINER_CLASS,
   FORM_WRAPPER_CLASS,
   MAIN_CONTAINER_CLASS
-} from '../../constants/style-groups'
+} from '../../constants/style-groups';
 import { type AppDispatch, useSelector } from '../../store/store';
 import { loginThunk, logoutThunk } from '../../slices/auth-slice';
 import { selectUser } from '../../slices/user-slice';
-import { useIsAuthed } from '../../hooks';
 
 const INITIAL_VALUES: IAuthorizationForm = {
   login: '',
@@ -47,7 +50,6 @@ const passwordFormSchema = Yup.object().shape({
 
 export const AuthorizationPage: FC = () => {
   const user = useSelector(selectUser);
-  const { isAuthed } = useIsAuthed();
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
@@ -72,9 +74,11 @@ export const AuthorizationPage: FC = () => {
     navigate(ROUTES.signup);
   };
 
-  // useEffect(() => {
-    // dispatch(logoutThunk());
-  // }, []);
+  useEffect(() => {
+    if (user) {
+      navigate(ROUTES.main);
+    }
+  }, [user]);
 
   return (
     <div className={MAIN_CONTAINER_CLASS}>

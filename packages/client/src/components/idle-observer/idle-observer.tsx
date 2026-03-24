@@ -37,7 +37,7 @@ export const IdleObserver: React.FC<Props> = ({
 
   const [events] = useState(eventsList);
 
-  let intervalId: React.MutableRefObject<null | NodeJS.Timer> = useRef(null);
+  const intervalId: React.MutableRefObject<null | NodeJS.Timer> = useRef(null);
 
   const idle = idleLimit < MIN_IDLE_LIMIT ? MIN_IDLE_LIMIT : idleLimit;
 
@@ -45,7 +45,6 @@ export const IdleObserver: React.FC<Props> = ({
     localStorage.setItem(LS_ACT, String(new Date().getTime()));
 
   const clearSubscribes = () => {
-    console.log('clearSubscribes', { intervalId })
     if (intervalId?.current) {
       clearInterval(intervalId.current);
     }
@@ -63,7 +62,7 @@ export const IdleObserver: React.FC<Props> = ({
       events.forEach(event => {
         window.addEventListener(event, getCurrentTimestamp);
       });
-      console.log('useEffect', { intervalId })
+
       intervalId.current = setInterval(() => {
         const lastActivityTimestamp = Number(localStorage.getItem(LS_ACT)) || 0;
         const currentTimestamp = new Date().getTime();

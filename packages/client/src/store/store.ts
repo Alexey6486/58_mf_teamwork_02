@@ -63,9 +63,7 @@ listenerMiddleware.startListening({
   },
   effect: async (action, listenerApi) => {
     try {
-      const userData = await listenerApi.dispatch(fetchUserThunk()).unwrap();
-      localStorage.setItem(LS_KEY, JSON.stringify(userData));
-      window.location.replace(ROUTES.main);
+      await listenerApi.dispatch(fetchUserThunk());
     } catch (error) {
       console.error('Failed to fetch user data:', error);
     }

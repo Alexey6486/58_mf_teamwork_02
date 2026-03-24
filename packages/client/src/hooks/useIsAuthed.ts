@@ -2,14 +2,24 @@ import { useEffect, useState } from 'react';
 import {
   URL_BASE,
   URL_USER_DATA
-} from '../constants/urls'
-import { ERequestMethods } from '../enums'
-import { useSelector } from '../store/store'
-import { selectUser } from '../slices/user-slice'
+} from '../constants/urls';
+import { ERequestMethods } from '../enums';
+import {
+  AppDispatch,
+  useSelector
+} from '../store/store';
+import {
+  selectUser,
+  setUsers
+} from '../slices/user-slice';
+import { useDispatch } from 'react-redux';
+import { safeJsonParse } from '../utils';
 
 export const useIsAuthed = () => {
   const user = useSelector(selectUser);
+  const dispatch = useDispatch<AppDispatch>();
   const [isAuthed, setIsAuthed] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -22,12 +32,15 @@ export const useIsAuthed = () => {
           credentials: 'include' as RequestCredentials,
         });
 
-        console.log({userData})
         if (userData.ok) {
           setIsAuthed(true);
+          setIsLoading(false);
+          const data = await safeJsonParse(userData);
+          dispatch(setUsers(data));
         }
       } catch (e) {
         console.log({ e })
+        setIsLoading(false);
       }
     };
 
@@ -35,8 +48,9 @@ export const useIsAuthed = () => {
       checkAuth().then();
     } else {
       setIsAuthed(true);
+      setIsLoading(false);
     }
   }, []);
 
-  return { isAuthed };
+  return { isAuthed, isLoading };
 };

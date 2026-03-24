@@ -52,8 +52,7 @@ export const ROUTES = {
 
 export const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   const location = useLocation();
-  const { isAuthed } = useIsAuthed();
-  console.log({isAuthed})
+  const { isAuthed, isLoading } = useIsAuthed();
   const [shouldNavigate, setShouldNavigate] = useState(false);
 
   useEffect(() => {
@@ -61,11 +60,12 @@ export const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   }, []);
 
   if (shouldNavigate) {
-    if (!isAuthed) {
+    if (!isAuthed && !isLoading) {
       return <Navigate to={ROUTES.login} replace state={{ from: location }} />;
     }
-
-    return children;
+    if (isAuthed && !isLoading) {
+      return children;
+    }
   }
 
   return null;
