@@ -84,6 +84,7 @@ async function createServer() {
                 .replace(`<!--ssr-initial-state-->`, `<script>window.APP_INITIAL_STATE = ${(0, serialize_javascript_1.default)(initialState, {
                 isJSON: true,
             })}</script>`);
+            console.log('createServer html template', { html });
             // Завершаем запрос и отдаём HTML-страницу
             res.status(200).set({ 'Content-Type': 'text/html' }).end(html);
         }

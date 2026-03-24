@@ -4,7 +4,7 @@ import type { ILeaderboard } from '../types';
 import { ERequestMethods } from '../enums';
 import { thunkCreator } from './thunk-creator';
 
-interface LeaderboardState {
+export interface LeaderboardState {
   data: ILeaderboard[];
   isLoading: boolean;
   error: {

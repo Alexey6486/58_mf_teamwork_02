@@ -11,7 +11,7 @@ import {
 import { ERequestMethods } from '../enums';
 import { thunkCreator } from './thunk-creator';
 
-interface UserState {
+export interface UserState {
   data: Partial<IUser> | null;
   isLoading: boolean;
   error: {

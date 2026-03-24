@@ -5,7 +5,7 @@ import { type Message, type Topic } from '../types/forum';
 
 const FORUM_LS_KEY = 'forum_state_v1';
 
-interface ForumState {
+export interface ForumState {
   topics: Topic[];
   messagesByTopicId: Record<number, Message[]>;
 }
