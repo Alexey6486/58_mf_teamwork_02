@@ -53,7 +53,7 @@ export const ROUTES = {
 export const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   const location = useLocation();
   const { isAuthed } = useIsAuthed();
-
+  console.log({isAuthed})
   const [shouldNavigate, setShouldNavigate] = useState(false);
 
   useEffect(() => {

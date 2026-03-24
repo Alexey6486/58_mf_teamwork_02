@@ -15,7 +15,7 @@ import { useDispatch } from 'react-redux';
 import { type AppDispatch } from '../../store/store';
 import { Fields } from '../../fields';
 import {
-  PageInitArgs,
+  type PageInitArgs,
   ROUTES
 } from '../../routes'
 import {

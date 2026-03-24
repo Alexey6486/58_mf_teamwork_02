@@ -5,7 +5,7 @@ import {
 } from '../../constants/style-groups';
 import { IconButton } from '../../components/IconButton';
 import { EIconButton } from '../../enums';
-import { PageInitArgs } from '../../routes'
+import { type PageInitArgs } from '../../routes'
 
 export const Error500 = () => {
   const navigate = useNavigate();

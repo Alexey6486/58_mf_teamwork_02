@@ -14,7 +14,7 @@ import {
 import { type AppDispatch, useSelector } from '../../store/store';
 import { type IRegistrationForm } from '../../types';
 import {
-  PageInitArgs,
+  type PageInitArgs,
   ROUTES
 } from '../../routes'
 import {

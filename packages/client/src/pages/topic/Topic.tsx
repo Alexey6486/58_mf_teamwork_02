@@ -10,7 +10,7 @@ import {
 import { useDispatch, useSelector } from '../../store/store';
 import { addMessage } from '../../slices/forum-slice';
 import {
-  PageInitArgs,
+  type PageInitArgs,
   ROUTES
 } from '../../routes'
 import { IconButton } from '../../components/IconButton';

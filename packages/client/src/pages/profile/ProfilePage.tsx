@@ -20,7 +20,7 @@ import {
 import { type IUser } from '../../types';
 import { URL_BASE_IMG } from '../../constants/urls';
 import {
-  PageInitArgs,
+  type PageInitArgs,
   ROUTES
 } from '../../routes'
 import {
@@ -38,7 +38,6 @@ import { logoutThunk } from '../../slices/auth-slice';
 import { LS_KEY } from '../../constants/auth';
 import { IconButton } from '../../components/IconButton';
 import { EIconButton } from '../../enums';
-import { initAuthPage } from '../authorization/Authorization'
 
 const INITIAL_VALUES: Partial<IUser> = {
   first_name: '',

@@ -5,7 +5,7 @@ import {
   MAIN_CONTAINER_CLASS,
 } from '../../constants/style-groups';
 import {
-  PageInitArgs,
+  type PageInitArgs,
   ROUTES
 } from '../../routes'
 

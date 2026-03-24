@@ -13,7 +13,7 @@ import {
 } from '../../validations';
 import { Fields } from '../../fields';
 import {
-  PageInitArgs,
+  type PageInitArgs,
   ROUTES
 } from '../../routes'
 import {
@@ -72,13 +72,9 @@ export const AuthorizationPage: FC = () => {
     navigate(ROUTES.signup);
   };
 
-  useEffect(() => {
-    if (isAuthed || (user !== null && user.id)) {
-      navigate(ROUTES.main);
-    } else {
-      dispatch(logoutThunk());
-    }
-  }, [isAuthed, user]);
+  // useEffect(() => {
+    // dispatch(logoutThunk());
+  // }, []);
 
   return (
     <div className={MAIN_CONTAINER_CLASS}>

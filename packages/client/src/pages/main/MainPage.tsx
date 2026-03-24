@@ -4,7 +4,7 @@ import {
   MAIN_CONTAINER_CLASS
 } from '../../constants/style-groups'
 import { Button } from "../../components/Button";
-import { PageInitArgs } from '../../routes'
+import { type PageInitArgs } from '../../routes'
 
 export const MainPage = () => {
     const navigate = useNavigate();

@@ -11,7 +11,7 @@ import {
 } from '../../constants/style-groups';
 import { Button } from '../../components/Button';
 import {
-  PageInitArgs,
+  type PageInitArgs,
   ROUTES
 } from '../../routes'
 import { useNavigate } from 'react-router-dom';
