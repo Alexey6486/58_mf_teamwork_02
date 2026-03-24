@@ -29,7 +29,6 @@ import {
   MAIN_CONTAINER_CLASS,
 } from '../../constants/style-groups';
 import { selectUser } from '../../slices/user-slice';
-import { useIsAuthed } from '../../hooks';
 import { signupThunk } from '../../slices/auth-slice';
 import { IconButton } from '../../components/IconButton';
 import { EIconButton } from '../../enums';
@@ -70,7 +69,6 @@ const registrationFormSchema = Yup.object().shape({
 
 export const RegistrationPage: FC = () => {
   const user = useSelector(selectUser);
-  const { isAuthed } = useIsAuthed();
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
@@ -104,10 +102,10 @@ export const RegistrationPage: FC = () => {
   };
 
   useEffect(() => {
-    if (isAuthed || (user !== null && user.id)) {
+    if (user) {
       navigate(ROUTES.main);
     }
-  }, [isAuthed, user]);
+  }, [user]);
 
   return (
     <div className={MAIN_CONTAINER_CLASS}>

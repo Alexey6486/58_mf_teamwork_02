@@ -1,18 +1,18 @@
 import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import {
   URL_BASE,
   URL_USER_DATA
 } from '../constants/urls';
 import { ERequestMethods } from '../enums';
 import {
-  AppDispatch,
+  type AppDispatch,
   useSelector
 } from '../store/store';
 import {
   selectUser,
   setUsers
 } from '../slices/user-slice';
-import { useDispatch } from 'react-redux';
 import { safeJsonParse } from '../utils';
 
 export const useIsAuthed = () => {

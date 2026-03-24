@@ -31,7 +31,7 @@ import {
   MAIN_CONTAINER_CLASS
 } from '../../constants/style-groups';
 import { type AppDispatch, useSelector } from '../../store/store';
-import { loginThunk, logoutThunk } from '../../slices/auth-slice';
+import { loginThunk } from '../../slices/auth-slice';
 import { selectUser } from '../../slices/user-slice';
 
 const INITIAL_VALUES: IAuthorizationForm = {
