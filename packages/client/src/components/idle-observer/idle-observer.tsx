@@ -37,7 +37,7 @@ export const IdleObserver: React.FC<Props> = ({
 
   const [events] = useState(eventsList);
 
-  const intervalId: React.MutableRefObject<null | NodeJS.Timer> = useRef(null);
+  const intervalId = useRef<null | NodeJS.Timer>(null);
 
   const idle = idleLimit < MIN_IDLE_LIMIT ? MIN_IDLE_LIMIT : idleLimit;
 
