@@ -1,4 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, {
+  useEffect,
+  useRef,
+  useState
+} from 'react'
 import { useDispatch } from 'react-redux';
 import { useNotification } from '../../hooks';
 import { LS_ACT } from '../../constants/auth';
@@ -33,7 +37,7 @@ export const IdleObserver: React.FC<Props> = ({
 
   const [events] = useState(eventsList);
 
-  let intervalId: NodeJS.Timer;
+  const intervalId = useRef<null | NodeJS.Timer>(null);
 
   const idle = idleLimit < MIN_IDLE_LIMIT ? MIN_IDLE_LIMIT : idleLimit;
 
@@ -41,7 +45,9 @@ export const IdleObserver: React.FC<Props> = ({
     localStorage.setItem(LS_ACT, String(new Date().getTime()));
 
   const clearSubscribes = () => {
-    clearInterval(intervalId);
+    if (intervalId?.current) {
+      clearInterval(intervalId.current);
+    }
 
     events.forEach(event => {
       window.removeEventListener(event, getCurrentTimestamp);
@@ -57,7 +63,7 @@ export const IdleObserver: React.FC<Props> = ({
         window.addEventListener(event, getCurrentTimestamp);
       });
 
-      intervalId = setInterval(() => {
+      intervalId.current = setInterval(() => {
         const lastActivityTimestamp = Number(localStorage.getItem(LS_ACT)) || 0;
         const currentTimestamp = new Date().getTime();
         const delta = currentTimestamp - lastActivityTimestamp;

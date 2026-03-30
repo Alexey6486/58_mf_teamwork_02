@@ -6,7 +6,7 @@ import { ERequestMethods } from '../enums';
 import { type RootState } from '../store/store';
 import { type IRegistrationDto } from '../types/user';
 
-interface IAuthState {
+export interface AuthState {
   data: IUser | null;
   isLoading: boolean;
   error: {
@@ -16,7 +16,7 @@ interface IAuthState {
   };
 }
 
-const initialState: IAuthState = {
+const initialState: AuthState = {
   data: null,
   isLoading: false,
   error: {

@@ -4,7 +4,10 @@ import {
   FORM_PAGE_CONTAINER_CLASS,
   MAIN_CONTAINER_CLASS,
 } from '../../constants/style-groups';
-import { ROUTES } from '../../routes';
+import {
+  type PageInitArgs,
+  ROUTES
+} from '../../routes'
 
 export const NotFoundPage = () => {
   return (
@@ -27,4 +30,4 @@ export const NotFoundPage = () => {
   );
 };
 
-export const initNotFoundPage = () => Promise.resolve();
+export const initNotFoundPage = async (_: PageInitArgs) => Promise.resolve();

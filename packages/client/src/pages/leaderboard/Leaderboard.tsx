@@ -15,7 +15,10 @@ import {
   FORM_TITLE_CLASS,
   MAIN_CONTAINER_CLASS,
 } from '../../constants/style-groups';
-import { ROUTES } from '../../routes';
+import {
+  type PageInitArgs,
+  ROUTES
+} from '../../routes'
 import { IconButton } from '../../components/IconButton';
 import { EIconButton } from '../../enums';
 
@@ -210,3 +213,5 @@ export const LeaderboardPage = () => {
     </div>
   );
 };
+
+export const initLeaderBoardPage = async (_: PageInitArgs) => Promise.resolve();

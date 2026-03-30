@@ -23,7 +23,7 @@ ReactDOM.hydrateRoot(
   <Provider store={store}>
     <ErrorBoundary FallbackComponent={ErrorFallback}>
       <RouterProvider router={router} />
-      <IdleObserver />
+      <IdleObserver idleLimit={5} />
     </ErrorBoundary>
   </Provider>
 );

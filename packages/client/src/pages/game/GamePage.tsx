@@ -10,7 +10,10 @@ import {
   ITEMS_CENTER_CLASS,
 } from '../../constants/style-groups';
 import { Button } from '../../components/Button';
-import { ROUTES } from '../../routes';
+import {
+  type PageInitArgs,
+  ROUTES
+} from '../../routes'
 import { useNavigate } from 'react-router-dom';
 
 enum GameState {
@@ -85,3 +88,5 @@ export const GamePage: FC = () => {
     </>
   );
 };
+
+export const initGamePage = async (_: PageInitArgs) => Promise.resolve();

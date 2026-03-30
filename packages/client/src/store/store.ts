@@ -10,7 +10,7 @@ import ssrReducer from '../slices/ssr-slice';
 import userReducer, { fetchUserThunk } from '../slices/user-slice';
 import authReducer from '../slices/auth-slice';
 import leaderboardReducer from '../slices/leaderboard-slice';
-import { LS_ACT, LS_KEY } from '../constants/auth';
+import { LS_ACT } from '../constants/auth';
 import { ROUTES } from '../routes';
 import { forumReducer, FORUM_LS_KEY } from '../slices/forum-slice';
 
@@ -42,29 +42,11 @@ export const store = configureStore({
 
 listenerMiddleware.startListening({
   predicate: action => {
-    return (
-      action.type === 'user/changeUserAvatarThunk/fulfilled' ||
-      action.type === 'user/changeUserDataThunk/fulfilled'
-    );
-  },
-  effect: async () => {
-    try {
-      const { user } = store.getState();
-      localStorage.setItem(LS_KEY, JSON.stringify(user?.data));
-    } catch (error) {
-      console.error('Failed to save user data:', error);
-    }
-  },
-});
-
-listenerMiddleware.startListening({
-  predicate: action => {
-    return action.type === 'auth/loginThunk/fulfilled';
+    return action.type === 'auth/loginThunk/fulfilled' || action.type === 'auth/signupThunk/fulfilled';
   },
   effect: async (action, listenerApi) => {
     try {
-      const userData = await listenerApi.dispatch(fetchUserThunk()).unwrap();
-      localStorage.setItem(LS_KEY, JSON.stringify(userData));
+      await listenerApi.dispatch(fetchUserThunk());
     } catch (error) {
       console.error('Failed to fetch user data:', error);
     }
@@ -78,24 +60,9 @@ listenerMiddleware.startListening({
   effect: async () => {
     try {
       localStorage.removeItem(LS_ACT);
-      localStorage.removeItem(LS_KEY);
       window.location.replace(ROUTES.login);
     } catch (error) {
       console.error('Failed to remove user data:', error);
-    }
-  },
-});
-
-listenerMiddleware.startListening({
-  predicate: action => {
-    return action.type === 'auth/signupThunk/fulfilled';
-  },
-  effect: async (action, listenerApi) => {
-    try {
-      const userData = await listenerApi.dispatch(fetchUserThunk()).unwrap();
-      localStorage.setItem(LS_KEY, JSON.stringify(userData));
-    } catch (error) {
-      console.error('Failed to fetch user data:', error);
     }
   },
 });

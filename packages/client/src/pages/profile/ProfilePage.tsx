@@ -19,7 +19,10 @@ import {
 } from '../../slices/user-slice';
 import { type IUser } from '../../types';
 import { URL_BASE_IMG } from '../../constants/urls';
-import { ROUTES } from '../../routes';
+import {
+  type PageInitArgs,
+  ROUTES
+} from '../../routes'
 import {
   BTN_CLASS,
   BTN_GROUP_CLASS,
@@ -32,7 +35,6 @@ import {
   MAIN_CONTAINER_CLASS,
 } from '../../constants/style-groups';
 import { logoutThunk } from '../../slices/auth-slice';
-import { LS_KEY } from '../../constants/auth';
 import { IconButton } from '../../components/IconButton';
 import { EIconButton } from '../../enums';
 
@@ -110,13 +112,6 @@ export const ProfilePage: FC = () => {
   const handleLogout = () => {
     dispatch(logoutThunk());
   };
-
-  useEffect(() => {
-    const user = localStorage.getItem(LS_KEY);
-    if (user) {
-      dispatch(setUsers(JSON.parse(user)));
-    }
-  }, []);
 
   return (
     <div className={MAIN_CONTAINER_CLASS}>
@@ -232,3 +227,5 @@ export const ProfilePage: FC = () => {
     </div>
   );
 };
+
+export const initProfilePage = async (_: PageInitArgs) => Promise.resolve();

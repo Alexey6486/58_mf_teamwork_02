@@ -9,7 +9,10 @@ import {
 } from '../../constants/style-groups';
 import { useDispatch, useSelector } from '../../store/store';
 import { addMessage } from '../../slices/forum-slice';
-import { ROUTES } from '../../routes';
+import {
+  type PageInitArgs,
+  ROUTES
+} from '../../routes'
 import { IconButton } from '../../components/IconButton';
 import { EIconButton } from '../../enums';
 
@@ -85,3 +88,5 @@ export const TopicPage: FC = () => {
     </div>
   );
 };
+
+export const initTopicPage = async (_: PageInitArgs) => Promise.resolve();
