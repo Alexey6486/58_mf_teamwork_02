@@ -22,7 +22,6 @@ import {
 } from '../../constants/style-groups';
 import CanvasProcessor, { type Rect } from './engine/CanvasProcessor';
 import { GAME_HEIGHT, GAME_WIDTH } from '../../constants/game';
-import { Helmet } from 'react-helmet';
 
 interface GamePlayScreenProps {
   config: GameConfig;
@@ -216,9 +215,6 @@ export const GamePlayScreen: FC<GamePlayScreenProps> = ({
 
   return (
     <div className={FORM_PAGE_CONTAINER_CLASS}>
-      <Helmet>
-        <link rel="preload" href="/src/assets/images/cards/back.svg" as="image" />
-      </Helmet>
       <div className={GAME_MAIN_CONTAINER_CLASS}>
         <div className={GAME_CANVAS_CONTAINER_CLASS}>
           <canvas
