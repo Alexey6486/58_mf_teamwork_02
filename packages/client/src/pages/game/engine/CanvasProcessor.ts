@@ -20,6 +20,8 @@ const PANEL_BG = 'rgba(51,65,85,0.6)';
 const PANEL_BG_DIM = 'rgba(51,65,85,0.4)';
 const OVERLAY = 'rgba(15,23,42,1)';
 
+const COUNT_CARDS = 12;
+
 export interface Rect {
   x: number;
   y: number;
@@ -31,7 +33,10 @@ export default class CanvasProcessor {
   private ctx: CanvasRenderingContext2D;
   private canvasWidth: number;
   private canvasHeight: number;
-  private cardImages: Record<number, HTMLImageElement> = {};
+  private cardImages: { back: HTMLImageElement | null; cards: HTMLImageElement[] } = {
+    back: null,
+    cards: []
+  };
 
   constructor(canvas: HTMLCanvasElement | null) {
     if (!canvas) throw new Error('Canvas must be defined');
@@ -43,19 +48,26 @@ export default class CanvasProcessor {
     this.canvasWidth = canvas.width;
     this.canvasHeight = canvas.height;
 
-    const backImg = new Image();
-    backImg.onload = () => {
-      this.cardImages[0] = backImg;
-    };
-    backImg.src = '/src/assets/images/cards/back.svg';
+    const cards = [
+      'back',
+      ...Array.from({ length: COUNT_CARDS }, (_, i) => i + 1)
+    ];
 
-    for(let i = 1; i <= 12; i++){
+    cards.forEach((name, index) => {
       const img = new Image();
+
       img.onload = () => {
-        this.cardImages[i] = img;
-      };
-      img.src = `/src/assets/images/cards/${i}.svg`;
-    }
+        if(index === 0){
+          this.cardImages.back = img;
+        } else {
+          this.cardImages.cards[index - 1] = img;
+        }
+      }
+      img.onerror = () => {
+        console.log('Failed to load image');
+      }
+      img.src = `/src/assets/images/cards/${name}.svg`
+    })
   }
 
   getCanvasWidth() {
@@ -122,8 +134,14 @@ export default class CanvasProcessor {
     h: number,
     value: number,
   ){
-    const img = this.cardImages[value];
+    // const img = this.cardImages[value];
+    let img: HTMLImageElement | null = null;
     const isBack = value === 0;
+    if(isBack){
+      img = this.cardImages.back;
+    } else {
+      img = this.cardImages.cards[value - 1]; 
+    }
 
     if(img?.complete && img.naturalHeight !== 0){
       this.ctx.save();
