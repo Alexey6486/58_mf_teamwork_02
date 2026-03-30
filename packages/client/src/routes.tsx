@@ -26,6 +26,8 @@ import {
   initTopicPage,
 } from './pages';
 import { useIsAuthed } from './hooks';
+import { useDispatch } from 'react-redux';
+import { logoutThunk } from './slices/auth-slice';
 
 export type PageInitContext = {
   clientToken?: string;
@@ -52,6 +54,7 @@ export const ROUTES = {
 
 export const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   const location = useLocation();
+  const dispatch = useDispatch<AppDispatch>();
   const { isAuthed, isLoading } = useIsAuthed();
   const [shouldNavigate, setShouldNavigate] = useState(false);
 
@@ -61,6 +64,7 @@ export const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
 
   if (shouldNavigate) {
     if (!isAuthed && !isLoading) {
+      dispatch(logoutThunk());
       return <Navigate to={ROUTES.login} replace state={{ from: location }} />;
     }
     if (isAuthed && !isLoading) {
