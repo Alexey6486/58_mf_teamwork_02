@@ -1,4 +1,4 @@
-import { type FC, type MouseEvent, type ChangeEvent, useEffect } from 'react';
+import { type FC, type MouseEvent, type ChangeEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
@@ -15,14 +15,13 @@ import {
   changeUserAvatarThunk,
   changeUserDataThunk,
   selectUser,
-  setUsers,
 } from '../../slices/user-slice';
 import { type IUser } from '../../types';
 import { URL_BASE_IMG } from '../../constants/urls';
 import {
   type PageInitArgs,
   ROUTES
-} from '../../routes'
+} from '../../routes';
 import {
   BTN_CLASS,
   BTN_GROUP_CLASS,
