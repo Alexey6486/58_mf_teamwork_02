@@ -66,22 +66,8 @@ export default class CanvasProcessor {
       img.onerror = () => {
         console.log('Failed to load image');
       }
-      img.src = `/assets/images/cards/${name}.svg`
+      img.src = `/src/assets/images/cards/${name}.svg`
     })
-
-    // const backImg = new Image();
-    // backImg.onload = () => {
-    //   this.cardImages[0] = backImg;
-    // };
-    // backImg.src = '/src/assets/images/cards/back.svg';
-
-    // for(let i = 1; i <= 12; i++){
-    //   const img = new Image();
-    //   img.onload = () => {
-    //     this.cardImages[i] = img;
-    //   };
-    //   img.src = `/src/assets/images/cards/${i}.svg`;
-    // }
   }
 
   getCanvasWidth() {
