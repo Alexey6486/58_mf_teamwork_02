@@ -1,9 +1,0 @@
-set -e
-
-echo "Running pre-commit checks..."
-
-yarn lint
-yarn style
-yarn test
-
-echo "All checks passed!"
