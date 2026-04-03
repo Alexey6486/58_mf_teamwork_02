@@ -10,7 +10,7 @@ import { createServer as createViteServer, type ViteDevServer } from 'vite';
 import serialize from 'serialize-javascript';
 import cookieParser from 'cookie-parser';
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 2000;
 const clientPath = path.join(__dirname, '..');
 const isDev = process.env.NODE_ENV === 'development';
 
