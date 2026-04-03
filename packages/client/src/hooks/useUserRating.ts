@@ -1,7 +1,7 @@
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "../store/store";
 import { selectUser, setUserRating } from "../slices/user-slice";
 import { fetchLeaderboardThunk, selectLeaderboard } from "../slices/leaderboard-slice";
-import { useEffect } from "react";
 import { RATING_FIELD } from "../constants/leaderboard";
 import { fromLeaderboardData } from "../utils/fromLeaderboardData";
 
@@ -10,7 +10,7 @@ export function useUserRating() {
     const user = useSelector(selectUser);
     const leaderboard = useSelector(selectLeaderboard);
 
-    const userId = user?.id ?? '';
+    const userId = user?.id;
 
     useEffect(() => {
         if(!userId) return;
