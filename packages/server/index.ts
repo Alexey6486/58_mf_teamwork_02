@@ -13,15 +13,15 @@ createClientAndConnect();
 
 app.get('/friends', (_, res) => {
   res.json([
-    { name: 'Саша', secondName: 'Панов' },
-    { name: 'Лёша', secondName: 'Садовников' },
-    { name: 'Серёжа', secondName: 'Иванов' },
+    { name: 'Саша 2', secondName: 'Панов' },
+    { name: 'Лёша 2', secondName: 'Садовников' },
+    { name: 'Серёжа 2', secondName: 'Иванов' },
   ]);
 });
 
-app.get('/user', (_, res) => {
-  res.json({ name: '</script>Степа', secondName: 'Степанов' });
-});
+app.get('/test', (_, res) => {
+  res.json({ name: 'Степа', secondName: 'Степанов' })
+})
 
 app.get('/', (_, res) => {
   res.json('👋 Howdy from the server :)');

@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 import {
   FORM_PAGE_CONTAINER_CLASS,
   MAIN_CONTAINER_CLASS,
@@ -16,6 +17,11 @@ export const Error500 = () => {
 
   return (
     <div className={MAIN_CONTAINER_CLASS}>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Страница ошибки</title>
+        <meta name="description" content="Страница ошибки"/>
+      </Helmet>
       <div className={FORM_PAGE_CONTAINER_CLASS}>
         <div className="absolute top-6 left-6">
           <IconButton

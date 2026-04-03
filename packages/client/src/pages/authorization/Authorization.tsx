@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { FormikProvider, useFormik } from 'formik';
 import { useDispatch } from 'react-redux';
+import { Helmet } from 'react-helmet';
 import { Logo } from '../../components/Logo/Logo';
 import type { IAuthorizationForm } from '../../types';
 import {
@@ -82,6 +83,11 @@ export const AuthorizationPage: FC = () => {
 
   return (
     <div className={MAIN_CONTAINER_CLASS}>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Страница авторизации</title>
+        <meta name="description" content="Страница авторизации"/>
+      </Helmet>
       <div className={FORM_PAGE_CONTAINER_CLASS}>
         <div className={FORM_CONTAINER_CLASS}>
           <Logo />

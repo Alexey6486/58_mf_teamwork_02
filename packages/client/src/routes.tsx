@@ -24,7 +24,9 @@ import {
   initForumPage,
   TopicPage,
   initTopicPage,
-} from './pages';
+  FriendsPageTest,
+  initFriendsPageTest
+} from './pages'
 import { useIsAuthed } from './hooks';
 import { useDispatch } from 'react-redux';
 import { logoutThunk } from './slices/auth-slice';
@@ -50,6 +52,7 @@ export const ROUTES = {
   forum: '/forum',
   topic: '/forum/:id',
   error500: '/error',
+  friends: '/friends',
 };
 
 export const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
@@ -162,5 +165,10 @@ export const routes = [
       </ProtectedRoute>
     ),
     fetchData: initNotFoundPage,
+  },
+  {
+    path: ROUTES.friends,
+    Component: FriendsPageTest,
+    fetchData: initFriendsPageTest,
   },
 ];

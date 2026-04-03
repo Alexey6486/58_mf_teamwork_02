@@ -7,7 +7,8 @@ export default {
   testMatch: ['<rootDir>/src/**/*.test.{ts,tsx}'],
   globals: {
     __SERVER_PORT__: process.env.SERVER_PORT,
-    __EXTERNAL_SERVER_URL__: Number(process.env.SERVER_PORT) || 3001,
+    __EXTERNAL_SERVER_URL__: process.env.EXTERNAL_SERVER_URL,
+    __INTERNAL_SERVER_URL__: process.env.INTERNAL_SERVER_URL,
   },
   moduleNameMapper: {
     '\\.(css|scss|sass)$': 'identity-obj-proxy'
