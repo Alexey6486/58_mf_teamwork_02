@@ -1,4 +1,4 @@
-import { type FC, memo, useEffect, useState } from 'react';
+import { type FC, memo, useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -8,7 +8,7 @@ import {
 } from '../../slices/leaderboard-slice';
 import { type AppDispatch, useSelector } from '../../store/store';
 import { type ILeaderboard, type TSortDirection } from '../../types';
-import { bubbleObjectSort, cloneDeep, isArray } from '../../utils';
+import { bubbleObjectSort, cloneDeep } from '../../utils';
 import {
   FORM_CONTAINER_CLASS,
   FORM_PAGE_CONTAINER_CLASS,
@@ -21,15 +21,20 @@ import {
 } from '../../routes'
 import { IconButton } from '../../components/IconButton';
 import { EIconButton } from '../../enums';
+import { fromLeaderboardData } from '../../utils/fromLeaderboardData';
 
-type TRow = 'row' | 'header';
-type TLeaderboardRow = ILeaderboard & {
-  type: TRow;
-  sortCb?: (
-    fieldName: keyof ILeaderboard,
-    dir: TSortDirection | null | undefined
-  ) => void;
-};
+type TLeaderboardRow =
+  | (ILeaderboard & {
+      type: 'row';
+      sortCb?: (fieldName: keyof ILeaderboard, dir: TSortDirection | null | undefined) => void;
+    })
+  | {
+      type: 'header';
+      id: string;
+      name: string;
+      flip7_rating: string;
+      sortCb?: (fieldName: keyof ILeaderboard, dir: TSortDirection | null | undefined) => void;
+    };
 
 const getDir = (dir: TSortDirection | null | undefined) => {
   switch (dir) {
@@ -92,13 +97,12 @@ const SortDirectionIcon: FC<{ dir: TSortDirection | null | undefined }> = ({
 };
 
 const LeaderboardRow: FC<TLeaderboardRow> = memo(
-  ({ id, name, games, wins, type, sortCb }) => {
+  ({ id, name, flip7_rating, type, sortCb }) => {
     const [sortDir, setSortDir] = useState<
       Partial<Record<keyof ILeaderboard, TSortDirection | null>>
     >({
       name: null,
-      games: null,
-      wins: null,
+      flip7_rating: null,
     });
 
     const handleClick = (fieldName: keyof ILeaderboard) => () => {
@@ -111,8 +115,7 @@ const LeaderboardRow: FC<TLeaderboardRow> = memo(
 
       setSortDir({
         name: null,
-        games: null,
-        wins: null,
+        flip7_rating: null,
         [fieldName]: dir,
       });
     };
@@ -137,17 +140,9 @@ const LeaderboardRow: FC<TLeaderboardRow> = memo(
           className={`flex items-center w-32 p-4 select-none text-main-black dark:text-main-white dark:group-hover:text-main-black${
             type === 'header' ? ' cursor-pointer' : ''
           }`}
-          onClick={handleClick('games')}>
-          <span className="mr-2">{games}</span>
-          {type === 'header' && <SortDirectionIcon dir={sortDir['games']} />}
-        </div>
-        <div
-          className={`flex items-center w-32 p-4 select-none text-main-black dark:text-main-white dark:group-hover:text-main-black${
-            type === 'header' ? ' cursor-pointer' : ''
-          }`}
-          onClick={handleClick('wins')}>
-          <span className="mr-2">{wins}</span>
-          {type === 'header' && <SortDirectionIcon dir={sortDir['wins']} />}
+          onClick={handleClick('flip7_rating')}>
+          <span className="mr-2">{flip7_rating}</span>
+          {type === 'header' && <SortDirectionIcon dir={sortDir['flip7_rating']} />}
         </div>
       </div>
     );
@@ -159,14 +154,21 @@ export const LeaderboardPage = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
+  const leaderboardItems = useMemo(() => {
+    return fromLeaderboardData(data);
+  }, [data]);
+
   const handleSort = (
     fieldName: keyof ILeaderboard,
     dir: TSortDirection | null | undefined
   ) => {
+
+    if (!leaderboardItems.length) return;
+
     dispatch(
       setLeaderboard(
         bubbleObjectSort<ILeaderboard, keyof ILeaderboard>(
-          cloneDeep(data),
+          cloneDeep(leaderboardItems),
           fieldName,
           dir
         )
@@ -179,7 +181,8 @@ export const LeaderboardPage = () => {
   };
 
   useEffect(() => {
-    dispatch(fetchLeaderboardThunk());
+    const cursor = 0;
+    dispatch(fetchLeaderboardThunk({ cursor }));
   }, []);
 
   return (
@@ -199,14 +202,16 @@ export const LeaderboardPage = () => {
               type={'header'}
               id={'header'}
               name={'Имя'}
-              games={'Игр'}
-              wins={'Побед'}
+              flip7_rating= {'Очки'}
               sortCb={handleSort}
             />
-            {isArray(data, true) &&
-              data.map((el: ILeaderboard) => (
-                <LeaderboardRow key={el.id} type={'row'} {...el} />
-              ))}
+            {leaderboardItems.map((el: ILeaderboard) => (
+              <LeaderboardRow
+                key={el.id}
+                type={'row'}
+                {...el}
+              />
+            ))}
           </div>
         </div>
       </div>

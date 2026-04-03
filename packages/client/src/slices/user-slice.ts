@@ -13,6 +13,7 @@ import { thunkCreator } from './thunk-creator';
 
 export interface UserState {
   data: Partial<IUser> | null;
+  score: number;
   isLoading: boolean;
   error: {
     status: string | null;
@@ -23,6 +24,7 @@ export interface UserState {
 
 const initialState: UserState = {
   data: null,
+  score: 0,
   isLoading: false,
   error: {
     status: null,
@@ -90,6 +92,9 @@ export const userSlice = createSlice({
     setUsers: (state, { payload }: PayloadAction<Partial<IUser>>) => {
       state.data = payload;
     },
+    setUserRating: (state, action: PayloadAction<number | null>) => {
+      state.score = action.payload ?? 0;
+    }
   },
   extraReducers: builder => {
     builder
@@ -152,7 +157,8 @@ export const userSlice = createSlice({
   },
 });
 
-export const { setUsers } = userSlice.actions;
+export const { setUsers, setUserRating } = userSlice.actions;
 export const selectUser = (state: RootState) => state.user.data;
+export const selectUserRating = (state: RootState) => state.user.score;
 
 export default userSlice.reducer;

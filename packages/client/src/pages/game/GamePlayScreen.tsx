@@ -22,6 +22,7 @@ import {
 } from '../../constants/style-groups';
 import CanvasProcessor, { type Rect } from './engine/CanvasProcessor';
 import { GAME_HEIGHT, GAME_WIDTH } from '../../constants/game';
+import { calcPoint } from '../../utils/calc-point-game';
 
 interface GamePlayScreenProps {
   config: GameConfig;
@@ -66,8 +67,11 @@ export const GamePlayScreen: FC<GamePlayScreenProps> = ({
 
       if (gameProcessor.hasWinner()) {
         const winner = gameProcessor.getWinner();
+        const pointGame = calcPoint(config.players);
+
         onFinish({
           winnerName: winner!.getName(),
+          pointGame: pointGame,
           players: gameProcessor
             .getPlayers()
             .map(p => ({ name: p.getName(), totalScore: p.getTotalScore() }))
