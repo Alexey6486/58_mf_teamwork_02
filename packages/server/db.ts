@@ -1,28 +1,58 @@
-import { Client } from 'pg';
+import { Sequelize, type SequelizeOptions } from 'sequelize-typescript';
+import {
+  TopicAttributes,
+  TopicModelName,
+  TopicOptions,
+} from './models/topic';
 
-const { POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB, POSTGRES_PORT } =
-  process.env;
+const {
+  POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB, POSTGRES_PORT, POSTGRES_HOST
+} = process.env;
 
-export const createClientAndConnect = async (): Promise<Client | null> => {
+// https://github.com/Yandex-Practicum/orm-simple-template/blob/d7e0670807d8e4a339558c4324afadb65bdc91a0/app/index.ts
+
+const sequelizeOptions: SequelizeOptions = {
+  host: POSTGRES_HOST,
+  port: Number(POSTGRES_PORT),
+  username: POSTGRES_USER,
+  password: POSTGRES_PASSWORD,
+  database: POSTGRES_DB,
+  dialect: 'postgres',
+};
+
+// Создаем инстанс Sequelize
+export const sequelize = new Sequelize(sequelizeOptions);
+
+// Инициализируем модели
+export const Topic = sequelize.define(
+  TopicModelName,
+  TopicAttributes,
+  TopicOptions,
+);
+
+export async function dbConnect() {
   try {
-    const client = new Client({
-      user: POSTGRES_USER,
-      host: 'localhost',
-      database: POSTGRES_DB,
-      password: POSTGRES_PASSWORD,
-      port: Number(POSTGRES_PORT),
-    });
+    await sequelize.authenticate(); // Проверка аутентификации в БД
+    await sequelize.sync({ force: false }); // Синхронизация базы данных
+    console.log('Connection has been established successfully.');
+  } catch (error) {
+    console.error('Unable to connect to the database:', error);
+  }
+}
 
-    await client.connect();
+export const createClientAndConnect = async (): Promise<Sequelize | null> => {
+  try {
+    await dbConnect();
+    console.log('sequelize', { sequelize });
 
-    const res = await client.query('SELECT NOW()');
-    console.log('  ➜ 🎸 Connected to the database at:', res?.rows?.[0].now);
-    client.end();
+    // Теперь getTableName() сработает
+    // const tableName = Topic.getTableName();
+    // console.log('Table name:', tableName);
 
-    return client;
+    return sequelize;
   } catch (e) {
     console.error(e);
   }
 
   return null;
-};
+}
