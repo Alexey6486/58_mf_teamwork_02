@@ -19,10 +19,6 @@ app.get('/friends', (_, res) => {
   ]);
 });
 
-app.get('/test', (_, res) => {
-  res.json({ name: 'Степа', secondName: 'Степанов' })
-})
-
 app.get('/', (_, res) => {
   res.json('👋 Howdy from the server :)');
 });
