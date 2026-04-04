@@ -13,7 +13,7 @@ const {
 
 const sequelizeOptions: SequelizeOptions = {
   host: POSTGRES_HOST,
-  port: Number(POSTGRES_PORT),
+  port: Number(POSTGRES_PORT) || 5432,
   username: POSTGRES_USER,
   password: POSTGRES_PASSWORD,
   database: POSTGRES_DB,
@@ -24,7 +24,7 @@ const sequelizeOptions: SequelizeOptions = {
 export const sequelize = new Sequelize(sequelizeOptions);
 
 // Инициализируем модели
-export const Topic = sequelize.define(
+export const TopicSequelized = sequelize.define(
   TopicModelName,
   TopicAttributes,
   TopicOptions,
@@ -33,7 +33,7 @@ export const Topic = sequelize.define(
 export async function dbConnect() {
   try {
     await sequelize.authenticate(); // Проверка аутентификации в БД
-    await sequelize.sync({ force: false }); // Синхронизация базы данных
+    await sequelize.sync({ alter: true }); // Синхронизация базы данных
     console.log('Connection has been established successfully.');
   } catch (error) {
     console.error('Unable to connect to the database:', error);
@@ -43,12 +43,13 @@ export async function dbConnect() {
 export const createClientAndConnect = async (): Promise<Sequelize | null> => {
   try {
     await dbConnect();
-    console.log('sequelize', { sequelize });
+    console.log('sequelize', { sequelize, env: process.env });
 
     // Теперь getTableName() сработает
-    // const tableName = Topic.getTableName();
-    // console.log('Table name:', tableName);
-
+    const tableName = TopicSequelized.getTableName();
+    console.log('Table name:', tableName);
+    const topics = await TopicSequelized.findAll();
+    console.log('✅ Topics found:', topics.length);
     return sequelize;
   } catch (e) {
     console.error(e);

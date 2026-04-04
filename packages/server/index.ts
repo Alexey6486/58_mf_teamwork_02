@@ -4,12 +4,16 @@ dotenv.config();
 
 import express from 'express';
 import { createClientAndConnect } from './db';
+import { routerForum } from './routes/forum';
 
 const app = express();
 app.use(cors());
 const port = Number(process.env.SERVER_PORT) || 3001;
 
 createClientAndConnect();
+
+// api handlers
+app.use('/api/v1/forum', routerForum);
 
 app.get('/friends', (_, res) => {
   res.json([
