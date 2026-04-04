@@ -1,3 +1,4 @@
+import os from 'os';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -10,9 +11,16 @@ import { createServer as createViteServer, type ViteDevServer } from 'vite';
 import serialize from 'serialize-javascript';
 import cookieParser from 'cookie-parser';
 
-const port = process.env.PORT || 2000;
+// На системах линукс под порт 80 проект не запускается
+const port_linux = process.env.CREATE_SERVER_LINUX_PORT || 2000;
+const port_win = process.env.CREATE_SERVER_WIN_PORT || 80;
+const platform = os?.platform() ?? undefined;
+
 const clientPath = path.join(__dirname, '..');
 const isDev = process.env.NODE_ENV === 'development';
+const port = isDev && platform && !platform.includes('win')
+  ? port_linux
+  : port_win;
 
 async function createServer() {
   const app = express();

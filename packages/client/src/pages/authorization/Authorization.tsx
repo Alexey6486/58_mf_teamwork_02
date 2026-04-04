@@ -32,8 +32,13 @@ import {
   MAIN_CONTAINER_CLASS
 } from '../../constants/style-groups';
 import { type AppDispatch, useSelector } from '../../store/store';
-import { loginThunk } from '../../slices/auth-slice';
+import {
+  loginThunk,
+  logoutThunk
+} from '../../slices/auth-slice'
 import { selectUser } from '../../slices/user-slice';
+import { IconButton } from '../../components/IconButton';
+import { EIconButton } from '../../enums';
 
 const INITIAL_VALUES: IAuthorizationForm = {
   login: '',
@@ -75,6 +80,10 @@ export const AuthorizationPage: FC = () => {
     navigate(ROUTES.signup);
   };
 
+  const handleLogout = () => {
+    dispatch(logoutThunk());
+  };
+
   useEffect(() => {
     if (user) {
       navigate(ROUTES.main);
@@ -89,6 +98,13 @@ export const AuthorizationPage: FC = () => {
         <meta name="description" content="Страница авторизации"/>
       </Helmet>
       <div className={FORM_PAGE_CONTAINER_CLASS}>
+        <div className="absolute top-12 right-12 opacity-0">
+          <IconButton
+            onClick={handleLogout}
+            iconName={EIconButton.OUT}
+            hoverName={'Logout'}
+          />
+        </div>
         <div className={FORM_CONTAINER_CLASS}>
           <Logo />
           <div className={FORM_WRAPPER_CLASS}>
