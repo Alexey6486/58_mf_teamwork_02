@@ -8,4 +8,3 @@ export { MainPage, initMainPage } from './main';
 export { LeaderboardPage, initLeaderBoardPage } from './leaderboard';
 export { ForumPage, initForumPage } from './forum';
 export { TopicPage, initTopicPage } from './topic';
-export { FriendsPageTest, initFriendsPageTest } from './friends';

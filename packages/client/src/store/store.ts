@@ -13,7 +13,6 @@ import leaderboardReducer from '../slices/leaderboard-slice';
 import { LS_ACT } from '../constants/auth';
 import { ROUTES } from '../routes';
 import { forumReducer, FORUM_LS_KEY } from '../slices/forum-slice';
-import friendsReducer from '../slices/friends-slice';
 
 // Глобально декларируем в window наш ключик
 // и задаем ему тип такой же как у стейта в сторе
@@ -29,7 +28,6 @@ export const reducer = combineReducers({
   auth: authReducer,
   leaderboard: leaderboardReducer,
   forum: forumReducer,
-  friends: friendsReducer,
 });
 
 export const listenerMiddleware = createListenerMiddleware<RootState>();
