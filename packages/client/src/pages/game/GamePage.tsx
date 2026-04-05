@@ -1,4 +1,6 @@
 import { type FC, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 import { DEFAULT_GAME_CONFIG, type GameConfig, type GameResult } from './types';
 import { GameStartScreen } from './GameStartScreen';
 import { GamePlayScreen } from './GamePlayScreen';
@@ -13,8 +15,7 @@ import { Button } from '../../components/Button';
 import {
   type PageInitArgs,
   ROUTES
-} from '../../routes'
-import { useNavigate } from 'react-router-dom';
+} from '../../routes';
 
 enum GameState {
   Start = 'start',
@@ -46,6 +47,11 @@ export const GamePage: FC = () => {
   return (
     <>
       <div className={GAME_BODY_CONTAINER_CLASS}>
+        <Helmet>
+          <meta charSet="utf-8" />
+          <title>Страница игры</title>
+          <meta name="description" content="Страница игры"/>
+        </Helmet>
         {gameState === GameState.Start && (
           <GameStartScreen onStart={handleStart} />
         )}
