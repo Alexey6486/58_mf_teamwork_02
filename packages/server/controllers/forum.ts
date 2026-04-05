@@ -2,7 +2,10 @@ import type { Response, Request } from 'express';
 import { Op } from 'sequelize';
 import { Topic } from '../db';
 import { catchAsync } from '../utils/catchAsync';
-import { getHeaders } from './headers/headers';
+import {
+  getHeaders,
+  postHeaders
+} from './headers/headers'
 
 export const getAllTopics = catchAsync(async (request: Request, response: Response) => {
   console.log('request query', { rq: request.query });
@@ -15,9 +18,11 @@ export const getAllTopics = catchAsync(async (request: Request, response: Respon
     : {};
   console.log('whereCondition', { whereCondition });
 
+  const limit = Number(size);
+  const offset = Number(page);
   const topics = await Topic.findAll({
-    limit: size as number,
-    offset: ((page as number) - 1) * (size as number),
+    limit: limit > 0 ? limit : 10,
+    offset: (offset > 0 ? offset - 1 : 1) * limit,
     order: [['createdAt', 'ASC']],
     where: whereCondition,
   });
@@ -37,6 +42,24 @@ export const getAllTopics = catchAsync(async (request: Request, response: Respon
       hasPrev: page > 1,
       data: {
         topics,
+      },
+    });
+});
+
+export const createTopics = catchAsync(async (request: Request, response: Response) => {
+  console.log('request body', { body: request.body });
+  const { title, text, authorId } = request.body;
+
+  const topic = await Topic.create({ title, text, authorId });
+  console.log('db result', { topic });
+
+  response
+    .set(postHeaders)
+    .status(200)
+    .json({
+      status: 'success',
+      data: {
+        topic,
       },
     });
 });
