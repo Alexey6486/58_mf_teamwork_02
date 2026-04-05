@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { ENotificationPermissions } from '../enums';
 
 const CL_MSG = {
@@ -22,6 +22,15 @@ interface Props {
 export const useNotification = () => {
   const [permission, setPermission] = useState<NotificationPermission>(ENotificationPermissions.default);
   const isSupported = 'Notification' in window;
+  const timeoutsRef = useRef<Set<ReturnType<typeof setTimeout>>>(new Set());
+  const notificationsRef = useRef<Set<Notification>>(new Set());
+
+  const cleanupNotification = useCallback((notification: Notification) => {
+    notification.onclick = null;
+    notification.onerror = null;
+    notification.close();
+    notificationsRef.current.delete(notification);
+  }, []);
 
   const requestPermission = useCallback(async () => {
     if (!isSupported) {
@@ -56,6 +65,11 @@ export const useNotification = () => {
           silent,
         });
 
+        notificationsRef.current.add(notification);
+        notification.onclose = () => {
+          notificationsRef.current.delete(notification);
+        };
+
         if (onNotificationClick) {
           notification.onclick = () => {
             window.focus();
@@ -64,10 +78,15 @@ export const useNotification = () => {
         }
 
         if (onNotificationError) {
-          notification.onerror = onNotificationError;
+          notification.onerror = () => onNotificationError();
         }
 
-        setTimeout(() => notification.close(), TIMEOUT);
+        const timeoutId = setTimeout(() => {
+          cleanupNotification(notification);
+          timeoutsRef.current.delete(timeoutId);
+        }, TIMEOUT);
+
+        timeoutsRef.current.add(timeoutId);
       } catch (error) {
         console.error(CL_MSG.error_show, error);
 
@@ -77,8 +96,15 @@ export const useNotification = () => {
       }
     } else if (permission === ENotificationPermissions.default) {
       requestPermission().then(res => {
-        if (res) {
-          showNotification({ title, body, icon, onNotificationClick, onNotificationError });
+        if (res === ENotificationPermissions.granted) {
+          showNotification({
+            title,
+            body,
+            icon,
+            silent,
+            onNotificationClick,
+            onNotificationError,
+          });
         }
       });
     } else {
@@ -86,13 +112,27 @@ export const useNotification = () => {
     }
 
     return;
-  }, [isSupported, permission, requestPermission]);
+  }, [cleanupNotification, isSupported, permission, requestPermission]);
 
   useEffect(() => {
-    if (isSupported && permission) {
+    if (isSupported) {
       setPermission(Notification.permission);
     }
   }, [isSupported]);
+
+  useEffect(() => {
+    return () => {
+      timeoutsRef.current.forEach(timeoutId => clearTimeout(timeoutId));
+      timeoutsRef.current.clear();
+
+      notificationsRef.current.forEach(notification => {
+        notification.onclick = null;
+        notification.onerror = null;
+        notification.close();
+      });
+      notificationsRef.current.clear();
+    };
+  }, []);
 
   return {
     permission,
