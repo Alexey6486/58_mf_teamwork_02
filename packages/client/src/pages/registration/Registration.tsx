@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 import { useFormik, FormikProvider } from 'formik';
+import { Helmet } from 'react-helmet';
 import { Fields } from '../../fields';
 import {
   requiredString,
@@ -16,7 +17,7 @@ import { type IRegistrationForm } from '../../types';
 import {
   type PageInitArgs,
   ROUTES
-} from '../../routes'
+} from '../../routes';
 import {
   BTN_CLASS,
   BTN_GROUP_CLASS,
@@ -109,6 +110,11 @@ export const RegistrationPage: FC = () => {
 
   return (
     <div className={MAIN_CONTAINER_CLASS}>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Страница регистрации</title>
+        <meta name="description" content="Страница регистрации"/>
+      </Helmet>
       <div className={FORM_PAGE_CONTAINER_CLASS}>
         <div className={FORM_CONTAINER_CLASS}>
           <div className="w-full flex justify-between absolute pl-8 pr-8 top-12 left-0">

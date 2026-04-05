@@ -1,5 +1,6 @@
 import { type FC, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 import { Logo } from '../../components/Logo/Logo';
 import { Topic } from '../../components/Topic/Topic';
 import {
@@ -47,6 +48,11 @@ export const ForumPage: FC = () => {
 
   return (
     <div className={MAIN_CONTAINER_CLASS}>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Страница форума</title>
+        <meta name="description" content="Страница форума"/>
+      </Helmet>
       <div
         className={`${FORM_PAGE_CONTAINER_CLASS} flex-col items-center justify-start`}>
         <div className="pt-[14px] w-full flex justify-center items-start">

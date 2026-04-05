@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 import { useFormik, FormikProvider } from 'formik';
+import { Helmet } from 'react-helmet';
 import { Fields } from '../../fields';
 import {
   requiredString,
@@ -114,6 +115,11 @@ export const ProfilePage: FC = () => {
 
   return (
     <div className={MAIN_CONTAINER_CLASS}>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Страница профиля</title>
+        <meta name="description" content="Страница профиля"/>
+      </Helmet>
       <div className={FORM_PAGE_CONTAINER_CLASS}>
         <div className={FORM_CONTAINER_CLASS}>
           <div className="w-full flex justify-between absolute pl-8 pr-8 top-12 left-0">

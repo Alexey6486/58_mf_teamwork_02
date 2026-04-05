@@ -1,5 +1,6 @@
 import { type FC, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 import { Logo } from '../../components/Logo/Logo';
 import { Message } from '../../components/Message/Message';
 import {
@@ -12,7 +13,7 @@ import { addMessage } from '../../slices/forum-slice';
 import {
   type PageInitArgs,
   ROUTES
-} from '../../routes'
+} from '../../routes';
 import { IconButton } from '../../components/IconButton';
 import { EIconButton } from '../../enums';
 
@@ -50,6 +51,11 @@ export const TopicPage: FC = () => {
 
   return (
     <div className={MAIN_CONTAINER_CLASS}>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Страница топика</title>
+        <meta name="description" content="Страница топика"/>
+      </Helmet>
       <div
         className={`${FORM_PAGE_CONTAINER_CLASS} flex-col items-center justify-start`}>
         <div className="pt-[14px] w-full flex justify-center items-start">

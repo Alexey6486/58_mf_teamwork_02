@@ -2,7 +2,7 @@
   "name": "client",
   "version": "0.0.0",
   "scripts": {
-    "dev": "tsc --project tsconfig.server.json && cross-env NODE_ENV=development EXTERNAL_SERVER_URL='http://localhost:3001' INTERNAL_SERVER_URL='http://localhost:3001' node server/index.js",
+    "dev": "tsc --project tsconfig.server.json && cross-env NODE_ENV=development CREATE_SERVER_WIN_PORT=80 CREATE_SERVER_LINUX_PORT=2000 EXTERNAL_SERVER_URL='http://localhost:3001' INTERNAL_SERVER_URL='http://localhost:3001' node server/index.js",
     "build": "tsc --project tsconfig.server.json && vite build && vite build --ssr src/entry-server.tsx --outDir dist/server",
     "preview": "node server/index.js",
     "lint": "eslint .",
@@ -47,7 +47,6 @@
     "@vitejs/plugin-react": "^2.0.1",
     "autoprefixer": "^10.4.20",
     "eslint": "^8.23.0",
-    "husky": "^9.1.7",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^28",
     "jest-environment-jsdom": "^29.0.1",
