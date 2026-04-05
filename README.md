@@ -17,7 +17,6 @@
 #### Docker ####
 Перед первым запуском выполните `node init.js`
 
-
 `docker compose up` - запустит три сервиса
 1. nginx, раздающий клиентскую статику (client)
 2. node, ваш сервер (server)
@@ -29,7 +28,32 @@
 **Для работы докера необходимо**
 - в корень проекта (на уровне файла docker-compose.yml) добавить файл .env
 - данные для этого файла (в учебных целях) лежат в файле .env.sample
-- если образы собраны и в проект внесены изменения, то нужно пересобрать образы заново `docker-compose build`
+- если образы собраны и в проект внесены изменения, то нужно
+  - остановить и удалить контейнеры `docker-compose down`
+  - пересобрать образы заново `docker-compose build`
+  - запустить контейнеры снова `docker-compose up`
+
+**Для работы с БД локально**
+- установить PostgreSQL
+- запустить pgadmin (устанавливается автоматически при установке PostgreSQL)
+- выбрать в панели слева Servers, на дашборде выбрать Add New Server, заполнить:
+  - вкладка General:
+    - поле name = postgres
+  - вкладка Connection:
+    - поле Host name/address = localhost
+    - port = 5432
+    - Maintenance database = postgres
+    - username/password = postgres
+- запустить проект `yanr dev` (в дев режиме, sequelize настроен на подключение к БД по вышеуказанным данным)
+
+**Работа с запросами к БД с помощью curl**\
+Получить все темы форума:\
+`curl "http://localhost:3001/api/v1/forum?page=1&size=20"`
+
+Создать новую тему на форуме:\
+`curl -X POST -H "Content-Type: application/json" -d "{\"title\": \"Тема форума №1\", \"text\": \"Текст темы форума №1\", \"authorId\": 1}" http://localhost:3001/api/v1/forum`
+
+___
 
 Более подробная документация для разработчиков находится [по ссылке](docs/oldREADME.md)
 

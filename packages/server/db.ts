@@ -16,7 +16,7 @@ const sequelizeOptions: SequelizeOptions = {
   port: Number(POSTGRES_PORT) || 5432,
   username: POSTGRES_USER,
   password: POSTGRES_PASSWORD,
-  database: POSTGRES_DB,
+  database: isDev ? 'postgres' : POSTGRES_DB,
   dialect: 'postgres',
 };
 

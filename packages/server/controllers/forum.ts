@@ -8,7 +8,6 @@ import {
 } from './headers/headers'
 
 export const getAllTopics = catchAsync(async (request: Request, response: Response) => {
-  console.log('request query', { rq: request.query });
   const { page = 1, size = 10, search = '' } = request.query;
 
   const whereCondition = search
@@ -16,7 +15,6 @@ export const getAllTopics = catchAsync(async (request: Request, response: Respon
       title: { [Op.iLike]: `%${search}%` } // поиск без учёта регистра
     }
     : {};
-  console.log('whereCondition', { whereCondition });
 
   const limit = Number(size);
   const offset = Number(page);
@@ -26,10 +24,8 @@ export const getAllTopics = catchAsync(async (request: Request, response: Respon
     order: [['createdAt', 'ASC']],
     where: whereCondition,
   });
-  console.log('db search topics', { topics });
 
   const total = await Topic.count({ where: whereCondition });
-  console.log('db search total', { total });
 
   response
     .set(getHeaders)
@@ -47,11 +43,9 @@ export const getAllTopics = catchAsync(async (request: Request, response: Respon
 });
 
 export const createTopics = catchAsync(async (request: Request, response: Response) => {
-  console.log('request body', { body: request.body });
   const { title, text, authorId } = request.body;
 
   const topic = await Topic.create({ title, text, authorId });
-  console.log('db result', { topic });
 
   response
     .set(postHeaders)
