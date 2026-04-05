@@ -3,9 +3,10 @@ import { Op } from 'sequelize';
 import { Topic } from '../db';
 import { catchAsync } from '../utils/catchAsync';
 import {
+  deleteHeaders,
   getHeaders,
   postHeaders
-} from './headers/headers'
+} from './headers/headers';
 
 export const getAllTopics = catchAsync(async (request: Request, response: Response) => {
   const { page = 1, size = 10, search = '' } = request.query;
@@ -42,7 +43,7 @@ export const getAllTopics = catchAsync(async (request: Request, response: Respon
     });
 });
 
-export const createTopics = catchAsync(async (request: Request, response: Response) => {
+export const createTopic = catchAsync(async (request: Request, response: Response) => {
   const { title, text, authorId } = request.body;
 
   const topic = await Topic.create({ title, text, authorId });
@@ -56,4 +57,26 @@ export const createTopics = catchAsync(async (request: Request, response: Respon
         topic,
       },
     });
+});
+
+export const deleteTopic = catchAsync(async (request: Request, response: Response) => {
+  const { id } = request.body;
+
+  const result = await Topic.destroy({ where: { id } });
+
+  if (result === 1) {
+    response
+      .set(deleteHeaders)
+      .status(200)
+      .json({
+        status: 'success',
+      });
+  } else {
+    response
+      .set(deleteHeaders)
+      .status(404)
+      .json({
+        error: 'topic not found',
+      });
+  }
 });

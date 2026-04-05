@@ -1,11 +1,24 @@
 import express from 'express';
 import { protectController } from '../controllers/authentication';
-import { getAllTopics, createTopics } from '../controllers/forum';
+import {
+  getAllTopics,
+  createTopic,
+  deleteTopic,
+} from '../controllers/forum';
+import {
+  getAllComments,
+  createComment,
+} from '../controllers/comment';
 
 const routerForum = express.Router();
 
 routerForum.route('/')
   .get(protectController, getAllTopics)
-  .post(protectController, createTopics);
+  .post(protectController, createTopic)
+  .delete(protectController, deleteTopic);
+
+routerForum.route('/issue/:issueId')
+  .get(protectController, getAllComments)
+  .post(protectController, createComment)
 
 export { routerForum };

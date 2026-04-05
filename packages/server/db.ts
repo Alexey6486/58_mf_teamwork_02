@@ -1,9 +1,14 @@
 import { Sequelize, type SequelizeOptions } from 'sequelize-typescript';
 import {
-  TopicAttributes,
   TopicModelName,
+  TopicAttributes,
   TopicOptions
 } from './models/topic';
+import {
+  CommentModelName,
+  CommentAttributes,
+  CommentOptions
+} from './models/comment';
 
 const {
   POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB, POSTGRES_PORT, POSTGRES_HOST
@@ -30,11 +35,39 @@ export const Topic = sequelize.define(
   TopicOptions,
 );
 
+export const Comment = sequelize.define(
+  CommentModelName,
+  CommentAttributes,
+  CommentOptions,
+);
+
+Topic.hasMany(Comment, {
+  foreignKey: 'topicId',
+  as: 'comments', // Псевдоним для выборки
+  onDelete: 'CASCADE', // Каскадное удаление
+});
+
+Comment.belongsTo(Topic, {
+  foreignKey: 'topicId',
+  as: 'topic', // Псевдоним для обратной связи
+  onDelete: 'CASCADE',
+});
+
+// Comment.belongsTo(Comment, {
+//   as: 'parent',
+//   foreignKey: 'replyToCommentId',
+// });
+//
+// Comment.hasMany(Comment, {
+//   as: 'replies',
+//   foreignKey: 'replyToCommentId',
+// });
+
 export async function dbConnect() {
   try {
     await sequelize.authenticate();
 
-    await sequelize.sync();
+    await sequelize.sync({ force: true });
     // { force: true } — пересоздаёт таблицы (удаляет старые, создаёт новые). Используйте только в разработке.
     // { alter: true } — автоматически изменяет существующую таблицу, чтобы она соответствовала модели.
     // Без опций — создаёт таблицы, если их нет.

@@ -53,6 +53,14 @@
 Создать новую тему на форуме:\
 `curl -X POST -H "Content-Type: application/json" -d "{\"title\": \"Тема форума №1\", \"text\": \"Текст темы форума №1\", \"authorId\": 1}" http://localhost:3001/api/v1/forum`
 
+Удалить тему на форуме с id=1:\
+`curl -X DELETE -H "Content-Type: application/json" -d "{\"id\": 1}" http://localhost:3001/api/v1/forum`
+
+Добавить комментарий к теме с id=2:\
+`curl -X POST -H "Content-Type: application/json" -d "{\"topicId\": 2, \"text\": \"Комментарий №1 к теме форума №1\", \"authorId\": 1}" http://localhost:3001/api/v1/forum/issue/2`
+
+Получить все сообщения темы форума с id=2:\
+`curl "http://localhost:3001/api/v1/forum/issue/2"`
 ___
 
 Более подробная документация для разработчиков находится [по ссылке](docs/oldREADME.md)
