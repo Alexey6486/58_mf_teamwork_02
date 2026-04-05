@@ -42,7 +42,7 @@ const port_win = process.env.CREATE_SERVER_WIN_PORT || 80;
 const platform = (_a = os_1.default === null || os_1.default === void 0 ? void 0 : os_1.default.platform()) !== null && _a !== void 0 ? _a : undefined;
 const clientPath = path_1.default.join(__dirname, '..');
 const isDev = process.env.NODE_ENV === 'development';
-const port = isDev && platform && platform.includes('win')
+const port = isDev && platform && !platform.includes('win')
     ? port_linux
     : port_win;
 async function createServer() {
@@ -102,7 +102,6 @@ async function createServer() {
     });
     app.listen(port, () => {
         console.log(`Client is listening on port: ${port}`);
-        console.log({ os: os_1.default.platform(), port, ne: process.env.NODE_ENV });
     });
 }
 createServer();

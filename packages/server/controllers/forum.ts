@@ -1,30 +1,42 @@
 import type { Response, Request } from 'express';
+import { Op } from 'sequelize';
+import { Topic } from '../db';
 import { catchAsync } from '../utils/catchAsync';
 import { getHeaders } from './headers/headers';
-import { APIFeatures } from '../utils/apiFeatures';
-import { TopicSequelized } from '../db';
 
 export const getAllTopics = catchAsync(async (request: Request, response: Response) => {
-  console.log('getAllTopics', { rq: request.query });
-  const topics = await TopicSequelized.findAll();
+  console.log('request query', { rq: request.query });
+  const { page = 1, size = 10, search = '' } = request.query;
 
-  console.log('getAllTopics topics', { topics });
-  const topicsPrepared = new APIFeatures(topics, request.query)
-    .filter().sort().pagination();
-  console.log('getAllTopics topicsPrepared', { topicsPrepared });
+  const whereCondition = search
+    ? {
+      title: { [Op.iLike]: `%${search}%` } // поиск без учёта регистра
+    }
+    : {};
+  console.log('whereCondition', { whereCondition });
 
-  // execute query
-  const queryResult = await topicsPrepared.query;
-  console.log('topics result', { queryResult });
+  const topics = await Topic.findAll({
+    limit: size as number,
+    offset: ((page as number) - 1) * (size as number),
+    order: [['createdAt', 'ASC']],
+    where: whereCondition,
+  });
+  console.log('db search topics', { topics });
 
-  // send response
-  response.set(getHeaders).status(200)
+  const total = await Topic.count({ where: whereCondition });
+  console.log('db search total', { total });
+
+  response
+    .set(getHeaders)
+    .status(200)
     .json({
       status: 'success',
-      // total: queryResult.length,
-      total: 0,
+      total: topics.length,
+      pages: Math.ceil(total / (size as number)),
+      hasNext: (size as number) * (size as number) < total,
+      hasPrev: page > 1,
       data: {
-        topics: queryResult
+        topics,
       },
-    })
+    });
 });

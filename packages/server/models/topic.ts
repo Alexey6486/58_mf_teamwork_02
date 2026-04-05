@@ -4,6 +4,7 @@ import type { ModelAttributes } from 'sequelize';
 export interface ITopic {
   id: number
   title: string
+  text: string
 
   updatedAt?: Date
   createdAt?: Date
@@ -24,6 +25,10 @@ export const TopicAttributes: ModelAttributes<Model, ITopic> = {
     unique: true,
     allowNull: false,
   },
+  text: {
+    type: DataType.STRING,
+    allowNull: false,
+  },
   createdAt: {
     type: DataType.DATE,
     allowNull: false,
@@ -37,14 +42,6 @@ export const TopicAttributes: ModelAttributes<Model, ITopic> = {
     allowNull: false,
   },
 };
-
-export class Topic extends Model<ITopic> implements ITopic {
-  declare id: number;
-  declare title: string;
-  declare createdAt: Date;
-  declare updatedAt: Date;
-  declare deletedAt: Date;
-}
 
 export const TopicOptions = {
   tableName: TopicTableName,

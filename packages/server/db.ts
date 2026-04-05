@@ -2,7 +2,7 @@ import { Sequelize, type SequelizeOptions } from 'sequelize-typescript';
 import {
   TopicAttributes,
   TopicModelName,
-  TopicOptions,
+  TopicOptions
 } from './models/topic';
 
 const {
@@ -10,9 +10,9 @@ const {
 } = process.env;
 
 // https://github.com/Yandex-Practicum/orm-simple-template/blob/d7e0670807d8e4a339558c4324afadb65bdc91a0/app/index.ts
-
+const isDev = process.env.NODE_ENV === 'development';
 const sequelizeOptions: SequelizeOptions = {
-  host: POSTGRES_HOST,
+  host: isDev ? 'localhost' : POSTGRES_HOST,
   port: Number(POSTGRES_PORT) || 5432,
   username: POSTGRES_USER,
   password: POSTGRES_PASSWORD,
@@ -24,7 +24,7 @@ const sequelizeOptions: SequelizeOptions = {
 export const sequelize = new Sequelize(sequelizeOptions);
 
 // Инициализируем модели
-export const TopicSequelized = sequelize.define(
+export const Topic = sequelize.define(
   TopicModelName,
   TopicAttributes,
   TopicOptions,
@@ -32,28 +32,15 @@ export const TopicSequelized = sequelize.define(
 
 export async function dbConnect() {
   try {
-    await sequelize.authenticate(); // Проверка аутентификации в БД
-    await sequelize.sync({ alter: true }); // Синхронизация базы данных
+    await sequelize.authenticate();
+
+    await sequelize.sync();
+    // { force: true } — пересоздаёт таблицы (удаляет старые, создаёт новые). Используйте только в разработке.
+    // { alter: true } — автоматически изменяет существующую таблицу, чтобы она соответствовала модели.
+    // Без опций — создаёт таблицы, если их нет.
+
     console.log('Connection has been established successfully.');
   } catch (error) {
     console.error('Unable to connect to the database:', error);
   }
-}
-
-export const createClientAndConnect = async (): Promise<Sequelize | null> => {
-  try {
-    await dbConnect();
-    console.log('sequelize', { sequelize, env: process.env });
-
-    // Теперь getTableName() сработает
-    const tableName = TopicSequelized.getTableName();
-    console.log('Table name:', tableName);
-    const topics = await TopicSequelized.findAll();
-    console.log('✅ Topics found:', topics.length);
-    return sequelize;
-  } catch (e) {
-    console.error(e);
-  }
-
-  return null;
 }
