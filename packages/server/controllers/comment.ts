@@ -19,7 +19,7 @@ export const getAllComments = catchAsync(
     // - отрисовать комментарии
     // - если комментарий это ответ, то перед текстом комментария сделать цитату из комментария, на который делается ответ
     // - к каждому комментарию добавить реакции, если они есть
-    const comments = await Topic.findByPk(topicId, {
+    const topic = await Topic.findByPk(topicId, {
       include: [
         {
           model: Comment,
@@ -33,7 +33,7 @@ export const getAllComments = catchAsync(
     response.status(200).json({
       status: 'success',
       data: {
-        comments,
+        topic,
       },
     });
   }

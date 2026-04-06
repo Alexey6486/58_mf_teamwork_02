@@ -1,19 +1,20 @@
-import { Model, DataType } from 'sequelize-typescript';
+import { DataType } from 'sequelize-typescript';
+import type { Model } from 'sequelize-typescript';
 import type { ModelAttributes } from 'sequelize';
 import { CommentTableName } from './comment';
 import { TopicTableName } from './topic';
 import { REACTIONS } from '../constants/constrains';
 
 export interface IReaction {
-  id: number
-  topicId: number
-  commentId: number
-  authorId: number
+  id: number;
+  topicId: number;
+  commentId: number;
+  authorId: number;
 
-  text: string
+  text: string;
 
-  updatedAt?: Date
-  createdAt?: Date
+  updatedAt?: Date;
+  createdAt?: Date;
 }
 
 export const ReactionModelName = 'Reaction';
@@ -34,7 +35,7 @@ export const ReactionAttributes: ModelAttributes<Model, IReaction> = {
     type: DataType.STRING,
     allowNull: false,
     validate: {
-      notIn: [REACTIONS],
+      isIn: [REACTIONS],
     },
   },
   topicId: {
