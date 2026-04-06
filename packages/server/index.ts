@@ -16,9 +16,10 @@ app.use(cors());
 // .json() позволяет конвертировать строку пейлоад запроса в JS объект
 app.use(express.json());
 
+// поднимаем БД
 dbConnect().then();
 
-// api handlers
+// api ручки
 app.use('/api/v1/forum', routerForum);
 
 app.get('/', (_, res) => {

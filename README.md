@@ -47,20 +47,28 @@
 - запустить проект `yanr dev` (в дев режиме, sequelize настроен на подключение к БД по вышеуказанным данным)
 
 **Работа с запросами к БД с помощью curl**\
+
+Ссылка на postman
+`https://.postman.co/workspace/My-Workspace~5acd6cf2-4e5d-4995-82f7-ccf41e135530/collection/17483266-7833775e-a065-4967-95e7-bd5ccb3a3b4f?action=share&creator=17483266`
+
 Получить все темы форума:\
-`curl "http://localhost:3001/api/v1/forum?page=1&size=20"`
+`curl "http://localhost:3001/api/v1/forum/issues?page=1&size=20"`
 
 Создать новую тему на форуме:\
-`curl -X POST -H "Content-Type: application/json" -d "{\"title\": \"Тема форума №1\", \"text\": \"Текст темы форума №1\", \"authorId\": 1}" http://localhost:3001/api/v1/forum`
+`curl -X POST -H "Content-Type: application/json" -d "{\"title\": \"Тема форума №1\", \"text\": \"Текст темы форума №1\", \"authorId\": 1}" http://localhost:3001/api/v1/forum/issue`
 
 Удалить тему на форуме с id=1:\
-`curl -X DELETE -H "Content-Type: application/json" -d "{\"id\": 1}" http://localhost:3001/api/v1/forum`
+`curl -X DELETE -H "Content-Type: application/json" -d "{\"id\": 1}" http://localhost:3001/api/v1/forum/issue`
 
-Добавить комментарий к теме с id=2:\
-`curl -X POST -H "Content-Type: application/json" -d "{\"topicId\": 2, \"text\": \"Комментарий №1 к теме форума №1\", \"authorId\": 1}" http://localhost:3001/api/v1/forum/issue/2`
+Добавить комментарий к теме с id=1:\
+`curl -X POST -H "Content-Type: application/json" -d "{\"topicId\": 1, \"text\": \"Комментарий №1 к теме форума №1\", \"authorId\": 1}" http://localhost:3001/api/v1/forum/issue/1`
 
-Получить все сообщения темы форума с id=2:\
-`curl "http://localhost:3001/api/v1/forum/issue/2"`
+Получить все сообщения темы форума с id=1:\
+`curl "http://localhost:3001/api/v1/forum/issue/1"`
+
+Добавить ответ на комментарий с id=1 к теме с id=1:\
+`curl -X POST -H "Content-Type: application/json" -d "{\"topicId\": 1, \"text\": \"Ответ №1 к Комментарию №1 к теме форума №1\", \"authorId\": 1, \"replyToCommentId\": 1}" http://localhost:3001/api/v1/forum/issue/1/1`
+
 ___
 
 Более подробная документация для разработчиков находится [по ссылке](docs/oldREADME.md)

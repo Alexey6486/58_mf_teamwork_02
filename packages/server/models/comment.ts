@@ -16,6 +16,7 @@ export interface IComment {
 
 export const CommentModelName = 'Comment';
 export const CommentTableName = 'comments';
+export const CommentAssociationAlias = 'comments';
 
 export const CommentAttributes: ModelAttributes<Model, IComment> = {
   id: {
@@ -31,10 +32,10 @@ export const CommentAttributes: ModelAttributes<Model, IComment> = {
     type: DataType.INTEGER,
     allowNull: false,
     references: {
-      model: TopicTableName,
+      model: TopicTableName, // несмотря на то, что поле называется модель, указывать нужно название таблицы
       key: 'id',
     },
-    onDelete: 'CASCADE',
+    onDelete: 'CASCADE', // при удалении топика, комментарий связанный с ним будет удален
   },
   text: {
     type: DataType.STRING,
@@ -43,6 +44,11 @@ export const CommentAttributes: ModelAttributes<Model, IComment> = {
   replyToCommentId: {
     type: DataType.INTEGER,
     allowNull: true,
+    references: {
+      model: CommentTableName,
+      key: 'id',
+    },
+    onDelete: 'CASCADE', // при удалении комментария, комментарий-ответ связанный с ним будет удален
   },
 };
 
