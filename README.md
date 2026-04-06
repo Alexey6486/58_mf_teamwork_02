@@ -49,7 +49,7 @@
 **Работа с запросами к БД с помощью curl**\
 
 Ссылка на postman
-`https://.postman.co/workspace/My-Workspace~5acd6cf2-4e5d-4995-82f7-ccf41e135530/collection/17483266-7833775e-a065-4967-95e7-bd5ccb3a3b4f?action=share&creator=17483266`
+`https://www.postman.com/aerospace-specialist-20254567/workspace/flip7/collection/17483266-7833775e-a065-4967-95e7-bd5ccb3a3b4f?action=share&source=copy-link&creator=17483266`
 
 Получить все темы форума:\
 `curl "http://localhost:3001/api/v1/forum/topics?page=1&size=20"`
