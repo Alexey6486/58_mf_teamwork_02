@@ -1,4 +1,4 @@
-import { type FC, useState } from 'react';
+import { type FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { Logo } from '../../components/Logo/Logo';
@@ -8,14 +8,11 @@ import {
   FORM_PAGE_CONTAINER_CLASS,
   MAIN_CONTAINER_CLASS,
 } from '../../constants/style-groups';
-import {
-  type PageInitArgs,
-  ROUTES
-} from '../../routes'
+import { type PageInitArgs, ROUTES } from '../../routes';
 import { useDispatch, useSelector } from '../../store/store';
 import { addTopic } from '../../slices/forum-slice';
 import { IconButton } from '../../components/IconButton';
-import { EIconButton } from '../../enums';
+import { EIconButton, ERequestMethods } from '../../enums';
 
 export const ForumPage: FC = () => {
   const navigate = useNavigate();
@@ -46,12 +43,31 @@ export const ForumPage: FC = () => {
     navigate(ROUTES.main);
   };
 
+  useEffect(() => {
+    const requestOptions = {
+      method: 'GET',
+      redirect: 'follow',
+      // headers: {
+      //   'Content-Type': 'application/json',
+      // },
+      // credentials: 'include' as RequestCredentials,
+    };
+
+    fetch(
+      'http://localhost:3001/api/v1/forum/topics?page=1&size=20',
+      requestOptions
+    )
+      .then(response => response.text())
+      .then(result => console.log(result))
+      .catch(error => console.error(error));
+  }, []);
+
   return (
     <div className={MAIN_CONTAINER_CLASS}>
       <Helmet>
         <meta charSet="utf-8" />
         <title>Страница форума</title>
-        <meta name="description" content="Страница форума"/>
+        <meta name="description" content="Страница форума" />
       </Helmet>
       <div
         className={`${FORM_PAGE_CONTAINER_CLASS} flex-col items-center justify-start`}>
