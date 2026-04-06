@@ -1,7 +1,8 @@
 import { Model, DataType } from 'sequelize-typescript';
 import type { ModelAttributes } from 'sequelize';
 import { CommentTableName } from './comment';
-import { TopicTableName } from './topic'
+import { TopicTableName } from './topic';
+import { REACTIONS } from '../constants/constrains';
 
 export interface IReaction {
   id: number
@@ -32,6 +33,9 @@ export const ReactionAttributes: ModelAttributes<Model, IReaction> = {
   text: {
     type: DataType.STRING,
     allowNull: false,
+    validate: {
+      notIn: [REACTIONS],
+    },
   },
   topicId: {
     type: DataType.INTEGER,

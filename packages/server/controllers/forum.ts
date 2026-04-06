@@ -7,6 +7,8 @@ import {
   getHeaders,
   postHeaders
 } from './headers/headers';
+import { TextValidation } from '../utils/validation';
+import { escapeHTML } from '../utils/xss';
 
 export const getAllTopics = catchAsync(async (request: Request, response: Response) => {
   const { page = 1, size = 10, search = '' } = request.query;
@@ -46,17 +48,31 @@ export const getAllTopics = catchAsync(async (request: Request, response: Respon
 export const createTopic = catchAsync(async (request: Request, response: Response) => {
   const { title, text, authorId } = request.body;
 
-  const topic = await Topic.create({ title, text, authorId });
+  if (TextValidation(title) && TextValidation(text)) {
 
-  response
-    .set(postHeaders)
-    .status(200)
-    .json({
-      status: 'success',
-      data: {
-        topic,
-      },
+    const topic = await Topic.create({
+      title: escapeHTML(title),
+      text: escapeHTML(text),
+      authorId,
     });
+
+    response
+      .set(postHeaders)
+      .status(200)
+      .json({
+        status: 'success',
+        data: {
+          topic,
+        },
+      });
+  } else {
+    response
+      .set(postHeaders)
+      .status(400)
+      .json({
+        error: 'wrong data type',
+      });
+  }
 });
 
 export const deleteTopic = catchAsync(async (request: Request, response: Response) => {

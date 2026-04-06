@@ -1,6 +1,10 @@
 import { Model, DataType } from 'sequelize-typescript';
 import type { ModelAttributes } from 'sequelize';
 import { TopicTableName } from './topic';
+import {
+  MAX_TEXT,
+  MIN_TEXT
+} from '../constants/constrains';
 
 export interface IComment {
   id: number
@@ -40,6 +44,10 @@ export const CommentAttributes: ModelAttributes<Model, IComment> = {
   text: {
     type: DataType.STRING,
     allowNull: false,
+    validate: {
+      max: MAX_TEXT,
+      min: MIN_TEXT,
+    },
   },
   replyToCommentId: {
     type: DataType.INTEGER,

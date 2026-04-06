@@ -11,6 +11,8 @@ import {
 } from './headers/headers';
 import { CommentAssociationAlias } from '../models/comment';
 import { ReactionAssociationAlias } from '../models/reaction';
+import { TextValidation } from '../utils/validation';
+import { escapeHTML } from '../utils/xss';
 
 export const getAllComments = catchAsync(async (request: Request, response: Response) => {
   const { topicId } = request.params;
@@ -51,26 +53,35 @@ export const createComment = catchAsync(async (request: Request, response: Respo
   const targetTopic = await Topic.findByPk(topicId);
 
   if (!targetTopic) {
-    throw new Error('Topic  not found');
+    throw new Error('Topic not found');
   }
 
-  // Создаем комментарий
-  const comment = await Comment.create({
-    authorId,
-    topicId,
-    text,
-    replyToCommentId: replyToCommentId || null
-  });
-
-  response
-    .set(postHeaders)
-    .status(200)
-    .json({
-      status: 'success',
-      data: {
-        comment,
-      },
+  if (TextValidation(text)) {
+    // Создаем комментарий
+    const comment = await Comment.create({
+      authorId,
+      topicId,
+      text: escapeHTML(text),
+      replyToCommentId: replyToCommentId || null
     });
+
+    response
+      .set(postHeaders)
+      .status(200)
+      .json({
+        status: 'success',
+        data: {
+          comment,
+        },
+      });
+  } else {
+    response
+      .set(postHeaders)
+      .status(400)
+      .json({
+        error: 'wrong data type',
+      });
+  }
 });
 
 export const createReply = catchAsync(async (request: Request, response: Response) => {
@@ -83,21 +94,30 @@ export const createReply = catchAsync(async (request: Request, response: Respons
     throw new Error('Topic or comment not found');
   }
 
-  // Создаем ответ
-  const comment = await Comment.create({
-    authorId,
-    topicId,
-    text,
-    replyToCommentId,
-  });
-
-  response
-    .set(postHeaders)
-    .status(200)
-    .json({
-      status: 'success',
-      data: {
-        comment,
-      },
+  if (TextValidation(text)) {
+    // Создаем ответ
+    const comment = await Comment.create({
+      authorId,
+      topicId,
+      text: escapeHTML(text),
+      replyToCommentId,
     });
+
+    response
+      .set(postHeaders)
+      .status(200)
+      .json({
+        status: 'success',
+        data: {
+          comment,
+        },
+      });
+  } else {
+    response
+      .set(postHeaders)
+      .status(400)
+      .json({
+        error: 'wrong data type',
+      });
+  }
 });

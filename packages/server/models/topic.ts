@@ -1,5 +1,11 @@
 import { Model, DataType } from 'sequelize-typescript';
 import type { ModelAttributes } from 'sequelize';
+import {
+  MAX_TEXT,
+  MAX_TITLE,
+  MIN_TEXT,
+  MIN_TITLE
+} from '../constants/constrains';
 
 export interface ITopic {
   id: number
@@ -25,13 +31,21 @@ export const TopicAttributes: ModelAttributes<Model, ITopic> = {
     allowNull: false,
   },
   title: {
-    type: DataType.STRING,
+    type: DataType.STRING(100),
     unique: true,
     allowNull: false,
+    validate: { // https://sequelize.org/docs/v6/core-concepts/validations-and-constraints/
+      max: MAX_TITLE,
+      min: MIN_TITLE,
+    },
   },
   text: {
-    type: DataType.STRING,
+    type: DataType.STRING(1000),
     allowNull: false,
+    validate: {
+      max: MAX_TEXT,
+      min: MIN_TEXT,
+    },
   },
 };
 
