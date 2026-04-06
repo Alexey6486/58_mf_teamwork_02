@@ -1,6 +1,5 @@
 import type { Request, NextFunction, Response } from 'express';
 import { catchAsync } from '../utils/catchAsync';
-import { getHeaders } from './headers/headers';
 
 export const protectController = async (
   request: Request,
@@ -59,7 +58,7 @@ export const protectController = async (
 
 export const signin = catchAsync(
   async (_request: Request, response: Response) => {
-    response.set(getHeaders).status(200).json({
+    response.status(200).json({
       status: 'success',
     });
   }
@@ -68,7 +67,7 @@ export const signin = catchAsync(
 export const signout = catchAsync(
   async (_request: Request, response: Response) => {
     console.log('logout');
-    response.set(getHeaders).status(200).json({
+    response.status(200).json({
       status: 'success',
     });
   }

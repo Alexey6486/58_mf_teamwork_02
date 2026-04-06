@@ -45,12 +45,11 @@ export const ForumPage: FC = () => {
 
   useEffect(() => {
     const requestOptions = {
-      method: 'GET',
-      redirect: 'follow',
-      // headers: {
-      //   'Content-Type': 'application/json',
-      // },
-      // credentials: 'include' as RequestCredentials,
+      method: ERequestMethods.GET,
+      headers: {
+        cooka: '123',
+      },
+      credentials: 'include' as RequestCredentials,
     };
 
     fetch(

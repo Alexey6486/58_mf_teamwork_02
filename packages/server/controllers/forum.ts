@@ -2,7 +2,6 @@ import type { Response, Request } from 'express';
 import { Op } from 'sequelize';
 import { Topic } from '../db';
 import { catchAsync } from '../utils/catchAsync';
-import { deleteHeaders, getHeaders, postHeaders } from './headers/headers';
 import { TextValidation } from '../utils/validation';
 import { escapeHTML } from '../utils/xss';
 
@@ -27,8 +26,7 @@ export const getAllTopics = catchAsync(
 
     const total = await Topic.count({ where: whereCondition });
 
-    response
-      .set(getHeaders)
+    response //.set(getHeaders) не нужны, т.к. установлены глобально в index.ts app.use(cors...
       .status(200)
       .json({
         status: 'success',
@@ -54,14 +52,14 @@ export const createTopic = catchAsync(
         authorId,
       });
 
-      response.set(postHeaders).status(200).json({
+      response.status(200).json({
         status: 'success',
         data: {
           topic,
         },
       });
     } else {
-      response.set(postHeaders).status(400).json({
+      response.status(400).json({
         error: 'wrong data type',
       });
     }
@@ -75,11 +73,11 @@ export const deleteTopic = catchAsync(
     const result = await Topic.destroy({ where: { id } });
 
     if (result === 1) {
-      response.set(deleteHeaders).status(200).json({
+      response.status(200).json({
         status: 'success',
       });
     } else {
-      response.set(deleteHeaders).status(404).json({
+      response.status(404).json({
         error: 'topic not found',
       });
     }

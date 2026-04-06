@@ -1,5 +1,23 @@
-const acao = {"Access-Control-Allow-Origin": "*"};
-export const getHeaders = {...acao, "Access-Control-Allow-Methods" : "GET"};
-export const postHeaders = {...acao, "Access-Control-Allow-Methods" : "POST"};
-export const patchHeaders = {...acao, "Access-Control-Allow-Methods" : "PATCH"};
-export const deleteHeaders = {...acao, "Access-Control-Allow-Methods" : "DELETE"};
+// const acao = {"Access-Control-Allow-Origin": "*"};
+const acao = { 'Access-Control-Allow-Origin': 'http://localhost' };
+const acac = { 'Access-Control-Allow-Credentials': 'true' };
+export const getHeaders = {
+  ...acao,
+  ...acac,
+  'Access-Control-Allow-Methods': 'GET',
+};
+export const postHeaders = {
+  ...acao,
+  ...acac,
+  'Access-Control-Allow-Methods': 'POST',
+};
+export const patchHeaders = {
+  ...acao,
+  ...acac,
+  'Access-Control-Allow-Methods': 'PATCH',
+};
+export const deleteHeaders = {
+  ...acao,
+  ...acac,
+  'Access-Control-Allow-Methods': 'DELETE',
+};
