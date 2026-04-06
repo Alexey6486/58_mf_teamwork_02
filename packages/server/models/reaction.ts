@@ -35,7 +35,7 @@ export const ReactionAttributes: ModelAttributes<Model, IReaction> = {
     type: DataType.STRING,
     allowNull: false,
     validate: {
-      isIn: [REACTIONS],
+      isIn: [REACTIONS], // можно взять отсюда https://snipp.ru/handbk/emoji?ysclid=mnnix0kb9u274533936
     },
   },
   topicId: {
