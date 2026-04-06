@@ -52,22 +52,25 @@
 `https://.postman.co/workspace/My-Workspace~5acd6cf2-4e5d-4995-82f7-ccf41e135530/collection/17483266-7833775e-a065-4967-95e7-bd5ccb3a3b4f?action=share&creator=17483266`
 
 Получить все темы форума:\
-`curl "http://localhost:3001/api/v1/forum/issues?page=1&size=20"`
+`curl "http://localhost:3001/api/v1/forum/topics?page=1&size=20"`
 
 Создать новую тему на форуме:\
-`curl -X POST -H "Content-Type: application/json" -d "{\"title\": \"Тема форума №1\", \"text\": \"Текст темы форума №1\", \"authorId\": 1}" http://localhost:3001/api/v1/forum/issue`
+`curl -X POST -H "Content-Type: application/json" -d "{\"title\": \"Тема форума №1\", \"text\": \"Текст темы форума №1\", \"authorId\": 1}" http://localhost:3001/api/v1/forum/topic`
 
 Удалить тему на форуме с id=1:\
-`curl -X DELETE -H "Content-Type: application/json" -d "{\"id\": 1}" http://localhost:3001/api/v1/forum/issue`
-
-Добавить комментарий к теме с id=1:\
-`curl -X POST -H "Content-Type: application/json" -d "{\"topicId\": 1, \"text\": \"Комментарий №1 к теме форума №1\", \"authorId\": 1}" http://localhost:3001/api/v1/forum/issue/1`
+`curl -X DELETE -H "Content-Type: application/json" -d "{\"id\": 1}" http://localhost:3001/api/v1/forum/topic`
 
 Получить все сообщения темы форума с id=1:\
-`curl "http://localhost:3001/api/v1/forum/issue/1"`
+`curl "http://localhost:3001/api/v1/forum/topic/1/comments"`
+
+Добавить комментарий к теме с id=1:\
+`curl -X POST -H "Content-Type: application/json" -d "{\"topicId\": 1, \"text\": \"Комментарий №1 к теме форума №1\", \"authorId\": 1}" http://localhost:3001/api/v1/forum/topic/1/comment`
 
 Добавить ответ на комментарий с id=1 к теме с id=1:\
-`curl -X POST -H "Content-Type: application/json" -d "{\"topicId\": 1, \"text\": \"Ответ №1 к Комментарию №1 к теме форума №1\", \"authorId\": 1, \"replyToCommentId\": 1}" http://localhost:3001/api/v1/forum/issue/1/1`
+`curl -X POST -H "Content-Type: application/json" -d "{\"topicId\": 1, \"text\": \"Ответ №1 к Комментарию №1 к теме форума №1\", \"authorId\": 1, \"replyToCommentId\": 1}" http://localhost:3001/api/v1/forum/topic/1/comment/1/reply`
+
+Добавить реакцию на комментарий с id=1 к теме с id=1:\
+`curl -X POST -H "Content-Type: application/json" -d "{\"topicId\": 1, \"text\": \"реакция\", \"authorId\": 1, \"commentId\": 1}" http://localhost:3001/api/v1/forum/topic/1/comment/1/reaction`
 
 ___
 

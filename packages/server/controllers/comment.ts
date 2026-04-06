@@ -1,28 +1,35 @@
 import type { Response, Request } from 'express';
 import {
   Comment,
+  Reaction,
   Topic
-} from '../db';
+} from '../db'
 import { catchAsync } from '../utils/catchAsync';
 import {
   getHeaders,
   postHeaders
 } from './headers/headers';
 import { CommentAssociationAlias } from '../models/comment';
+import { ReactionAssociationAlias } from '../models/reaction';
 
 export const getAllComments = catchAsync(async (request: Request, response: Response) => {
-  const { issueId } = request.params;
+  const { topicId } = request.params;
 
   // комментарии к топику и ответы на эти комментарии это одна и таже модель, хранятся они в одной таблице,
   // ответ на комментарий и сам комментарий ссылаются на один и тотже топик
-  // поэтому при данной выборке мы должны получить топик по id, его комментарии и ответы к ним
-  // на фронте можно сортировать комментарии по дате добавления и для тех комментарие, что являются ответами
-  // можно добавлять превью комментария на который отвечают, как это обычно делается в чатах и форумах
+  // поэтому при данной выборке мы должны получить топик по id, его комментарии, ответы к ним и
+  // все реакции комментариев, т.к. они тоже привязаны к топику, к которому прнадлежат комментарии
+  // на фронте нужно будет делать маппинг
+  // - отрисовать данные открытой темы форума (загловок, текст)
+  // - отрисовать комментарии
+  // - если комментарий это ответ, то перед текстом комментария сделать цитату из комментария, на который делается ответ
+  // - к каждому комментарию добавить реакции, если они есть
   const comments = await Topic.findByPk(
-    issueId,
+    topicId,
     {
       include: [
-        { model: Comment, as: CommentAssociationAlias },
+        { model: Comment, as: CommentAssociationAlias, order: [['createdAt', 'ASC']] },
+        { model: Reaction, as: ReactionAssociationAlias },
       ]
     });
 

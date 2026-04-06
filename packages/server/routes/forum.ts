@@ -10,21 +10,29 @@ import {
   createComment,
   createReply,
 } from '../controllers/comment';
+import {
+  createReaction,
+} from '../controllers/reaction';
 
 const routerForum = express.Router();
 
-routerForum.route('/issues')
+routerForum.route('/topics')
   .get(protectController, getAllTopics)
 
-routerForum.route('/issue')
+routerForum.route('/topic')
   .post(protectController, createTopic)
   .delete(protectController, deleteTopic);
 
-routerForum.route('/issue/:issueId')
+routerForum.route('/topic/:topicId/comments')
   .get(protectController, getAllComments)
+
+routerForum.route('/topic/:topicId/comment')
   .post(protectController, createComment)
 
-routerForum.route('/issue/:issueId/:commentId')
+routerForum.route('/topic/:topicId/comment/:commentId/reply')
   .post(protectController, createReply)
+
+routerForum.route('/topic/:topicId/comment/:commentId/reaction')
+  .post(protectController, createReaction)
 
 export { routerForum };

@@ -10,6 +10,12 @@ import {
   CommentOptions,
   CommentAssociationAlias
 } from './models/comment';
+import {
+  ReactionModelName,
+  ReactionAttributes,
+  ReactionOptions,
+  ReactionAssociationAlias
+} from './models/reaction';
 
 // пример бэкэнда
 // https://github.com/Yandex-Practicum/orm-simple-template/blob/d7e0670807d8e4a339558c4324afadb65bdc91a0/app/index.ts
@@ -46,6 +52,12 @@ export const Comment = sequelize.define(
   CommentOptions,
 );
 
+export const Reaction = sequelize.define(
+  ReactionModelName,
+  ReactionAttributes,
+  ReactionOptions,
+);
+
 // структура связей
 // - у темы форума может быть много комментариев
 // - комментарий принадлежит какой-то теме форума
@@ -55,11 +67,47 @@ export const Comment = sequelize.define(
 // - комментарию принадлежат реакции на этот комментарий
 // - при удалении комментария, удаляем все реакции на этот комментарий
 
-// буквально, Topic может иметь много комментариев (Topic id будет лежать в поле topicId комментария)
+// hasMany = Topic может иметь много комментариев (Topic id будет лежать в поле topicId комментария)
 Topic.hasMany(Comment, {
-  foreignKey: 'topicId',
+  foreignKey: 'topicId', // в моделе комментария в поле topicId будет лежать id топика
   as: CommentAssociationAlias, // Псевдоним для выборки, например Topic.getComments() (также set..., add...)***
   onDelete: 'CASCADE', // Каскадное удаление строк других таблиц с внешними ключами, которые ссылались на этот топик
+});
+
+// belongsTo = Comment всегда принадлежит какому-то топику (Topic id будет лежать в поле topicId комментария)
+Comment.belongsTo(Topic, {
+  foreignKey: 'topicId',
+  as: 'topic',
+  onDelete: 'CASCADE',
+});
+
+Comment.hasMany(Comment, {
+  foreignKey: 'replyToCommentId',
+  as: 'replies',
+  onDelete: 'CASCADE',
+});
+
+Comment.belongsTo(Comment, {
+  foreignKey: 'replyToCommentId',
+  as: 'targetComment',
+  onDelete: 'CASCADE',
+});
+
+Topic.hasMany(Reaction, {
+  foreignKey: 'topicId',
+  as: ReactionAssociationAlias,
+});
+
+Comment.hasMany(Reaction, {
+  foreignKey: 'commentId',
+  as: 'reactions',
+  onDelete: 'CASCADE',
+});
+
+Reaction.belongsTo(Comment, {
+  foreignKey: 'commentId',
+  as: 'targetComment',
+  onDelete: 'CASCADE',
 });
 
 // ***
@@ -110,38 +158,6 @@ Topic.hasMany(Comment, {
 //       { model: Reaction, as: reactionToCommentId }, - все реакции поле reactionToCommentId=35
 //     ],
 //   });
-
-// буквально, Comment всегда принадлежит какому-то топику (Topic id будет лежать в поле topicId комментария)
-Comment.belongsTo(Topic, {
-  foreignKey: 'topicId',
-  as: 'Topic',
-  onDelete: 'CASCADE',
-});
-
-Comment.belongsTo(Comment, {
-  as: 'TargetComment',
-  foreignKey: 'replyToCommentId',
-  onDelete: 'CASCADE',
-});
-
-Comment.hasMany(Comment, {
-  as: 'Replies',
-  foreignKey: 'replyToCommentId',
-  onDelete: 'CASCADE',
-});
-
-// TODO Reaction model
-// Reaction.belongsTo(Comment, {
-//   as: 'TargetComment',
-//   foreignKey: 'reactionToCommentId',
-//   onDelete: 'CASCADE',
-// });
-
-// Comment.hasMany(Reaction, {
-//   as: 'Reactions',
-//   foreignKey: 'reactionToCommentId',
-//   onDelete: 'CASCADE',
-// });
 
 export async function dbConnect() {
   try {
