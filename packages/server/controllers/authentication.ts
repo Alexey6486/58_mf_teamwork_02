@@ -12,6 +12,18 @@ export const protectController = async (
 ) => {
   try {
     if (request.cookies[YP_COOKIE_UUID] && request.cookies[YP_COOKIE_AUTH]) {
+      const yp_user = await fetch(`${YP_BASE_URL}/auth/user`, {
+        method: 'GET',
+        headers: {
+          Cookie: cookiesToString(request.cookies),
+        },
+        credentials: 'include',
+      });
+
+      if (!yp_user?.ok) {
+        return response.status(403).json({ error: 'Доступ запрещен' });
+      }
+
       return next();
     }
     return response.status(403).json({ error: 'Доступ запрещен' });
@@ -41,7 +53,6 @@ export const signin = catchAsync(
 
     // Шаг 2: парсим куки из ответа стороннего API
     const setCookieHeaders = yp_response?.headers?.get?.('Set-Cookie');
-    console.log('setCookieHeaders', { setCookieHeaders });
 
     if (setCookieHeaders) {
       // Парсим все куки
@@ -93,15 +104,6 @@ export const signin = catchAsync(
 
 export const signout = catchAsync(
   async (request: Request, response: Response) => {
-    console.log('Raw cookies object:', request.cookies);
-    console.log('All cookie names:', Object.keys(request.cookies));
-    console.log('uuid cookie:', request.cookies.uuid);
-    console.log('uuid cookie (bracket notation):', request.cookies['uuid']);
-    console.log('authCookie cookie:', request.cookies.authCookie);
-    console.log(
-      'authCookie cookie (bracket notation):',
-      request.cookies['authCookie']
-    );
     await fetch(`${YP_BASE_URL}/auth/logout`, {
       method: 'POST',
       headers: {

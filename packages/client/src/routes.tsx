@@ -133,7 +133,11 @@ export const routes = [
   },
   {
     path: ROUTES.forum,
-    element: <ForumPage />,
+    element: (
+      <ProtectedRoute>
+        <ForumPage />
+      </ProtectedRoute>
+    ),
     fetchData: initForumPage,
   },
   {

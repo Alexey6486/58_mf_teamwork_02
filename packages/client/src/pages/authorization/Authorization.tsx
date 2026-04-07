@@ -27,9 +27,9 @@ import {
 import { type AppDispatch, useSelector } from '../../store/store';
 import { loginThunk, logoutThunk } from '../../slices/auth-slice';
 import { selectUser } from '../../slices/user-slice';
-import { useYandexOAuth } from '../../hooks/useYandexOAuth';
+import { useYandexOAuth } from '../../hooks';
 import { IconButton } from '../../components/IconButton';
-import { EIconButton, ERequestMethods } from '../../enums';
+import { EIconButton } from '../../enums';
 import { YandexIdLogo } from '../../components/YandexIdLogo/YandexIdLogo';
 
 const INITIAL_VALUES: IAuthorizationForm = {
@@ -59,23 +59,7 @@ export const AuthorizationPage: FC = () => {
     enableReinitialize: true,
     onSubmit: values => {
       formik.setSubmitting(false);
-      // dispatch(loginThunk(values));
-
-      const requestOptions = {
-        method: ERequestMethods.POST,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          login: values?.login,
-          password: values?.password,
-        }),
-        credentials: 'include' as RequestCredentials,
-      };
-
-      fetch('http://localhost:3001/api/v1/auth/signin', requestOptions)
-        .then(response => response.text())
-        .then(result => console.log(result))
-        .catch(error => console.error(error));
-
+      dispatch(loginThunk(values));
       formik.resetForm();
     },
   });
@@ -90,17 +74,7 @@ export const AuthorizationPage: FC = () => {
   };
 
   const handleLogout = () => {
-    // dispatch(logoutThunk());
-    const requestOptions = {
-      method: ERequestMethods.POST,
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include' as RequestCredentials,
-    };
-
-    fetch('http://localhost:3001/api/v1/auth/signout', requestOptions)
-      .then(response => response.text())
-      .then(result => console.log(result))
-      .catch(error => console.error(error));
+    dispatch(logoutThunk());
   };
 
   useEffect(() => {
