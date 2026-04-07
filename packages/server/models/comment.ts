@@ -1,21 +1,19 @@
-import { Model, DataType } from 'sequelize-typescript';
+import { DataType } from 'sequelize-typescript';
+import type { Model } from 'sequelize-typescript';
 import type { ModelAttributes } from 'sequelize';
 import { TopicTableName } from './topic';
-import {
-  MAX_TEXT,
-  MIN_TEXT
-} from '../constants/constrains';
+import { MAX_TEXT, MIN_TEXT } from '../constants/constrains';
 
 export interface IComment {
-  id: number
-  topicId: number
-  authorId: number
-  text: string
+  id: number;
+  topicId: number;
+  authorId: number;
+  text: string;
 
-  replyToCommentId: number
+  replyToCommentId: number;
 
-  updatedAt?: Date
-  createdAt?: Date
+  updatedAt?: Date;
+  createdAt?: Date;
 }
 
 export const CommentModelName = 'Comment';
