@@ -13,12 +13,34 @@ const app = express();
 const port = Number(process.env.SERVER_PORT) || 3001;
 
 // Глобальная настройка CORS
-app.use(
-  cors({
-    origin: 'http://localhost', // разрешить запросы с указанного источника
-    credentials: true, // если true, то обязательно должен быть указан origin
-  })
-);
+// Список разрешённых доменов
+const allowedOrigins: string[] = [
+  'http://localhost:3001',
+  'http://localhost:2000',
+  'http://localhost',
+];
+
+interface CorsOriginCallback {
+  (error: Error | null, origin?: boolean): void;
+}
+
+const corsOptions = {
+  origin: (origin: string | undefined, callback: CorsOriginCallback) => {
+    // Разрешаем запросы без Origin (например, curl или прямые запросы)
+    if (!origin) return callback(null, true);
+
+    // Проверяем, есть ли домен в списке разрешённых
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true); // Разрешаем запрос
+    } else {
+      callback(new Error('Not allowed by CORS')); // Запрещаем запрос
+    }
+  },
+  credentials: true, // Разрешаем учётные данные (куки, авторизация)
+};
+
+// Применяем middleware
+app.use(cors(corsOptions));
 
 // .json() позволяет конвертировать строку пейлоад запроса в JS объект
 app.use(express.json());

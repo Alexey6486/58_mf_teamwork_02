@@ -1,35 +1,20 @@
 import type { Request, NextFunction, Response } from 'express';
 import cookieParser from 'set-cookie-parser';
+import type { CookieOptions } from 'express-serve-static-core';
 import { catchAsync } from '../utils/catchAsync';
-import { YP_BASE_URL } from '../constants/api';
+import { cookiesToString } from '../utils/cookies';
+import { YP_BASE_URL, YP_COOKIE_AUTH, YP_COOKIE_UUID } from '../constants/api';
 
 export const protectController = async (
   request: Request,
   response: Response,
   next: NextFunction
 ) => {
-  // Пример проверки данных в заголовке
-  console.log('protectController Raw cookies object:', request.cookies);
-  console.log(
-    'protectController All cookie names:',
-    Object.keys(request.cookies)
-  );
-  console.log('protectController uuid cookie:', request.cookies.uuid);
-  console.log(
-    'protectController uuid cookie (bracket notation):',
-    request.cookies['uuid']
-  );
-  console.log(
-    'protectController authCookie cookie:',
-    request.cookies.authCookie
-  );
-  console.log(
-    'protectController authCookie cookie (bracket notation):',
-    request.cookies['authCookie']
-  );
-  // Здесь ваша логика проверки данных
   try {
-    return next();
+    if (request.cookies[YP_COOKIE_UUID] && request.cookies[YP_COOKIE_AUTH]) {
+      return next();
+    }
+    return response.status(403).json({ error: 'Доступ запрещен' });
   } catch (error) {
     return response.status(403).json({ error: 'Доступ запрещен' });
   }
@@ -50,13 +35,11 @@ export const signin = catchAsync(
     });
 
     // Проверяем статус ответа
-    if (!yp_response.ok) {
+    if (!yp_response?.ok) {
       response.status(401).json({ error: 'Authentication failed' });
     }
 
     // Шаг 2: парсим куки из ответа стороннего API
-    // const setCookieHeaders = yp_response.headers.get('Set-Cookie');
-    // @ts-ignore
     const setCookieHeaders = yp_response?.headers?.get?.('Set-Cookie');
     console.log('setCookieHeaders', { setCookieHeaders });
 
@@ -66,66 +49,40 @@ export const signin = catchAsync(
         decodeValues: true, // Декодировать значения (по умолчанию true)
         map: true, // Получить объект { имя_куки: объект_куки }
       });
-      // const parsedCookies = cookieParser.parse({
-      //   headers: { 'set-cookie': setCookieHeader }
-      // });
-      console.log('parsedCookies', { parsedCookies });
-      const sessionUuidCookie = parsedCookies['uuid'];
-      const sessionAuthCookie = parsedCookies['authCookie'];
+
+      const sessionUuidCookie = parsedCookies[YP_COOKIE_UUID];
+      const sessionAuthCookie = parsedCookies[YP_COOKIE_AUTH];
 
       if (!sessionUuidCookie || !sessionAuthCookie) {
-        throw new Error(
-          'Куку session_id не удалось получить от стороннего API'
-        );
+        throw new Error('Cookies не найдены');
       }
 
       response.cookie(sessionUuidCookie.name, sessionUuidCookie.value, {
-        httpOnly: sessionUuidCookie.httpOnly || true, // Безопасно по умолчанию
-        secure: sessionUuidCookie.secure || false, // В продакшене ставьте true при HTTPS
-        maxAge: sessionUuidCookie.maxAge
-          ? sessionUuidCookie.maxAge * 1000
-          : undefined,
+        httpOnly: sessionUuidCookie.httpOnly, // Безопасно по умолчанию
+        secure: sessionUuidCookie.secure, // В продакшене ставьте true при HTTPS
+        maxAge: sessionUuidCookie.maxAge,
         expires: sessionUuidCookie.expires,
-        // domain: sessionUuidCookie.domain,
-        domain: 'localhost',
+        domain:
+          process.env.NODE_ENV === 'development'
+            ? process.env.DEV_COOKIE_DOMAIN
+            : process.env.PROD_COOKIE_DOMAIN,
         path: sessionUuidCookie.path || '/',
-        // @ts-ignore
-        sameSite: sessionUuidCookie.sameSite || 'lax',
+        sameSite: sessionUuidCookie.sameSite as CookieOptions['sameSite'],
       });
 
       response.cookie(sessionAuthCookie.name, sessionAuthCookie.value, {
-        httpOnly: sessionAuthCookie.httpOnly || true, // Безопасно по умолчанию
-        secure: sessionAuthCookie.secure || false, // В продакшене ставьте true при HTTPS
-        maxAge: sessionAuthCookie.maxAge
-          ? sessionAuthCookie.maxAge * 1000
-          : undefined,
+        httpOnly: sessionAuthCookie.httpOnly,
+        secure: sessionAuthCookie.secure,
+        maxAge: sessionAuthCookie.maxAge,
         expires: sessionAuthCookie.expires,
-        // domain: sessionAuthCookie.domain,
-        domain: 'localhost',
-        path: sessionAuthCookie.path || '/',
-        // @ts-ignore
-        sameSite: sessionAuthCookie.sameSite || 'lax',
+        domain:
+          process.env.NODE_ENV === 'development'
+            ? process.env.DEV_COOKIE_DOMAIN
+            : process.env.PROD_COOKIE_DOMAIN,
+        path: sessionAuthCookie.path,
+        sameSite: sessionUuidCookie.sameSite as CookieOptions['sameSite'],
       });
-
-      // Шаг 3: устанавливаем куки клиенту для использования с нашим бэкендом
-      // parsedCookies.forEach((cookie) => {
-      //   console.log('cookie', { cookie });
-      //   response.cookie(
-      //     cookie.name,
-      //     cookie.value,
-      //     {
-      //       httpOnly: true, // Защита от XSS
-      //       secure: process.env.NODE_ENV === 'production', // Только HTTPS в продакшене
-      //       sameSite: 'lax', // Защита от CSRF
-      //       domain: cookie.domain || undefined, // Используем домен из куки, если есть
-      //       path: cookie.path || '/', // Используем путь из куки, если есть
-      //       maxAge: cookie.maxAge || 24 * 60 * 60 * 1000 // 24 часа по умолчанию
-      //     });
-      // });
     }
-    // @ts-ignore
-    console.log('Response headers:', response.getHeaders());
-    console.log('Set-Cookie header:', response.getHeaders()['set-cookie']);
 
     response.status(200).json({
       status: 'success',
@@ -145,16 +102,16 @@ export const signout = catchAsync(
       'authCookie cookie (bracket notation):',
       request.cookies['authCookie']
     );
-
-    const yp_response = await fetch(`${YP_BASE_URL}/auth/logout`, {
+    await fetch(`${YP_BASE_URL}/auth/logout`, {
       method: 'POST',
       headers: {
-        cookie:
-          'uuid=2aeec771-5be1-4ef6-baad-3f5b5f03b551; Domain=ya-praktikum.tech; Path=/; Expires=Fri, 08 May 2026 09:35:25 GMT; HttpOnly; Secure; SameSite=None, authCookie=055bb17ea70ab407e9894a4efb403232a78af190%3A1775554525; Domain=ya-praktikum.tech; Path=/; Expires=Fri, 08 May 2026 09:35:25 GMT; HttpOnly; Secure; SameSite=None, uuid=213bce9c-66cd-4a9e-9a8d-903586f2e37e; Domain=ya-praktikum.tech; Path=/; Expires=Fri, 08 May 2026 09:35:25 GMT; HttpOnly; Secure; SameSite=None',
+        Cookie: cookiesToString(request.cookies),
       },
-      // credentials: 'include',
+      credentials: 'include',
     });
-    console.log('yp_response', { yp_response });
+
+    response.clearCookie(YP_COOKIE_UUID);
+    response.clearCookie(YP_COOKIE_AUTH);
 
     response.status(200).json({
       status: 'success',
