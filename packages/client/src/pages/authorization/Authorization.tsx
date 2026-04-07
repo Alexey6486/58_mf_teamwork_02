@@ -1,8 +1,4 @@
-import {
-  type FC,
-  type MouseEvent,
-  useEffect
-} from 'react';
+import { type FC, type MouseEvent, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { FormikProvider, useFormik } from 'formik';
@@ -17,10 +13,7 @@ import {
   requiredString,
 } from '../../validations';
 import { Fields } from '../../fields';
-import {
-  type PageInitArgs,
-  ROUTES
-} from '../../routes';
+import { type PageInitArgs, ROUTES } from '../../routes';
 import {
   BTN_CLASS,
   BTN_GROUP_CLASS,
@@ -29,16 +22,13 @@ import {
   FORM_CONTAINER_CLASS,
   FORM_PAGE_CONTAINER_CLASS,
   FORM_WRAPPER_CLASS,
-  MAIN_CONTAINER_CLASS
+  MAIN_CONTAINER_CLASS,
 } from '../../constants/style-groups';
 import { type AppDispatch, useSelector } from '../../store/store';
-import {
-  loginThunk,
-  logoutThunk
-} from '../../slices/auth-slice'
+import { loginThunk, logoutThunk } from '../../slices/auth-slice';
 import { selectUser } from '../../slices/user-slice';
 import { IconButton } from '../../components/IconButton';
-import { EIconButton } from '../../enums';
+import { EIconButton, ERequestMethods } from '../../enums';
 
 const INITIAL_VALUES: IAuthorizationForm = {
   login: '',
@@ -66,7 +56,23 @@ export const AuthorizationPage: FC = () => {
     enableReinitialize: true,
     onSubmit: values => {
       formik.setSubmitting(false);
-      dispatch(loginThunk(values));
+      // dispatch(loginThunk(values));
+
+      const requestOptions = {
+        method: ERequestMethods.POST,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          login: values?.login,
+          password: values?.password,
+        }),
+        credentials: 'include' as RequestCredentials,
+      };
+
+      fetch('http://localhost:3001/api/v1/auth/signin', requestOptions)
+        .then(response => response.text())
+        .then(result => console.log(result))
+        .catch(error => console.error(error));
+
       formik.resetForm();
     },
   });
@@ -81,7 +87,17 @@ export const AuthorizationPage: FC = () => {
   };
 
   const handleLogout = () => {
-    dispatch(logoutThunk());
+    // dispatch(logoutThunk());
+    const requestOptions = {
+      method: ERequestMethods.POST,
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include' as RequestCredentials,
+    };
+
+    fetch('http://localhost:3001/api/v1/auth/signout', requestOptions)
+      .then(response => response.text())
+      .then(result => console.log(result))
+      .catch(error => console.error(error));
   };
 
   useEffect(() => {
@@ -95,7 +111,7 @@ export const AuthorizationPage: FC = () => {
       <Helmet>
         <meta charSet="utf-8" />
         <title>Страница авторизации</title>
-        <meta name="description" content="Страница авторизации"/>
+        <meta name="description" content="Страница авторизации" />
       </Helmet>
       <div className={FORM_PAGE_CONTAINER_CLASS}>
         <div className="absolute top-12 right-12 opacity-0">

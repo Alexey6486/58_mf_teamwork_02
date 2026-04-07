@@ -1,8 +1,10 @@
 import express from 'express';
-import { protectController } from '../controllers/authentication';
+import { signin, signout } from '../controllers/authentication';
 
 const routerAuthentication = express.Router();
 
-routerAuthentication.route('/').post(protectController);
+routerAuthentication.route('/signin').post(signin);
+
+routerAuthentication.route('/signout').post(signout);
 
 export { routerAuthentication };

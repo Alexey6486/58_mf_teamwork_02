@@ -46,9 +46,6 @@ export const ForumPage: FC = () => {
   useEffect(() => {
     const requestOptions = {
       method: ERequestMethods.GET,
-      headers: {
-        cooka: '123',
-      },
       credentials: 'include' as RequestCredentials,
     };
 

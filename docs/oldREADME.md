@@ -19,10 +19,11 @@
 И для клиента и для сервера
 ```yarn lerna add {your_dep}```
 
-
 Если вы хотите добавить dev зависимость, проделайте то же самое, но с флагом `dev`
 ```yarn lerna add {your_dep} --dev --scope server```
 
+Если вы хотите удалить зависимость, пакет удалится из dependencies и devDependencies отдельной команды для удаления из devDependencies нет
+`lerna exec --scope={targe_scope} -- yarn remove {your_dep}`
 
 ### Тесты
 
