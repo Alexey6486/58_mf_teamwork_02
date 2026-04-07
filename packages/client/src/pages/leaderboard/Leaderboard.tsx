@@ -22,6 +22,7 @@ import {
 import { IconButton } from '../../components/IconButton';
 import { EIconButton } from '../../enums';
 import { fromLeaderboardData } from '../../utils/fromLeaderboardData';
+import { usePage } from '../../hooks';
 
 type TLeaderboardRow =
   | (ILeaderboard & {
@@ -150,6 +151,8 @@ const LeaderboardRow: FC<TLeaderboardRow> = memo(
 );
 
 export const LeaderboardPage = () => {
+  usePage({ initPage: initLeaderBoardPage });
+
   const { data } = useSelector(selectLeaderboard);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -219,4 +222,6 @@ export const LeaderboardPage = () => {
   );
 };
 
-export const initLeaderBoardPage = async (_: PageInitArgs) => Promise.resolve();
+export const initLeaderBoardPage = async({ dispatch }: PageInitArgs) => {
+  return dispatch(fetchLeaderboardThunk({ cursor: 0 }));
+}
