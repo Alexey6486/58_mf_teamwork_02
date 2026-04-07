@@ -7,42 +7,79 @@ import { REACTIONS } from '../constants/constrains';
 
 export const createReaction = catchAsync(
   async (request: Request, response: Response) => {
-    const { topicId, commentId, authorId, text } = request.body;
+    const { topicId, commentId, authorId, text, id } = request.body;
 
-    const targetTopic = await Topic.findByPk(topicId);
-    const targetComment = await Comment.findByPk(commentId);
+    if (!id) {
+      const targetTopic = await Topic.findByPk(topicId);
+      const targetComment = await Comment.findByPk(commentId);
 
-    if (!targetTopic || !targetComment) {
-      throw new Error('Topic or comment not found');
-    }
+      if (!targetTopic || !targetComment) {
+        throw new Error('Topic or comment not found');
+      }
 
-    // TODO логику, если данный пользователь уже ставил реакцию и приходит
-    //  новая реакция на тот же комментарий, то нужно его заменить,
-    //  т.е. разрешать только одну реакцию на комментарий от одного пользователя
-    if (TextValidation(text) && REACTIONS.includes(text)) {
-      // Создаем ответ
-      const reaction = await Reaction.create({
-        topicId,
-        commentId,
-        authorId,
-        text: escapeHTML(text),
-      });
+      if (TextValidation(text) && REACTIONS.includes(text)) {
+        // Создаем ответ
+        const reaction = await Reaction.create({
+          topicId,
+          commentId,
+          authorId,
+          text: escapeHTML(text),
+        });
 
-      response.status(200).json({
-        status: 'success',
-        data: {
-          reaction,
-        },
-      });
+        response.status(200).json({
+          status: 'success',
+          data: {
+            reaction,
+          },
+        });
+      } else {
+        response.status(400).json({
+          error: 'wrong data type',
+        });
+      }
     } else {
-      response.status(400).json({
-        error: 'wrong data type',
-      });
+      const reaction = await Reaction.findByPk(id);
+
+      if (reaction) {
+        // Обновляем запись
+        const [updated] = await Reaction.update(
+          { topicId, commentId, authorId, text },
+          {
+            where: { id },
+            returning: true,
+            validate: true,
+          }
+        );
+
+        response.status(200).json({
+          status: 'success',
+          data: {
+            reaction: updated,
+          },
+        });
+      } else {
+        response.status(400).json({
+          error: 'wrong id',
+        });
+      }
     }
   }
 );
 
-// TODO сделать контроллер для удаления реакции, на фронте проверять,
-//  если данный пользователь уже поставил реакцию под данных комментарием и
-//  хочет её удалить, а не поменять на другую, то фронт отправляет запрос на
-//  ручку удаления реакции
+export const deleteReaction = catchAsync(
+  async (request: Request, response: Response) => {
+    const { id } = request.body;
+
+    const result = await Reaction.destroy({ where: { id } });
+
+    if (result === 1) {
+      response.status(200).json({
+        status: 'success',
+      });
+    } else {
+      response.status(404).json({
+        error: 'reaction not found',
+      });
+    }
+  }
+);
