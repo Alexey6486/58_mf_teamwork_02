@@ -1,4 +1,4 @@
-import { type FC, useState } from 'react';
+import { type FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { Logo } from '../../components/Logo/Logo';
@@ -12,7 +12,7 @@ import { type PageInitArgs, ROUTES } from '../../routes';
 import { useDispatch, useSelector } from '../../store/store';
 import { addTopic } from '../../slices/forum-slice';
 import { IconButton } from '../../components/IconButton';
-import { EIconButton } from '../../enums';
+import { EIconButton, ERequestMethods } from '../../enums';
 
 export const ForumPage: FC = () => {
   const navigate = useNavigate();
@@ -42,6 +42,21 @@ export const ForumPage: FC = () => {
   const toMain = () => {
     navigate(ROUTES.main);
   };
+
+  useEffect(() => {
+    const requestOptions = {
+      method: ERequestMethods.GET,
+      credentials: 'include' as RequestCredentials,
+    };
+
+    fetch(
+      'http://localhost:3001/api/v1/forum/topics?page=1&size=20',
+      requestOptions
+    )
+      .then(response => response.text())
+      .then(result => console.log(result))
+      .catch(error => console.error(error));
+  }, []);
 
   return (
     <div className={MAIN_CONTAINER_CLASS}>

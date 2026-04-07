@@ -6,6 +6,7 @@ import { createProxyMiddleware } from 'http-proxy-middleware';
 import cookieParser from 'cookie-parser';
 import { routerForum } from './routes/forum';
 import { routerAuthentication } from './routes/authentication';
+import { YP_BASE_URL } from './constants/api';
 
 dotenv.config();
 
@@ -55,7 +56,7 @@ app.use(
   createProxyMiddleware({
     changeOrigin: true,
     logger: console,
-    target: 'https://ya-praktikum.tech/api/v2',
+    target: YP_BASE_URL,
   })
 );
 
