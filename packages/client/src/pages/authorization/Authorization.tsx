@@ -27,8 +27,10 @@ import {
 import { type AppDispatch, useSelector } from '../../store/store';
 import { loginThunk, logoutThunk } from '../../slices/auth-slice';
 import { selectUser } from '../../slices/user-slice';
+import { useYandexOAuth } from '../../hooks/useYandexOAuth';
 import { IconButton } from '../../components/IconButton';
 import { EIconButton, ERequestMethods } from '../../enums';
+import { YandexIdLogo } from '../../components/YandexIdLogo/YandexIdLogo';
 
 const INITIAL_VALUES: IAuthorizationForm = {
   login: '',
@@ -48,6 +50,7 @@ export const AuthorizationPage: FC = () => {
   const user = useSelector(selectUser);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+  const { startOAuth } = useYandexOAuth();
 
   const formik = useFormik<IAuthorizationForm>({
     initialValues: INITIAL_VALUES,
@@ -143,6 +146,12 @@ export const AuthorizationPage: FC = () => {
                 </button>
                 <button className={BTN_CLASS} onClick={toRegistration}>
                   Зарегистрироваться
+                </button>
+                <button
+                  className={`${BTN_CLASS} flex items-center justify-center`}
+                  type="button"
+                  onClick={startOAuth}>
+                  <YandexIdLogo />
                 </button>
               </div>
             </FormikProvider>

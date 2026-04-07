@@ -10,6 +10,7 @@ import fs from 'fs/promises';
 import { createServer as createViteServer, type ViteDevServer } from 'vite';
 import serialize from 'serialize-javascript';
 import cookieParser from 'cookie-parser';
+import { apiProxy } from './middlewares/api-proxy';
 
 // На системах линукс под порт 80 проект не запускается
 const port_linux = process.env.CREATE_SERVER_LINUX_PORT || 2000;
@@ -18,14 +19,17 @@ const platform = os?.platform() ?? undefined;
 
 const clientPath = path.join(__dirname, '..');
 const isDev = process.env.NODE_ENV === 'development';
-const port = isDev && platform && !platform.includes('win')
-  ? port_linux
-  : port_win;
+const port =
+  isDev && platform && !platform.includes('win') ? port_linux : port_win;
+const API_PROXY_PATH = '/api/v2';
 
 async function createServer() {
   const app = express();
 
   app.use(cookieParser());
+  app.use(express.json());
+  app.use(API_PROXY_PATH, apiProxy);
+
   let vite: ViteDevServer | undefined;
   if (isDev) {
     vite = await createViteServer({

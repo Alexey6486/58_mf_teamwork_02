@@ -36,6 +36,7 @@ const promises_1 = __importDefault(require("fs/promises"));
 const vite_1 = require("vite");
 const serialize_javascript_1 = __importDefault(require("serialize-javascript"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
+const api_proxy_1 = require("./middlewares/api-proxy");
 // На системах линукс под порт 80 проект не запускается
 const port_linux = process.env.CREATE_SERVER_LINUX_PORT || 2000;
 const port_win = process.env.CREATE_SERVER_WIN_PORT || 80;
@@ -45,9 +46,12 @@ const isDev = process.env.NODE_ENV === 'development';
 const port = isDev && platform && !platform.includes('win')
     ? port_linux
     : port_win;
+const API_PROXY_PATH = '/api/v2';
 async function createServer() {
     const app = (0, express_1.default)();
     app.use((0, cookie_parser_1.default)());
+    app.use(express_1.default.json());
+    app.use(API_PROXY_PATH, api_proxy_1.apiProxy);
     let vite;
     if (isDev) {
         vite = await (0, vite_1.createServer)({
