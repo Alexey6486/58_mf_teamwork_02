@@ -1,6 +1,7 @@
 import { type FC, memo, useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 import {
   fetchLeaderboardThunk,
   selectLeaderboard,
@@ -18,7 +19,7 @@ import {
 import {
   type PageInitArgs,
   ROUTES
-} from '../../routes'
+} from '../../routes';
 import { IconButton } from '../../components/IconButton';
 import { EIconButton } from '../../enums';
 import { fromLeaderboardData } from '../../utils/fromLeaderboardData';
@@ -190,6 +191,11 @@ export const LeaderboardPage = () => {
 
   return (
     <div className={MAIN_CONTAINER_CLASS}>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Страница лидерборд</title>
+        <meta name="description" content="Страница лидерборд"/>
+      </Helmet>
       <div className={FORM_PAGE_CONTAINER_CLASS}>
         <div className={FORM_CONTAINER_CLASS}>
           <div className="w-full flex justify-between absolute pl-8 pr-8 top-12 left-0">

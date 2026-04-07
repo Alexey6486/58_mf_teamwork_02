@@ -25,7 +25,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
+const os_1 = __importDefault(require("os"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const express_1 = __importDefault(require("express"));
@@ -34,12 +36,22 @@ const promises_1 = __importDefault(require("fs/promises"));
 const vite_1 = require("vite");
 const serialize_javascript_1 = __importDefault(require("serialize-javascript"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
-const port = process.env.PORT || 2000;
+const api_proxy_1 = require("./middlewares/api-proxy");
+// На системах линукс под порт 80 проект не запускается
+const port_linux = process.env.CREATE_SERVER_LINUX_PORT || 2000;
+const port_win = process.env.CREATE_SERVER_WIN_PORT || 80;
+const platform = (_a = os_1.default === null || os_1.default === void 0 ? void 0 : os_1.default.platform()) !== null && _a !== void 0 ? _a : undefined;
 const clientPath = path_1.default.join(__dirname, '..');
 const isDev = process.env.NODE_ENV === 'development';
+const port = isDev && platform && !platform.includes('win')
+    ? port_linux
+    : port_win;
+const API_PROXY_PATH = '/api/v2';
 async function createServer() {
     const app = (0, express_1.default)();
     app.use((0, cookie_parser_1.default)());
+    app.use(express_1.default.json());
+    app.use(API_PROXY_PATH, api_proxy_1.apiProxy);
     let vite;
     if (isDev) {
         vite = await (0, vite_1.createServer)({

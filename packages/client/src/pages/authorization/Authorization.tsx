@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { FormikProvider, useFormik } from 'formik';
 import { useDispatch } from 'react-redux';
+import { Helmet } from 'react-helmet';
 import { Logo } from '../../components/Logo/Logo';
 import type { IAuthorizationForm } from '../../types';
 import {
@@ -31,8 +32,15 @@ import {
   MAIN_CONTAINER_CLASS
 } from '../../constants/style-groups';
 import { type AppDispatch, useSelector } from '../../store/store';
-import { loginThunk } from '../../slices/auth-slice';
+import {
+  loginThunk,
+  logoutThunk,
+} from '../../slices/auth-slice';
 import { selectUser } from '../../slices/user-slice';
+import { useYandexOAuth } from '../../hooks/useYandexOAuth';
+import { IconButton } from '../../components/IconButton';
+import { YandexIdLogo } from '../../components/YandexIdLogo/YandexIdLogo';
+import { EIconButton } from '../../enums';
 
 const INITIAL_VALUES: IAuthorizationForm = {
   login: '',
@@ -52,6 +60,7 @@ export const AuthorizationPage: FC = () => {
   const user = useSelector(selectUser);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+  const { startOAuth } = useYandexOAuth();
 
   const formik = useFormik<IAuthorizationForm>({
     initialValues: INITIAL_VALUES,
@@ -74,6 +83,10 @@ export const AuthorizationPage: FC = () => {
     navigate(ROUTES.signup);
   };
 
+  const handleLogout = () => {
+    dispatch(logoutThunk());
+  };
+
   useEffect(() => {
     if (user) {
       navigate(ROUTES.main);
@@ -82,7 +95,19 @@ export const AuthorizationPage: FC = () => {
 
   return (
     <div className={MAIN_CONTAINER_CLASS}>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Страница авторизации</title>
+        <meta name="description" content="Страница авторизации"/>
+      </Helmet>
       <div className={FORM_PAGE_CONTAINER_CLASS}>
+        <div className="absolute top-12 right-12 opacity-0">
+          <IconButton
+            onClick={handleLogout}
+            iconName={EIconButton.OUT}
+            hoverName={'Logout'}
+          />
+        </div>
         <div className={FORM_CONTAINER_CLASS}>
           <Logo />
           <div className={FORM_WRAPPER_CLASS}>
@@ -105,6 +130,9 @@ export const AuthorizationPage: FC = () => {
                 </button>
                 <button className={BTN_CLASS} onClick={toRegistration}>
                   Зарегистрироваться
+                </button>
+                <button className={`${BTN_CLASS} flex items-center justify-center`} type="button" onClick={startOAuth}>
+                  <YandexIdLogo />
                 </button>
               </div>
             </FormikProvider>

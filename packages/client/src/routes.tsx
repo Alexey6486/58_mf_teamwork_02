@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import type { AppDispatch, RootState } from './store/store';
 import {
   AuthorizationPage,
@@ -26,7 +27,6 @@ import {
   initTopicPage,
 } from './pages';
 import { useIsAuthed } from './hooks';
-import { useDispatch } from 'react-redux';
 import { logoutThunk } from './slices/auth-slice';
 
 export type PageInitContext = {

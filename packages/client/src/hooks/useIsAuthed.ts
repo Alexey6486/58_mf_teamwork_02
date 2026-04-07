@@ -31,6 +31,7 @@ export const useIsAuthed = () => {
           },
           credentials: 'include' as RequestCredentials,
         });
+
         if (userData.ok) {
           setIsAuthed(true);
           setIsLoading(false);

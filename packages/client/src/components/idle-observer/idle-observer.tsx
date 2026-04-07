@@ -37,7 +37,7 @@ export const IdleObserver: React.FC<Props> = ({
 
   const [events] = useState(eventsList);
 
-  const intervalId = useRef<null | NodeJS.Timer>(null);
+  const intervalId = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const idle = idleLimit < MIN_IDLE_LIMIT ? MIN_IDLE_LIMIT : idleLimit;
 
@@ -47,6 +47,7 @@ export const IdleObserver: React.FC<Props> = ({
   const clearSubscribes = () => {
     if (intervalId?.current) {
       clearInterval(intervalId.current);
+      intervalId.current = null;
     }
 
     events.forEach(event => {

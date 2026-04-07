@@ -1,8 +1,9 @@
 import { useNavigate } from "react-router-dom";
+import { Helmet } from 'react-helmet';
 import {
   BTN_MENU_CLASS,
   MAIN_CONTAINER_CLASS
-} from '../../constants/style-groups'
+} from '../../constants/style-groups';
 import { Button } from "../../components/Button";
 import { type PageInitArgs } from '../../routes';
 import { useUserRating } from "../../hooks/useUserRating";
@@ -13,6 +14,11 @@ export const MainPage = () => {
 
     return(
         <div className={MAIN_CONTAINER_CLASS}>
+            <Helmet>
+              <meta charSet="utf-8" />
+              <title>Главная страница</title>
+              <meta name="description" content="Главная страница"/>
+            </Helmet>
             <div className="flex flex-col justify-center items-center bg-main-light h-full rounded-md dark:bg-main-dark">
                 <div className="font-bold text-main-blue dark:text-main-white text-5xl mb-3">Flip 7</div>
                 <div className="flex bg-[#bae6fd] dark:bg-btn-dark dark:text-white w-fit mx-auto rounded-b-md
