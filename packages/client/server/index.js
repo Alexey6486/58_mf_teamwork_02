@@ -43,9 +43,7 @@ const port_win = process.env.CREATE_SERVER_WIN_PORT || 80;
 const platform = (_a = os_1.default === null || os_1.default === void 0 ? void 0 : os_1.default.platform()) !== null && _a !== void 0 ? _a : undefined;
 const clientPath = path_1.default.join(__dirname, '..');
 const isDev = process.env.NODE_ENV === 'development';
-const port = isDev && platform && !platform.includes('win')
-    ? port_linux
-    : port_win;
+const port = isDev && platform && !platform.includes('win') ? port_linux : port_win;
 const API_PROXY_PATH = '/api/v2';
 async function createServer() {
     const app = (0, express_1.default)();

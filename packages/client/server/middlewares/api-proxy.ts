@@ -10,12 +10,15 @@ function sanitizeSetCookie(raw: string): string {
   return raw
     .split(';')
     .map(part => part.trim())
-    .filter(part => !UNSAFE_COOKIE_ATTRS.has(part.split('=')[0].trim().toLowerCase()))
+    .filter(
+      part => !UNSAFE_COOKIE_ATTRS.has(part.split('=')[0].trim().toLowerCase())
+    )
     .join('; ');
 }
 
 function extractSetCookies(headers: Headers): string[] {
-  const getAll = (headers as unknown as { getSetCookie(): string[] }).getSetCookie;
+  const getAll = (headers as unknown as { getSetCookie(): string[] })
+    .getSetCookie;
   if (typeof getAll === 'function') {
     return getAll.call(headers);
   }
@@ -29,7 +32,11 @@ function buildTargetUrl(req: Request): string {
   return `${YANDEX_API_BASE}${req.path}${query}`;
 }
 
-export async function apiProxy(req: Request, res: Response, next: NextFunction) {
+export async function apiProxy(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   try {
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
@@ -58,7 +65,10 @@ export async function apiProxy(req: Request, res: Response, next: NextFunction) 
 
     res
       .status(response.status)
-      .set('Content-Type', response.headers.get('content-type') || 'application/json')
+      .set(
+        'Content-Type',
+        response.headers.get('content-type') || 'application/json'
+      )
       .send(body);
   } catch (err) {
     next(err);

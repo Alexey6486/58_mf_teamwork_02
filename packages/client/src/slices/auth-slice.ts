@@ -1,7 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { IAuthorizationForm, IUser } from '../types';
 import { thunkCreator } from './thunk-creator';
-import { URL_BASE, URL_LOGIN, URL_LOGOUT, URL_SIGNUP, URL_OAUTH_SERVICE_ID, URL_OAUTH_YANDEX, OAUTH_REDIRECT_URI } from '../constants/urls';
+import {
+  URL_BASE,
+  URL_LOGIN,
+  URL_LOGOUT,
+  URL_SIGNUP,
+  URL_OAUTH_SERVICE_ID,
+  URL_OAUTH_YANDEX,
+  OAUTH_REDIRECT_URI,
+} from '../constants/urls';
 import { ERequestMethods } from '../enums';
 import { type RootState } from '../store/store';
 import { type IRegistrationDto } from '../types/user';
@@ -67,9 +75,12 @@ export const signupThunk = thunkCreator<string, Partial<IRegistrationDto>>(
 export const oauthGetServiceIdThunk = thunkCreator<{ service_id: string }>(
   'auth/oauthGetServiceId',
   async _ => {
-    return fetch(`${URL_BASE}${URL_OAUTH_SERVICE_ID}?redirect_uri=${OAUTH_REDIRECT_URI}`, {
-      credentials: 'include' as RequestCredentials,
-    });
+    return fetch(
+      `${URL_BASE}${URL_OAUTH_SERVICE_ID}?redirect_uri=${OAUTH_REDIRECT_URI}`,
+      {
+        credentials: 'include' as RequestCredentials,
+      }
+    );
   }
 );
 
