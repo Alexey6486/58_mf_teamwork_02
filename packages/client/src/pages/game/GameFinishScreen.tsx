@@ -8,6 +8,9 @@ import {
   FORM_TITLE_CLASS,
 } from '../../constants/style-groups';
 import { Button } from '../../components/Button';
+import { useDispatch, useSelector } from '../../store/store';
+import { selectUser, selectUserRating } from '../../slices/user-slice';
+import { updateLeaderboardScore } from '../../slices/leaderboard-slice';
 
 interface GameFinishScreenProps {
   result: GameResult;
@@ -15,6 +18,31 @@ interface GameFinishScreenProps {
 }
 
 export const GameFinishScreen: FC<GameFinishScreenProps> = ({ result, onRestart }) => {
+  const dispatch = useDispatch();
+  const user = useSelector(selectUser);
+
+
+  if(user && result.winnerName === user?.first_name){
+    const userRating = useSelector(selectUserRating);
+    const newScore = userRating + result.pointGame;
+
+    const handleRecordRating = () => {
+      dispatch(
+        updateLeaderboardScore({
+          data: 
+            {
+              id: user.id ?? '',
+              name: result.winnerName,
+              flip7_rating: newScore,
+            }
+        })
+      );
+    };
+
+    handleRecordRating();
+  }
+  
+
   return (
     <div className={FORM_PAGE_CONTAINER_CLASS}>
       <div className={FORM_CONTAINER_CLASS}>

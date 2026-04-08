@@ -1,6 +1,9 @@
 export type ILeaderboard = {
   id: string;
   name: string;
-  games: string;
-  wins: string;
+  flip7_rating: number;
+};
+
+export type ServerLeaderboardItem = {
+  data: ILeaderboard;
 };

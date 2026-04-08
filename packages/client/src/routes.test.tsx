@@ -44,6 +44,7 @@ const renderWithProviders = (
     preloadState = {
       user: {
         data: null,
+        score: 0,
         isLoading: false,
         error: {
           status: null,
@@ -98,6 +99,7 @@ describe('Jest ProtectedRoute component test', () => {
               first_name: 'John',
             },
             isLoading: false,
+            score: 80,
             error: {
               status: null,
               message: null,

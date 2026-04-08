@@ -1,27 +1,27 @@
 import { Sequelize, type SequelizeOptions } from 'sequelize-typescript';
-import {
-  TopicModelName,
-  TopicAttributes,
-  TopicOptions
-} from './models/topic';
+import { TopicModelName, TopicAttributes, TopicOptions } from './models/topic';
 import {
   CommentModelName,
   CommentAttributes,
   CommentOptions,
-  CommentAssociationAlias
+  CommentAssociationAlias,
 } from './models/comment';
 import {
   ReactionModelName,
   ReactionAttributes,
   ReactionOptions,
-  ReactionAssociationAlias
+  ReactionAssociationAlias,
 } from './models/reaction';
 
 // пример бэкэнда
 // https://github.com/Yandex-Practicum/orm-simple-template/blob/d7e0670807d8e4a339558c4324afadb65bdc91a0/app/index.ts
 
 const {
-  POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB, POSTGRES_PORT, POSTGRES_HOST
+  POSTGRES_USER,
+  POSTGRES_PASSWORD,
+  POSTGRES_DB,
+  POSTGRES_PORT,
+  POSTGRES_HOST,
 } = process.env;
 
 const isDev = process.env.NODE_ENV === 'development';
@@ -43,19 +43,19 @@ export const sequelize = new Sequelize(sequelizeOptions);
 export const Topic = sequelize.define(
   TopicModelName,
   TopicAttributes,
-  TopicOptions,
+  TopicOptions
 );
 
 export const Comment = sequelize.define(
   CommentModelName,
   CommentAttributes,
-  CommentOptions,
+  CommentOptions
 );
 
 export const Reaction = sequelize.define(
   ReactionModelName,
   ReactionAttributes,
-  ReactionOptions,
+  ReactionOptions
 );
 
 // структура связей

@@ -6,9 +6,11 @@ import {
 } from '../../constants/style-groups';
 import { Button } from "../../components/Button";
 import { type PageInitArgs } from '../../routes';
+import { useUserRating } from "../../hooks/useUserRating";
 
 export const MainPage = () => {
     const navigate = useNavigate();
+    useUserRating();
 
     return(
         <div className={MAIN_CONTAINER_CLASS}>

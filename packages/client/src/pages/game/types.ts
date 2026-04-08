@@ -31,6 +31,7 @@ export interface PlayerData {
 
 export type GameResult = {
   winnerName: string;
+  pointGame: number;
   players: { name: string; totalScore: number }[];
 };
 

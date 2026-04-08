@@ -3,9 +3,11 @@ import type { RootState } from '../store/store';
 import type { ILeaderboard } from '../types';
 import { ERequestMethods } from '../enums';
 import { thunkCreator } from './thunk-creator';
+import { RATING_FIELD, TEAM_NAME, LIMIT_RATING } from '../constants/leaderboard';
+import { URL_BASE, URL_LEADERBOARD } from '../constants/urls';
 
 export interface LeaderboardState {
-  data: ILeaderboard[];
+  data: ILeaderboard[] | null;
   isLoading: boolean;
   error: {
     status: string | null;
@@ -14,8 +16,16 @@ export interface LeaderboardState {
   };
 }
 
+export interface UpdateRatingUser {
+  data: ILeaderboard | null;
+}
+
+export interface FetchLeaderBoard {
+  cursor: number;
+};
+
 const initialState: LeaderboardState = {
-  data: [],
+  data: null,
   isLoading: false,
   error: {
     status: null,
@@ -24,69 +34,45 @@ const initialState: LeaderboardState = {
   },
 };
 
-export const fetchLeaderboardThunk = thunkCreator<ILeaderboard[]>(
-  'user/fetchLeaderboardThunk',
-  async _ => {
-    return fetch('url', {
-      method: ERequestMethods.GET,
+export const updateLeaderboardScore = thunkCreator<ILeaderboard, UpdateRatingUser>(
+  'leaderboard/updateLeaderboardScore',
+  async(dataRequest) => {
+    const { data } = dataRequest;
+
+    return fetch(`${URL_BASE}${URL_LEADERBOARD}`, {
+      method: ERequestMethods.POST,
       headers: {
         'Content-Type': 'application/json',
       },
       credentials: 'include' as RequestCredentials,
+      body: JSON.stringify({
+        data,
+        ratingFieldName: RATING_FIELD,
+        teamName: TEAM_NAME,
+      }),
     });
   }
 );
 
-const MOCK: ILeaderboard[] = [
-  {
-    id: '1',
-    name: 'Test 1',
-    games: '10',
-    wins: '2',
-  },
-  {
-    id: '2',
-    name: 'Test 2',
-    games: '5',
-    wins: '1',
-  },
-  {
-    id: '3',
-    name: 'Test 3',
-    games: '24',
-    wins: '7',
-  },
-  {
-    id: '4',
-    name: 'Test 4',
-    games: '1',
-    wins: '0',
-  },
-  {
-    id: '5',
-    name: 'Test 5',
-    games: '12',
-    wins: '7',
-  },
-  {
-    id: '6',
-    name: 'Test 6',
-    games: '4',
-    wins: '2',
-  },
-  {
-    id: '7',
-    name: 'Test 7',
-    games: '9',
-    wins: '3',
-  },
-  {
-    id: '8',
-    name: 'Test 8',
-    games: '5',
-    wins: '4',
-  },
-];
+export const fetchLeaderboardThunk = thunkCreator<ILeaderboard[], FetchLeaderBoard>(
+  'leaderboard/fetchLeaderboardThunk',
+  async ({ cursor }) => {
+    const url = `${URL_BASE}${URL_LEADERBOARD}/${TEAM_NAME}`;
+
+    return fetch(url, {
+      method: ERequestMethods.POST,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include' as RequestCredentials,
+      body: JSON.stringify({
+        ratingFieldName: RATING_FIELD,
+        cursor,
+        limit: LIMIT_RATING,
+      })
+    });
+  }
+);
 
 export const leaderboardSlice = createSlice({
   name: 'leaderboard',
@@ -98,17 +84,16 @@ export const leaderboardSlice = createSlice({
   },
   extraReducers: builder => {
     builder
-      // Handle leaderboard data
       .addCase(fetchLeaderboardThunk.pending, state => {
-        state.data = [];
+        state.data = null;
         state.isLoading = true;
       })
-      .addCase(fetchLeaderboardThunk.fulfilled, state => {
-        state.data = MOCK;
+      .addCase(fetchLeaderboardThunk.fulfilled, (state, action: PayloadAction<ILeaderboard[]>) => {
+        state.data = action.payload;
         state.isLoading = false;
       })
       .addCase(fetchLeaderboardThunk.rejected, state => {
-        state.data = [];
+        state.data = null;
         state.isLoading = false;
       });
   },
