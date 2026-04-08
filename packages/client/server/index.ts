@@ -19,9 +19,8 @@ const platform = os?.platform() ?? undefined;
 
 const clientPath = path.join(__dirname, '..');
 const isDev = process.env.NODE_ENV === 'development';
-const port = isDev && platform && !platform.includes('win')
-  ? port_linux
-  : port_win;
+const port =
+  isDev && platform && !platform.includes('win') ? port_linux : port_win;
 const API_PROXY_PATH = '/api/v2';
 
 async function createServer() {

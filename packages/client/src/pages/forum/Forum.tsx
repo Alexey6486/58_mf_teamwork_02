@@ -8,10 +8,7 @@ import {
   FORM_PAGE_CONTAINER_CLASS,
   MAIN_CONTAINER_CLASS,
 } from '../../constants/style-groups';
-import {
-  type PageInitArgs,
-  ROUTES
-} from '../../routes'
+import { type PageInitArgs, ROUTES } from '../../routes';
 import { useDispatch, useSelector } from '../../store/store';
 import { addTopic } from '../../slices/forum-slice';
 import { IconButton } from '../../components/IconButton';
@@ -51,7 +48,7 @@ export const ForumPage: FC = () => {
       <Helmet>
         <meta charSet="utf-8" />
         <title>Страница форума</title>
-        <meta name="description" content="Страница форума"/>
+        <meta name="description" content="Страница форума" />
       </Helmet>
       <div
         className={`${FORM_PAGE_CONTAINER_CLASS} flex-col items-center justify-start`}>

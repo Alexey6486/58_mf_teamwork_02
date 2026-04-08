@@ -22,8 +22,7 @@ export function useYandexOAuth() {
     const result = await dispatch(oauthGetServiceIdThunk());
     if (oauthGetServiceIdThunk.fulfilled.match(result)) {
       const { service_id } = result.payload as { service_id: string };
-      window.location.href =
-        `${OAUTH_YANDEX_URL}?response_type=code&client_id=${service_id}&redirect_uri=${OAUTH_REDIRECT_URI}`;
+      window.location.href = `${OAUTH_YANDEX_URL}?response_type=code&client_id=${service_id}&redirect_uri=${OAUTH_REDIRECT_URI}`;
     }
   };
 

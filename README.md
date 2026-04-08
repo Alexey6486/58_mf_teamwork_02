@@ -17,7 +17,6 @@
 #### Docker ####
 Перед первым запуском выполните `node init.js`
 
-
 `docker compose up` - запустит три сервиса
 1. nginx, раздающий клиентскую статику (client)
 2. node, ваш сервер (server)
@@ -29,7 +28,54 @@
 **Для работы докера необходимо**
 - в корень проекта (на уровне файла docker-compose.yml) добавить файл .env
 - данные для этого файла (в учебных целях) лежат в файле .env.sample
-- если образы собраны и в проект внесены изменения, то нужно пересобрать образы заново `docker-compose build`
+- если образы собраны и в проект внесены изменения, то нужно
+  - остановить и удалить контейнеры `docker-compose down`
+  - пересобрать образы заново `docker-compose build`
+  - запустить контейнеры снова `docker-compose up`
+
+**Для работы с БД локально**
+- установить PostgreSQL
+- запустить pgadmin (устанавливается автоматически при установке PostgreSQL)
+- выбрать в панели слева Servers, на дашборде выбрать Add New Server, заполнить:
+  - вкладка General:
+    - поле name = postgres
+  - вкладка Connection:
+    - поле Host name/address = localhost
+    - port = 5432
+    - Maintenance database = postgres
+    - username/password = postgres
+- запустить проект `yanr dev` (в дев режиме, sequelize настроен на подключение к БД по вышеуказанным данным)
+
+Если клиент на Linux в режиме разработки работает с порта 2000, установите в .env файле
+DEV_COOKIE_DOMAIN=localhost:2000
+
+**Работа с запросами к БД с помощью curl**\
+
+Ссылка на postman
+`https://www.postman.com/aerospace-specialist-20254567/workspace/flip7/collection/17483266-7833775e-a065-4967-95e7-bd5ccb3a3b4f?action=share&source=copy-link&creator=17483266`
+
+Получить все темы форума:\
+`curl "http://localhost:3001/api/v1/forum/topics?page=1&size=20"`
+
+Создать новую тему на форуме:\
+`curl -X POST -H "Content-Type: application/json" -d "{\"title\": \"Тема форума №1\", \"text\": \"Текст темы форума №1\", \"authorId\": 1}" http://localhost:3001/api/v1/forum/topic`
+
+Удалить тему на форуме с id=1:\
+`curl -X DELETE -H "Content-Type: application/json" -d "{\"id\": 1}" http://localhost:3001/api/v1/forum/topic`
+
+Получить все сообщения темы форума с id=1:\
+`curl "http://localhost:3001/api/v1/forum/topic/1/comments"`
+
+Добавить комментарий к теме с id=1:\
+`curl -X POST -H "Content-Type: application/json" -d "{\"topicId\": 1, \"text\": \"Комментарий №1 к теме форума №1\", \"authorId\": 1}" http://localhost:3001/api/v1/forum/topic/1/comment`
+
+Добавить ответ на комментарий с id=1 к теме с id=1:\
+`curl -X POST -H "Content-Type: application/json" -d "{\"topicId\": 1, \"text\": \"Ответ №1 к Комментарию №1 к теме форума №1\", \"authorId\": 1, \"replyToCommentId\": 1}" http://localhost:3001/api/v1/forum/topic/1/comment/1/reply`
+
+Добавить реакцию на комментарий с id=1 к теме с id=1:\
+`curl -X POST -H "Content-Type: application/json" -d "{\"topicId\": 1, \"text\": \"реакция\", \"authorId\": 1, \"commentId\": 1}" http://localhost:3001/api/v1/forum/topic/1/comment/1/reaction`
+
+___
 
 Более подробная документация для разработчиков находится [по ссылке](docs/oldREADME.md)
 

@@ -12,7 +12,8 @@ function sanitizeSetCookie(raw) {
         .join('; ');
 }
 function extractSetCookies(headers) {
-    const getAll = headers.getSetCookie;
+    const getAll = headers
+        .getSetCookie;
     if (typeof getAll === 'function') {
         return getAll.call(headers);
     }
