@@ -4,6 +4,7 @@ import type { ILeaderboard } from '../types';
 import { ERequestMethods } from '../enums';
 import { thunkCreator } from './thunk-creator';
 import { RATING_FIELD, TEAM_NAME, LIMIT_RATING } from '../constants/leaderboard';
+import { URL_BASE, URL_LEADERBOARD } from '../constants/urls';
 
 export interface LeaderboardState {
   data: ILeaderboard[] | null;
@@ -33,14 +34,12 @@ const initialState: LeaderboardState = {
   },
 };
 
-const BASE_URL = "https://ya-praktikum.tech/api/v2/leaderboard";
-
 export const updateLeaderboardScore = thunkCreator<ILeaderboard, UpdateRatingUser>(
   'leaderboard/updateLeaderboardScore',
   async(dataRequest) => {
     const { data } = dataRequest;
 
-    return fetch(`${BASE_URL}`, {
+    return fetch(`${URL_BASE}${URL_LEADERBOARD}`, {
       method: ERequestMethods.POST,
       headers: {
         'Content-Type': 'application/json',
@@ -58,7 +57,7 @@ export const updateLeaderboardScore = thunkCreator<ILeaderboard, UpdateRatingUse
 export const fetchLeaderboardThunk = thunkCreator<ILeaderboard[], FetchLeaderBoard>(
   'leaderboard/fetchLeaderboardThunk',
   async ({ cursor }) => {
-    const url = `${BASE_URL}/${TEAM_NAME}`;
+    const url = `${URL_BASE}${URL_LEADERBOARD}/${TEAM_NAME}`;
 
     return fetch(url, {
       method: ERequestMethods.POST,
@@ -85,7 +84,6 @@ export const leaderboardSlice = createSlice({
   },
   extraReducers: builder => {
     builder
-      // Handle leaderboard data
       .addCase(fetchLeaderboardThunk.pending, state => {
         state.data = null;
         state.isLoading = true;
