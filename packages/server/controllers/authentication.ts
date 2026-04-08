@@ -11,16 +11,6 @@ export const protectController = async (
   next: NextFunction
 ) => {
   try {
-    console.log('Raw cookies object:', request.cookies);
-    console.log('All cookie names:', Object.keys(request.cookies));
-    console.log('uuid cookie:', request.cookies.uuid);
-    console.log('uuid cookie (bracket notation):', request.cookies['uuid']);
-    console.log('authCookie cookie:', request.cookies.authCookie);
-    console.log(
-      'authCookie cookie (bracket notation):',
-      request.cookies['authCookie']
-    );
-
     if (request.cookies[YP_COOKIE_UUID] && request.cookies[YP_COOKIE_AUTH]) {
       const yp_user = await fetch(`${YP_BASE_URL}/auth/user`, {
         method: 'GET',
