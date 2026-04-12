@@ -1,6 +1,7 @@
 import type { Request, Response, NextFunction } from 'express';
 
-const YANDEX_API_BASE = 'https://ya-praktikum.tech/api/v2';
+const YANDEX_API_BASE =
+  process.env.YP_API_BASE || 'https://ya-praktikum.tech/api/v2';
 
 const UNSAFE_COOKIE_ATTRS = new Set(['domain', 'secure', 'samesite']);
 
