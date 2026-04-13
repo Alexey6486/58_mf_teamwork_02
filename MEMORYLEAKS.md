@@ -50,7 +50,7 @@
 
 ---
 
-### 3) `packages/client/src/components/idle-observer/idle-observer.tsx`
+### 3) `packages/client/src/components/IdleObserver/IdleObserver.tsx`
 
 **Проблема:**  
 После `clearInterval` сохранялась ссылка на таймер в `intervalId.current`.

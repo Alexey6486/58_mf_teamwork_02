@@ -2,8 +2,8 @@
 
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+  darkMode: 'class',
   theme: {
-    darkMode: 'selector',
     extend: {
       boxShadow: {
         'inset-light': 'inset 1px 1px 4px 0 rgba(0, 0, 0, 0.1)',

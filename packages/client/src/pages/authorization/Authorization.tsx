@@ -1,4 +1,4 @@
-import { type FC, type MouseEvent, useEffect } from 'react';
+import React, { type FC, type MouseEvent, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { FormikProvider, useFormik } from 'formik';
@@ -22,7 +22,6 @@ import {
   FORM_CONTAINER_CLASS,
   FORM_PAGE_CONTAINER_CLASS,
   FORM_WRAPPER_CLASS,
-  MAIN_CONTAINER_CLASS,
 } from '../../constants/style-groups';
 import { type AppDispatch, useSelector } from '../../store/store';
 import { loginThunk, logoutThunk } from '../../slices/auth-slice';
@@ -84,7 +83,7 @@ export const AuthorizationPage: FC = () => {
   }, [user]);
 
   return (
-    <div className={MAIN_CONTAINER_CLASS}>
+    <>
       <Helmet>
         <meta charSet="utf-8" />
         <title>Страница авторизации</title>
@@ -132,7 +131,7 @@ export const AuthorizationPage: FC = () => {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

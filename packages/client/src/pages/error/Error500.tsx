@@ -1,12 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import {
-  FORM_PAGE_CONTAINER_CLASS,
-  MAIN_CONTAINER_CLASS,
-} from '../../constants/style-groups';
+import { FORM_PAGE_CONTAINER_CLASS } from '../../constants/style-groups';
 import { IconButton } from '../../components/IconButton';
 import { EIconButton } from '../../enums';
-import { type PageInitArgs } from '../../routes'
+import { type PageInitArgs } from '../../routes';
 
 export const Error500 = () => {
   const navigate = useNavigate();
@@ -16,11 +13,11 @@ export const Error500 = () => {
   };
 
   return (
-    <div className={MAIN_CONTAINER_CLASS}>
+    <>
       <Helmet>
         <meta charSet="utf-8" />
         <title>Страница ошибки</title>
-        <meta name="description" content="Страница ошибки"/>
+        <meta name="description" content="Страница ошибки" />
       </Helmet>
       <div className={FORM_PAGE_CONTAINER_CLASS}>
         <div className="absolute top-6 left-6">
@@ -36,7 +33,7 @@ export const Error500 = () => {
           alt="500"
         />
       </div>
-    </div>
+    </>
   );
 };
 

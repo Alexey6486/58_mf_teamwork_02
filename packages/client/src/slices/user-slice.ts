@@ -1,7 +1,4 @@
-import {
-  createSlice,
-  type PayloadAction
-} from '@reduxjs/toolkit';
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '../store/store';
 import type { IUser, IUserPassword } from '../types';
 import {
@@ -11,12 +8,13 @@ import {
   URL_PSW,
   URL_USER_DATA,
 } from '../constants/urls';
-import { ERequestMethods } from '../enums';
+import { ERequestMethods, ETheme } from '../enums';
 import { thunkCreator } from './thunk-creator';
 
 export interface UserState {
   data: Partial<IUser> | null;
   score: number;
+  theme: ETheme;
   isLoading: boolean;
   error: {
     status: string | null;
@@ -28,6 +26,7 @@ export interface UserState {
 const initialState: UserState = {
   data: null,
   score: 0,
+  theme: ETheme.light,
   isLoading: false,
   error: {
     status: null,
@@ -97,7 +96,10 @@ export const userSlice = createSlice({
     },
     setUserRating: (state, action: PayloadAction<number | null>) => {
       state.score = action.payload ?? 0;
-    }
+    },
+    setUserTheme: (state, { payload }: PayloadAction<ETheme>) => {
+      state.theme = payload;
+    },
   },
   extraReducers: builder => {
     builder
@@ -160,8 +162,9 @@ export const userSlice = createSlice({
   },
 });
 
-export const { setUsers, setUserRating } = userSlice.actions;
+export const { setUsers, setUserRating, setUserTheme } = userSlice.actions;
 export const selectUser = (state: RootState) => state.user.data;
+export const selectUserTheme = (state: RootState) => state.user.theme;
 export const selectUserRating = (state: RootState) => state.user.score;
 
 export default userSlice.reducer;
