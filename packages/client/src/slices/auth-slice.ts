@@ -9,6 +9,7 @@ import {
   URL_OAUTH_SERVICE_ID,
   URL_OAUTH_YANDEX,
   OAUTH_REDIRECT_URI,
+  SERVER_URI,
 } from '../constants/urls';
 import { ERequestMethods } from '../enums';
 import { type RootState } from '../store/store';
@@ -37,7 +38,7 @@ const initialState: AuthState = {
 export const loginThunk = thunkCreator<string, IAuthorizationForm>(
   'auth/loginThunk',
   async authForm => {
-    return fetch(`${URL_BASE}${URL_LOGIN}`, {
+    return fetch(`${SERVER_URI}${URL_LOGIN}`, {
       method: ERequestMethods.POST,
       headers: {
         'Content-Type': 'application/json',

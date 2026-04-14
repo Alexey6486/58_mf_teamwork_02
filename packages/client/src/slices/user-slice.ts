@@ -1,20 +1,27 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '../store/store';
-import type { IUser, IUserPassword } from '../types';
+import type {
+  IUser,
+  IUserPassword,
+  IServerUser,
+  IServerUserThemeResponse,
+} from '../types';
 import {
+  SERVER_URI,
   URL_AVATAR,
   URL_BASE,
   URL_PROFILE,
   URL_PSW,
+  URL_THEME,
   URL_USER_DATA,
 } from '../constants/urls';
-import { ERequestMethods, ETheme } from '../enums';
+import { ERequestMethods, type ETheme } from '../enums';
 import { thunkCreator } from './thunk-creator';
 
 export interface UserState {
   data: Partial<IUser> | null;
   score: number;
-  theme: ETheme;
+  theme: ETheme | null;
   isLoading: boolean;
   error: {
     status: string | null;
@@ -26,7 +33,7 @@ export interface UserState {
 const initialState: UserState = {
   data: null,
   score: 0,
-  theme: ETheme.light,
+  theme: null,
   isLoading: false,
   error: {
     status: null,
@@ -83,6 +90,34 @@ export const changeUserPasswordThunk = thunkCreator<
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(userPassword),
+    credentials: 'include' as RequestCredentials,
+  });
+});
+
+export const fetchUserTheme = thunkCreator<
+  IServerUserThemeResponse,
+  Partial<IServerUser>
+>('user/fetchUserTheme', async userData => {
+  return fetch(`${SERVER_URI}${URL_THEME}`, {
+    method: ERequestMethods.POST,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(userData),
+    credentials: 'include' as RequestCredentials,
+  });
+});
+
+export const changeUserTheme = thunkCreator<
+  IServerUserThemeResponse,
+  Partial<IServerUser>
+>('user/changeUserTheme', async userData => {
+  return fetch(`${SERVER_URI}${URL_THEME}`, {
+    method: ERequestMethods.PUT,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(userData),
     credentials: 'include' as RequestCredentials,
   });
 });
@@ -157,6 +192,36 @@ export const userSlice = createSlice({
         state.isLoading = false;
       })
       .addCase(changeUserPasswordThunk.rejected.type, state => {
+        state.isLoading = false;
+      })
+
+      // Handle fetch user theme
+      .addCase(fetchUserTheme.pending, state => {
+        state.isLoading = true;
+      })
+      .addCase(
+        fetchUserTheme.fulfilled,
+        (state, { payload }: PayloadAction<IServerUserThemeResponse>) => {
+          state.theme = payload.data.theme;
+          state.isLoading = false;
+        }
+      )
+      .addCase(fetchUserTheme.rejected, state => {
+        state.isLoading = false;
+      })
+
+      // Handle change user theme
+      .addCase(changeUserTheme.pending, state => {
+        state.isLoading = true;
+      })
+      .addCase(
+        changeUserTheme.fulfilled,
+        (state, { payload }: PayloadAction<IServerUserThemeResponse>) => {
+          state.theme = payload.data.theme;
+          state.isLoading = false;
+        }
+      )
+      .addCase(changeUserTheme.rejected, state => {
         state.isLoading = false;
       });
   },

@@ -12,6 +12,7 @@ import {
   ReactionOptions,
   ReactionAssociationAlias,
 } from './models/reaction';
+import { UserModelName, UserAttributes, UserOptions } from './models/user';
 
 // пример бэкэнда
 // https://github.com/Yandex-Practicum/orm-simple-template/blob/d7e0670807d8e4a339558c4324afadb65bdc91a0/app/index.ts
@@ -56,6 +57,12 @@ export const Reaction = sequelize.define(
   ReactionModelName,
   ReactionAttributes,
   ReactionOptions
+);
+
+export const User = sequelize.define(
+  UserModelName,
+  UserAttributes,
+  UserOptions
 );
 
 // структура связей

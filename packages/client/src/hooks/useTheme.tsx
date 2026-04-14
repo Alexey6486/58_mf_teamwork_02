@@ -1,32 +1,38 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { type AppDispatch, useSelector } from '../store/store';
-import { selectUserTheme, setUserTheme } from '../slices/user-slice';
+import {
+  changeUserTheme,
+  selectUser,
+  selectUserTheme,
+  setUserTheme,
+} from '../slices/user-slice';
 import { ETheme } from '../enums';
 import { LS_THEME } from '../constants/auth';
 
-// - в init state положить theme: light (в т.ч. для ssr)
-// - при переключении темы на странице авторизации, сохранять в LS
-// - далее на странице авторизации загружать тему из LS (если LS еще пустой, берем дефолтную темы из init state)
-// - после первой авторизации (новый пользователь), при переключении темы, тема сохраняется в БД и LS
-// - после последующих авторизаций этого пользователя тема загружается из БД
-
 export const useTheme = () => {
+  const user = useSelector(selectUser);
   const theme = useSelector(selectUserTheme);
   const dispatch = useDispatch<AppDispatch>();
 
-  console.log('useTheme', { theme });
+  console.log('useTheme', { user, theme });
 
   const setTheme = (theme: ETheme) => () => {
+    localStorage.setItem(LS_THEME, theme);
+
     console.log('useTheme setTheme', { theme });
 
-    dispatch(setUserTheme(theme));
-    localStorage.setItem(LS_THEME, theme);
+    if (user?.id) {
+      // id может не быть если пользователь не авторизован (страница регистрации/авторизации)
+      dispatch(changeUserTheme({ userId: user.id, theme }));
+    } else {
+      dispatch(setUserTheme(theme));
+    }
   };
 
   useEffect(() => {
     const root = document?.documentElement;
-    console.log('useTheme uf', { root });
+    const lsTheme = localStorage.getItem(LS_THEME);
 
     if (root) {
       if (root.classList.contains(ETheme.light)) {
@@ -37,7 +43,24 @@ export const useTheme = () => {
         root.classList.remove(ETheme.dark);
       }
 
-      root.classList.add(theme);
+      // init state при ssr theme=null (в случае первой загрузки страници или при обновлении через f5)
+      if (!theme) {
+        // проверяем есть ли ls
+        if (lsTheme) {
+          // если есть, добавляем в state
+          dispatch(setUserTheme(lsTheme as ETheme));
+        } else {
+          // если нет, добавляем в state и ls значение по умолчанию
+          localStorage.setItem(LS_THEME, ETheme.light);
+          dispatch(setUserTheme(ETheme.light));
+        }
+      } else {
+        // если есть theme в state, применяем
+        if (!lsTheme || lsTheme !== theme) {
+          localStorage.setItem(LS_THEME, theme);
+        }
+        root.classList.add(theme);
+      }
     }
   }, [theme]);
 

@@ -13,14 +13,14 @@ export const ThemeSwitch: FC = () => {
       {theme === ETheme.light && (
         <IconButton
           iconName={ETheme.light}
-          hoverName="switch to dark theme"
+          hoverName="Переключить на тёмную тему"
           onClick={setTheme(ETheme.dark)}
         />
       )}
       {theme === ETheme.dark && (
         <IconButton
           iconName={ETheme.dark}
-          hoverName="switch to light theme"
+          hoverName="Переключить на светлую тему"
           onClick={setTheme(ETheme.light)}
         />
       )}
