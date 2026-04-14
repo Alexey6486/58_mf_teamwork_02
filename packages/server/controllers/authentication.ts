@@ -4,6 +4,18 @@ import type { CookieOptions } from 'express-serve-static-core';
 import { catchAsync } from '../utils/catchAsync';
 import { cookiesToString } from '../utils/cookies';
 import { YP_BASE_URL, YP_COOKIE_AUTH, YP_COOKIE_UUID } from '../constants/api';
+import { User } from '../db';
+
+interface IYandexUser {
+  id: string;
+  first_name: string;
+  second_name: string;
+  display_name: string;
+  login: string;
+  email: string;
+  phone: string;
+  avatar: string;
+}
 
 export const protectController = async (
   request: Request,
@@ -67,6 +79,31 @@ export const signin = catchAsync(
       if (!sessionUuidCookie || !sessionAuthCookie) {
         throw new Error('Cookies не найдены');
       }
+
+      const cookieHeader = Object.entries(parsedCookies)
+        .map(([name, cookie]) => `${name}=${cookie.value}`)
+        .join('; ');
+
+      const yandexUserData = await fetch(`${YP_BASE_URL}/auth/user`, {
+        method: 'GET',
+        headers: {
+          Cookie: cookieHeader,
+        },
+        credentials: 'include',
+      }).then(async res => {
+        if (!res.ok) throw new Error(`Пользователь не найден`);
+        return (await res.json()) as IYandexUser;
+      });
+
+      const yandexUserId = yandexUserData.id;
+
+      await User.upsert(
+        {
+          userId: parseInt(yandexUserId),
+          theme: 'light',
+        },
+        { returning: true }
+      );
 
       response.cookie(sessionUuidCookie.name, sessionUuidCookie.value, {
         httpOnly: sessionUuidCookie.httpOnly, // Безопасно по умолчанию

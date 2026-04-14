@@ -7,6 +7,7 @@ import cookieParser from 'cookie-parser';
 import { routerForum } from './routes/forum';
 import { routerAuthentication } from './routes/authentication';
 import { YP_BASE_URL } from './constants/api';
+import { routerTheme } from './routes/theme';
 
 dotenv.config();
 
@@ -62,6 +63,7 @@ app.use(
 
 app.use('/api/v1/auth', routerAuthentication);
 app.use('/api/v1/forum', routerForum);
+app.use('/api/v1/theme', routerTheme);
 
 app.get('/', (_, res) => {
   res.json('👋 Howdy from the server :)');
