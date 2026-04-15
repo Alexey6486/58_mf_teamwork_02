@@ -13,7 +13,7 @@ export const getTheme = catchAsync(
     });
 
     if (!user) {
-      await User.upsert(
+      const [data] = await User.upsert(
         {
           userId: parseInt(userId),
           theme: TTheme.light,
@@ -24,7 +24,7 @@ export const getTheme = catchAsync(
       response.status(200).json({
         status: 'success',
         data: {
-          theme: TTheme.light,
+          theme: data.dataValues.theme,
         },
       });
     } else {
@@ -50,7 +50,7 @@ export const updateTheme = catchAsync(
       response.status(404).json({ status: 'error', error: 'User not found' });
     } else {
       await user.update({
-        theme: theme,
+        theme,
       });
 
       response.status(200).json({
