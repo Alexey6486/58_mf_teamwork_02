@@ -1,5 +1,4 @@
 import express from 'express';
-import { protect } from '../middlewares/protect';
 import { getAllTopics, createTopic, deleteTopic } from '../controllers/forum';
 import {
   getAllComments,
@@ -10,28 +9,28 @@ import { createReaction, deleteReaction } from '../controllers/reaction';
 
 const routerForum = express.Router();
 
-routerForum.route('/topics').get(protect, getAllTopics);
+routerForum.route('/topics').get(getAllTopics);
 
 routerForum
   .route('/topic')
-  .post(protect, createTopic)
-  .delete(protect, deleteTopic);
+  .post(createTopic)
+  .delete(deleteTopic);
 
 routerForum
   .route('/topic/:topicId/comments')
-  .get(protect, getAllComments);
+  .get(getAllComments);
 
 routerForum
   .route('/topic/:topicId/comment')
-  .post(protect, createComment);
+  .post(createComment);
 
 routerForum
   .route('/topic/:topicId/comment/:commentId/reply')
-  .post(protect, createReply);
+  .post(createReply);
 
 routerForum
   .route('/topic/:topicId/comment/:commentId/reaction')
-  .post(protect, createReaction)
-  .delete(protect, deleteReaction);
+  .post(createReaction)
+  .delete(deleteReaction);
 
 export { routerForum };

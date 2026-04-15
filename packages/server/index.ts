@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 import { dbConnect } from './db';
 import { YP_BASE_URL } from './constants/api';
 import { routerAuthentication, routerForum, routerTheme } from './routes';
+import { protect } from './middlewares/protect';
 
 dotenv.config();
 
@@ -15,6 +16,7 @@ const port = Number(process.env.SERVER_PORT) || 3001;
 // Глобальная настройка CORS
 // Список разрешённых доменов
 const allowedOrigins: string[] = [
+  'http://localhost:3000',
   'http://localhost:3001',
   'http://localhost:2000',
   'http://localhost',
@@ -60,6 +62,7 @@ app.use(
 );
 
 app.use('/api/v1/auth', routerAuthentication);
+app.use('/api/v1', protect);
 app.use('/api/v1/forum', routerForum);
 app.use('/api/v1/theme', routerTheme);
 
