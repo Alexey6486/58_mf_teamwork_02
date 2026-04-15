@@ -10,9 +10,23 @@ export const getTheme = catchAsync(
       attributes: ['theme'],
       where: { userId: userId },
     });
+    console.log(user);
 
     if (!user) {
-      response.status(404).json({ status: 'error', error: 'User not found' });
+      const [data] = await User.upsert(
+        {
+          userId: parseInt(userId),
+          theme: 'light',
+        },
+        { returning: true }
+      );
+
+      response.status(200).json({
+        status: 'success',
+        data: {
+          theme: data.dataValues.theme,
+        },
+      });
     } else {
       response.status(200).json({
         status: 'success',
@@ -42,7 +56,7 @@ export const updateTheme = catchAsync(
       response.status(200).json({
         status: 'success',
         data: {
-          user,
+          theme: user.dataValues.theme,
         },
       });
     }
