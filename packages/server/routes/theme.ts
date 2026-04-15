@@ -1,12 +1,12 @@
 import express from 'express';
 import { getTheme, updateTheme } from '../controllers/theme';
-import { protectController } from '../controllers/authentication';
+import { protect } from '../middlewares/protect';
 
 const routerTheme = express.Router();
 
 routerTheme
   .route('/')
-  .post(protectController, getTheme)
-  .put(protectController, updateTheme);
+  .post(protect, getTheme)
+  .put(protect, updateTheme);
 
 export { routerTheme };

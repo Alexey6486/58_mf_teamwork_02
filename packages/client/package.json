@@ -2,7 +2,7 @@
   "name": "client",
   "version": "0.0.0",
   "scripts": {
-    "dev": "tsc --project tsconfig.server.json && cross-env NODE_ENV=development CREATE_SERVER_WIN_PORT=80 CREATE_SERVER_LINUX_PORT=2000 EXTERNAL_SERVER_URL='http://localhost:3001' INTERNAL_SERVER_URL='http://localhost:3001' node server/index.js",
+    "dev": "tsc --project tsconfig.server.json && cross-env NODE_ENV=development CREATE_SERVER_WIN_PORT=3000 CREATE_SERVER_LINUX_PORT=2000 EXTERNAL_SERVER_URL='http://localhost:3001' INTERNAL_SERVER_URL='http://localhost:3001' node server/index.js",
     "build": "tsc --project tsconfig.server.json && vite build && vite build --ssr src/entry-server.tsx --outDir dist/server",
     "preview": "node server/index.js",
     "lint": "eslint .",
@@ -20,6 +20,7 @@
     "eslint-config-prettier": "^8.5.0",
     "express": "^4.18.2",
     "formik": "^2.4.9",
+    "http-proxy-middleware": "^3.0.5",
     "lodash-es": "^4.17.23",
     "prettier": "^2.7.1",
     "react": "^18.2.0",

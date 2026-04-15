@@ -1,5 +1,5 @@
 import express from 'express';
-import { protectController } from '../controllers/authentication';
+import { protect } from '../middlewares/protect';
 import { getAllTopics, createTopic, deleteTopic } from '../controllers/forum';
 import {
   getAllComments,
@@ -10,28 +10,28 @@ import { createReaction, deleteReaction } from '../controllers/reaction';
 
 const routerForum = express.Router();
 
-routerForum.route('/topics').get(protectController, getAllTopics);
+routerForum.route('/topics').get(protect, getAllTopics);
 
 routerForum
   .route('/topic')
-  .post(protectController, createTopic)
-  .delete(protectController, deleteTopic);
+  .post(protect, createTopic)
+  .delete(protect, deleteTopic);
 
 routerForum
   .route('/topic/:topicId/comments')
-  .get(protectController, getAllComments);
+  .get(protect, getAllComments);
 
 routerForum
   .route('/topic/:topicId/comment')
-  .post(protectController, createComment);
+  .post(protect, createComment);
 
 routerForum
   .route('/topic/:topicId/comment/:commentId/reply')
-  .post(protectController, createReply);
+  .post(protect, createReply);
 
 routerForum
   .route('/topic/:topicId/comment/:commentId/reaction')
-  .post(protectController, createReaction)
-  .delete(protectController, deleteReaction);
+  .post(protect, createReaction)
+  .delete(protect, deleteReaction);
 
 export { routerForum };

@@ -13,7 +13,8 @@ export const URL_AVATAR = `/user/profile/avatar`;
 export const URL_PSW = `/user/password`;
 export const URL_OAUTH_SERVICE_ID = `/oauth/yandex/service-id`;
 export const URL_OAUTH_YANDEX = `/oauth/yandex`;
-export const OAUTH_REDIRECT_URI = 'http://localhost:3000';
+export const OAUTH_REDIRECT_URI =
+  typeof window !== 'undefined' ? window.location.origin : '';
 export const OAUTH_YANDEX_URL = `https://oauth.yandex.ru/authorize`;
 export const URL_LEADERBOARD = `/leaderboard`;
 export const SERVER_URI = 'http://localhost:3001/api/v1';

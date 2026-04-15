@@ -48,8 +48,8 @@ const API_PROXY_PATH = '/api/v2';
 async function createServer() {
     const app = (0, express_1.default)();
     app.use((0, cookie_parser_1.default)());
-    app.use(express_1.default.json());
     app.use(API_PROXY_PATH, api_proxy_1.apiProxy);
+    app.use(express_1.default.json());
     let vite;
     if (isDev) {
         vite = await (0, vite_1.createServer)({
