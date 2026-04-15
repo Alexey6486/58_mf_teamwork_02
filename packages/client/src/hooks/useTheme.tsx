@@ -15,12 +15,8 @@ export const useTheme = () => {
   const theme = useSelector(selectUserTheme);
   const dispatch = useDispatch<AppDispatch>();
 
-  console.log('useTheme', { user, theme });
-
   const setTheme = (theme: ETheme) => () => {
     localStorage.setItem(LS_THEME, theme);
-
-    console.log('useTheme setTheme', { theme });
 
     if (user?.id) {
       // id может не быть если пользователь не авторизован (страница регистрации/авторизации)
