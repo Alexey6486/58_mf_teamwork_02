@@ -1,32 +1,18 @@
 import React from 'react';
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
-import {
-  BrowserRouter,
-  Route,
-  Routes
-} from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import {
-  configureStore,
-} from '@reduxjs/toolkit';
-import {
-  ProtectedRoute,
-  ROUTES
-} from './routes';
-import {
-  userSlice,
-  type UserState
-} from './slices/user-slice';
+import { configureStore } from '@reduxjs/toolkit';
+import { ProtectedRoute, ROUTES } from './routes';
+import { userSlice, type UserState } from './slices/user-slice';
 
 const ProfilePageText = 'Profile Page';
 const AuthorizationPageText = 'Authorization Page';
 const ProfilePageTest = () => <div>{ProfilePageText}</div>;
 const AuthorizationPageTest = () => <div>{AuthorizationPageText}</div>;
 
-const createTestStore = (preloadState: {
-  user: UserState,
-}) => {
+const createTestStore = (preloadState: { user: UserState }) => {
   return configureStore({
     reducer: {
       user: userSlice.reducer,
@@ -45,6 +31,7 @@ const renderWithProviders = (
       user: {
         data: null,
         score: 0,
+        theme: null,
         isLoading: false,
         error: {
           status: null,
@@ -54,17 +41,15 @@ const renderWithProviders = (
       },
     },
   }: {
-    route: string,
-    preloadState: { user: UserState } | undefined
-  },
+    route: string;
+    preloadState: { user: UserState } | undefined;
+  }
 ) => {
   window.history.pushState({}, 'Test page', route);
 
   return render(
     <Provider store={createTestStore(preloadState)}>
-      <BrowserRouter>
-        {component}
-      </BrowserRouter>
+      <BrowserRouter>{component}</BrowserRouter>
     </Provider>
   );
 };
@@ -74,7 +59,14 @@ describe('Jest ProtectedRoute component test', () => {
     renderWithProviders(
       <Routes>
         <Route path={ROUTES.login} element={<AuthorizationPageTest />} />
-        <Route path={ROUTES.profile} element={<ProtectedRoute><ProfilePageTest /></ProtectedRoute>} />
+        <Route
+          path={ROUTES.profile}
+          element={
+            <ProtectedRoute>
+              <ProfilePageTest />
+            </ProtectedRoute>
+          }
+        />
       </Routes>,
       { route: ROUTES.profile, preloadState: undefined }
     );
@@ -87,7 +79,14 @@ describe('Jest ProtectedRoute component test', () => {
     renderWithProviders(
       <Routes>
         <Route path={ROUTES.login} element={<AuthorizationPageTest />} />
-        <Route path={ROUTES.profile} element={<ProtectedRoute><ProfilePageTest /></ProtectedRoute>} />
+        <Route
+          path={ROUTES.profile}
+          element={
+            <ProtectedRoute>
+              <ProfilePageTest />
+            </ProtectedRoute>
+          }
+        />
       </Routes>,
       {
         route: ROUTES.profile,
