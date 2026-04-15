@@ -6,7 +6,6 @@ import { Topic } from '../../components/Topic/Topic';
 import {
   BTN_CLASS,
   FORM_PAGE_CONTAINER_CLASS,
-  MAIN_CONTAINER_CLASS,
 } from '../../constants/style-groups';
 import { type PageInitArgs, ROUTES } from '../../routes';
 import { useDispatch, useSelector } from '../../store/store';
@@ -44,7 +43,7 @@ export const ForumPage: FC = () => {
   };
 
   return (
-    <div className={MAIN_CONTAINER_CLASS}>
+    <>
       <Helmet>
         <meta charSet="utf-8" />
         <title>Страница форума</title>
@@ -101,7 +100,7 @@ export const ForumPage: FC = () => {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

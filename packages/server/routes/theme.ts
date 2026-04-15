@@ -6,7 +6,7 @@ const routerTheme = express.Router();
 
 routerTheme
   .route('/')
-  .get(protectController, getTheme)
+  .post(protectController, getTheme)
   .put(protectController, updateTheme);
 
 export { routerTheme };

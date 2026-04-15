@@ -2,10 +2,15 @@ import { DataType } from 'sequelize-typescript';
 import type { Model } from 'sequelize-typescript';
 import type { ModelAttributes } from 'sequelize';
 
+export enum TTheme {
+  light = 'light',
+  dark = 'dark',
+}
+
 export interface IUser {
   id: number;
   userId: number;
-  theme: 'light' | 'dark';
+  theme: TTheme;
 }
 
 export const UserModelName = 'User';
@@ -23,8 +28,8 @@ export const UserAttributes: ModelAttributes<Model, IUser> = {
     unique: true,
   },
   theme: {
-    type: DataType.ENUM('light', 'dark'),
-    defaultValue: 'light',
+    type: DataType.ENUM(TTheme.light, TTheme.dark),
+    defaultValue: TTheme.light,
     allowNull: false,
   },
 };

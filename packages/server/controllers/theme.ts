@@ -1,6 +1,7 @@
 import type { Response, Request } from 'express';
 import { catchAsync } from '../utils/catchAsync';
 import { User } from '../db';
+import { TTheme } from '../models/user';
 
 export const getTheme = catchAsync(
   async (request: Request, response: Response) => {
@@ -10,13 +11,12 @@ export const getTheme = catchAsync(
       attributes: ['theme'],
       where: { userId: userId },
     });
-    console.log(user);
 
     if (!user) {
       const [data] = await User.upsert(
         {
           userId: parseInt(userId),
-          theme: 'light',
+          theme: TTheme.light,
         },
         { returning: true }
       );
@@ -50,13 +50,13 @@ export const updateTheme = catchAsync(
       response.status(404).json({ status: 'error', error: 'User not found' });
     } else {
       await user.update({
-        theme: theme,
+        theme,
       });
 
       response.status(200).json({
         status: 'success',
         data: {
-          theme: user.dataValues.theme,
+          theme,
         },
       });
     }

@@ -1,8 +1,4 @@
-import React, {
-  useEffect,
-  useRef,
-  useState
-} from 'react'
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNotification } from '../../hooks';
 import { LS_ACT } from '../../constants/auth';

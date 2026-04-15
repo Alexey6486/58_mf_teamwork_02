@@ -6,12 +6,15 @@ import {
 } from 'react-redux';
 import { combineReducers, type Store } from 'redux';
 import { configureStore, createListenerMiddleware } from '@reduxjs/toolkit';
-import ssrReducer from '../slices/ssr-slice';
-import userReducer, { fetchUserThunk } from '../slices/user-slice';
-import authReducer from '../slices/auth-slice';
-import leaderboardReducer from '../slices/leaderboard-slice';
 import { LS_ACT } from '../constants/auth';
 import { ROUTES } from '../routes';
+import ssrReducer from '../slices/ssr-slice';
+import userReducer, {
+  fetchUserThunk,
+  fetchUserTheme,
+} from '../slices/user-slice';
+import authReducer from '../slices/auth-slice';
+import leaderboardReducer from '../slices/leaderboard-slice';
 import { forumReducer, FORUM_LS_KEY } from '../slices/forum-slice';
 
 // Глобально декларируем в window наш ключик
@@ -42,11 +45,15 @@ export const store = configureStore({
 
 listenerMiddleware.startListening({
   predicate: action => {
-    return action.type === 'auth/loginThunk/fulfilled' || action.type === 'auth/signupThunk/fulfilled';
+    return (
+      action.type === 'auth/loginThunk/fulfilled' ||
+      action.type === 'auth/signupThunk/fulfilled'
+    );
   },
   effect: async (action, listenerApi) => {
     try {
-      await listenerApi.dispatch(fetchUserThunk());
+      const user = await listenerApi.dispatch(fetchUserThunk()).unwrap();
+      await listenerApi.dispatch(fetchUserTheme({ userId: user.id }));
     } catch (error) {
       console.error('Failed to fetch user data:', error);
     }

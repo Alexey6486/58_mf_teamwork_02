@@ -6,14 +6,10 @@ import { Message } from '../../components/Message/Message';
 import {
   BTN_CLASS,
   FORM_PAGE_CONTAINER_CLASS,
-  MAIN_CONTAINER_CLASS,
 } from '../../constants/style-groups';
 import { useDispatch, useSelector } from '../../store/store';
 import { addMessage } from '../../slices/forum-slice';
-import {
-  type PageInitArgs,
-  ROUTES
-} from '../../routes';
+import { type PageInitArgs, ROUTES } from '../../routes';
 import { IconButton } from '../../components/IconButton';
 import { EIconButton } from '../../enums';
 
@@ -50,11 +46,11 @@ export const TopicPage: FC = () => {
   };
 
   return (
-    <div className={MAIN_CONTAINER_CLASS}>
+    <>
       <Helmet>
         <meta charSet="utf-8" />
         <title>Страница топика</title>
-        <meta name="description" content="Страница топика"/>
+        <meta name="description" content="Страница топика" />
       </Helmet>
       <div
         className={`${FORM_PAGE_CONTAINER_CLASS} flex-col items-center justify-start`}>
@@ -91,7 +87,7 @@ export const TopicPage: FC = () => {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -14,10 +14,7 @@ import {
 } from '../../validations';
 import { type AppDispatch, useSelector } from '../../store/store';
 import { type IRegistrationForm } from '../../types';
-import {
-  type PageInitArgs,
-  ROUTES
-} from '../../routes';
+import { type PageInitArgs, ROUTES } from '../../routes';
 import {
   BTN_CLASS,
   BTN_GROUP_CLASS,
@@ -27,7 +24,6 @@ import {
   FORM_PAGE_CONTAINER_CLASS,
   FORM_TITLE_CLASS,
   FORM_WRAPPER_CLASS,
-  MAIN_CONTAINER_CLASS,
 } from '../../constants/style-groups';
 import { selectUser } from '../../slices/user-slice';
 import { signupThunk } from '../../slices/auth-slice';
@@ -109,11 +105,11 @@ export const RegistrationPage: FC = () => {
   }, [user]);
 
   return (
-    <div className={MAIN_CONTAINER_CLASS}>
+    <>
       <Helmet>
         <meta charSet="utf-8" />
         <title>Страница регистрации</title>
-        <meta name="description" content="Страница регистрации"/>
+        <meta name="description" content="Страница регистрации" />
       </Helmet>
       <div className={FORM_PAGE_CONTAINER_CLASS}>
         <div className={FORM_CONTAINER_CLASS}>
@@ -205,8 +201,9 @@ export const RegistrationPage: FC = () => {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
-export const initRegistrationPage = async (_: PageInitArgs) => Promise.resolve();
+export const initRegistrationPage = async (_: PageInitArgs) =>
+  Promise.resolve();

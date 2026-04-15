@@ -16,6 +16,7 @@ import {
 } from './types';
 import ComputerPlayerProcessor from './engine/ComputerPlayerProcessor';
 import {
+  CANVAS_CLASS,
   FORM_PAGE_CONTAINER_CLASS,
   GAME_CANVAS_CONTAINER_CLASS,
   GAME_MAIN_CONTAINER_CLASS,
@@ -226,6 +227,7 @@ export const GamePlayScreen: FC<GamePlayScreenProps> = ({
             width={GAME_WIDTH}
             height={GAME_HEIGHT}
             onClick={handleCanvasClick}
+            className={CANVAS_CLASS}
           />
         </div>
       </div>

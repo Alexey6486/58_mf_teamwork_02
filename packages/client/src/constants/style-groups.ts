@@ -1,4 +1,4 @@
-export const MAIN_CONTAINER_CLASS = "p-4 h-screen dark:bg-form-dark";
+export const MAIN_CONTAINER_CLASS = 'p-4 h-screen dark:bg-form-dark';
 export const FORM_PAGE_CONTAINER_CLASS =
   'flex justify-center items-center h-full rounded-md bg-main-light dark:bg-main-dark';
 export const FORM_CONTAINER_CLASS =
@@ -29,10 +29,10 @@ export const BTN_MENU_CLASS =
 
 export const ITEMS_CENTER_CLASS = 'justify-center items-center';
 export const GAME_HEADER_CONTAINER_CLASS =
-  'fixed z-10 w-full flex flex-row h-16 bg-main-light dark:bg-main-dark';
-export const GAME_BODY_CONTAINER_CLASS = 'fixed w-full h-full';
+  'fixed top-6 left-0 right-0 z-10 flex flex-row h-16';
 export const GAME_HEADER_DIV_ITEMS_CLASS = 'items-center h-10 px-2';
 export const GAME_MAIN_CONTAINER_CLASS =
   'relative flex flex-col justify-center items-center h-screen';
 export const GAME_CANVAS_CONTAINER_CLASS =
-  'p-1 border border-solid border-form-light rounded-main-radius shadow-outer-light dark:shadow-outer-dark dark:border-form-dark';
+  'm-4 p-1 border border-solid border-form-light rounded-main-radius shadow-outer-light dark:shadow-outer-dark dark:border-form-dark';
+export const CANVAS_CLASS = 'rounded-main-radius';
