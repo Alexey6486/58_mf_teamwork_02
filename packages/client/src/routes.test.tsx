@@ -99,6 +99,7 @@ describe('Jest ProtectedRoute component test', () => {
             },
             isLoading: false,
             score: 80,
+            theme: null,
             error: {
               status: null,
               message: null,
