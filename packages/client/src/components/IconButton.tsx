@@ -77,6 +77,40 @@ const getIcon = (type: EnumIconType, hoverName: string) => {
         </svg>
       );
     }
+    case EIconButton.FS_ON: {
+      return (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24">
+          <title>{hoverName}</title>
+          <path
+            fill="#FFFFFF"
+            fillRule="evenodd"
+            d="M12 4h6.586l-5.293 5.293l1.414 1.414L20 5.414V12h2V2H12zM4 18.586l5.293-5.293l1.414 1.414L5.414 20H12v2H2V12h2z"
+            clipRule="evenodd"
+          />
+        </svg>
+      );
+    }
+    case EIconButton.FS_OFF: {
+      return (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24">
+          <title>{hoverName}</title>
+          <path
+            fill="#FFFFFF"
+            fillRule="evenodd"
+            d="m16.414 9l6.793-6.793L21.793.793L15 7.586V1h-2v10h10V9zM9 16.414V23h2V13H1v2h6.586L.793 21.793l1.414 1.414z"
+            clipRule="evenodd"
+          />
+        </svg>
+      );
+    }
     default: {
       return <></>;
     }
