@@ -16,14 +16,17 @@ import {
 } from './types';
 import ComputerPlayerProcessor from './engine/ComputerPlayerProcessor';
 import {
-  CANVAS_CLASS,
   FORM_PAGE_CONTAINER_CLASS,
   GAME_CANVAS_CONTAINER_CLASS,
+  GAME_CONTAINER_FS_CLASS,
   GAME_MAIN_CONTAINER_CLASS,
 } from '../../constants/style-groups';
 import CanvasProcessor, { type Rect } from './engine/CanvasProcessor';
 import { GAME_HEIGHT, GAME_WIDTH } from '../../constants/game';
 import { calcPoint } from '../../utils/calc-point-game';
+import { IconButton } from '../../components/IconButton';
+import { EIconButton } from '../../enums';
+import { useFullscreen } from '../../hooks';
 
 interface GamePlayScreenProps {
   config: GameConfig;
@@ -35,6 +38,14 @@ export const GamePlayScreen: FC<GamePlayScreenProps> = ({
   onFinish,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const { isFullscreen, toggle, isSupported } = useFullscreen(containerRef, {
+    onEnter: () => console.log('Entered fullscreen'),
+    onExit: () => console.log('Exited fullscreen'),
+    onError: error => console.error('Fullscreen error:', error),
+  });
+
   const canvasProcessorRef = useRef<CanvasProcessor | null>(null);
   const buttonsRef = useRef<{ draw: Rect; end: Rect; confirm: Rect }>({
     draw: { x: 0, y: 0, w: 0, h: 0 },
@@ -221,14 +232,39 @@ export const GamePlayScreen: FC<GamePlayScreenProps> = ({
   return (
     <div className={FORM_PAGE_CONTAINER_CLASS}>
       <div className={GAME_MAIN_CONTAINER_CLASS}>
-        <div className={GAME_CANVAS_CONTAINER_CLASS}>
+        <div
+          className={`${GAME_CANVAS_CONTAINER_CLASS}${
+            isFullscreen ? ` ${GAME_CONTAINER_FS_CLASS}` : ''
+          }`}
+          ref={containerRef}>
           <canvas
             ref={canvasRef}
             width={GAME_WIDTH}
             height={GAME_HEIGHT}
             onClick={handleCanvasClick}
-            className={CANVAS_CLASS}
+            style={{
+              maxWidth: GAME_WIDTH,
+              maxHeight: GAME_HEIGHT,
+            }}
           />
+          {isSupported && (
+            <div className="absolute top-4 left-4">
+              {!isFullscreen && (
+                <IconButton
+                  iconName={EIconButton.FS_ON}
+                  hoverName="Развернуть на весь экран"
+                  onClick={toggle}
+                />
+              )}
+              {isFullscreen && (
+                <IconButton
+                  iconName={EIconButton.FS_OFF}
+                  hoverName="Вернутся в окно браузера"
+                  onClick={toggle}
+                />
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>

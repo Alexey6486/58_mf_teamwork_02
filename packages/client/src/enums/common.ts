@@ -3,9 +3,9 @@ export enum ETheme {
   dark = 'dark',
 }
 
-export const EIconButton = {
-  BACK: 'back',
-  OUT: 'out',
-  THEME_LIGHT: ETheme.light,
-  THEME_DARK: ETheme.dark,
-} as const;
+export enum EIconButton {
+  BACK = 'back',
+  OUT = 'out',
+  FS_ON = 'fs_on',
+  FS_OFF = 'fs_off',
+}

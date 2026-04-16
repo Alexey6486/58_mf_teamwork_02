@@ -15,45 +15,36 @@ module.exports = {
   },
   plugins: ['@typescript-eslint'],
   rules: {
+    '@typescript-eslint/no-non-null-assertion': 'warn',
     '@typescript-eslint/ban-ts-comment': 1,
-    "@typescript-eslint/no-explicit-any": "error",
-    "@typescript-eslint/naming-convention": [
-      "error",
+    '@typescript-eslint/no-explicit-any': 'error',
+    '@typescript-eslint/naming-convention': [
+      'error',
       {
-        "selector": "variableLike",
-        "format": [
-          "camelCase",
-          "UPPER_CASE",
-          "PascalCase",
-          "snake_case"
-        ],
-        "leadingUnderscore": "allowSingleOrDouble",
-        "trailingUnderscore": "allowSingleOrDouble",
+        selector: 'variableLike',
+        format: ['camelCase', 'UPPER_CASE', 'PascalCase', 'snake_case'],
+        leadingUnderscore: 'allowSingleOrDouble',
+        trailingUnderscore: 'allowSingleOrDouble',
       },
       {
-        "selector": "typeLike",
-        "format": [
-          "camelCase",
-          "UPPER_CASE",
-          "PascalCase",
-          "snake_case"
-        ]
-      }
+        selector: 'typeLike',
+        format: ['camelCase', 'UPPER_CASE', 'PascalCase', 'snake_case'],
+      },
     ],
-    "@typescript-eslint/consistent-type-imports": "error",
-    "no-console": "off",
-    "@typescript-eslint/no-unused-vars": [
-      "warn",
+    '@typescript-eslint/consistent-type-imports': 'error',
+    'no-console': 'off',
+    '@typescript-eslint/no-unused-vars': [
+      'warn',
       {
-        "argsIgnorePattern": "^_",
-        "varsIgnorePattern": "^_",
-        "caughtErrorsIgnorePattern": "^_"
-      }
-    ]
+        argsIgnorePattern: '^_',
+        varsIgnorePattern: '^_',
+        caughtErrorsIgnorePattern: '^_',
+      },
+    ],
   },
   ignorePatterns: [
-    "packages/client/server/index.js",
-    "packages/client/dist",
-    "packages/server/dist"
-  ]
-}
+    'packages/client/server/index.js',
+    'packages/client/dist',
+    'packages/server/dist',
+  ],
+};

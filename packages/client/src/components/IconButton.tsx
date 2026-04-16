@@ -1,17 +1,15 @@
 import { type FC } from 'react';
 import { EIconButton } from '../enums';
 
-type EnumIconType = typeof EIconButton[keyof typeof EIconButton];
-
 type ButtonProps = {
-  iconName: EnumIconType;
+  iconName: EIconButton;
   hoverName: string;
   type?: 'button' | 'submit' | 'reset' | undefined;
   styles?: string;
   onClick: () => void;
 };
 
-const getIcon = (type: EnumIconType, hoverName: string) => {
+const getIcon = (type: EIconButton, hoverName: string) => {
   switch (type) {
     case EIconButton.BACK: {
       return (
@@ -47,7 +45,7 @@ const getIcon = (type: EnumIconType, hoverName: string) => {
         </svg>
       );
     }
-    case EIconButton.THEME_LIGHT: {
+    case EIconButton.FS_ON: {
       return (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -56,13 +54,15 @@ const getIcon = (type: EnumIconType, hoverName: string) => {
           viewBox="0 0 24 24">
           <title>{hoverName}</title>
           <path
-            fill="#000000"
-            d="M11.289 23.287v-2.952a.713.713 0 1 1 1.426 0v2.952a.713.713 0 1 1-1.426 0m8.19-2.804l-2.087-2.086a.713.713 0 1 1 1.008-1.008l2.085 2.089a.713.713 0 0 1-1.009 1.002l.001.001zm-15.962 0a.71.71 0 0 1 0-1.008l2.087-2.087a.713.713 0 1 1 1.008 1.008l-2.087 2.086a.71.71 0 0 1-1.008 0zm2.803-8.485a5.683 5.683 0 1 1 11.366 0a5.683 5.683 0 0 1-11.366 0m1.425 0a4.26 4.26 0 1 0 8.518 0a4.26 4.26 0 0 0-8.518 0m12.591.713a.713.713 0 1 1 0-1.426h2.952a.713.713 0 1 1 0 1.426zm-19.623 0a.713.713 0 1 1 0-1.426h2.953a.713.713 0 1 1 0 1.426zM17.39 6.608a.71.71 0 0 1 0-1.008l2.087-2.087a.713.713 0 1 1 1.008 1.008l-2.087 2.087a.71.71 0 0 1-1.008 0m-11.788 0L3.517 4.523a.713.713 0 1 1 1.008-1.008l2.087 2.087A.713.713 0 1 1 5.604 6.61zm5.685-2.944V.713a.713.713 0 1 1 1.426 0v2.952a.713.713 0 1 1-1.426 0z"
+            fill="#FFFFFF"
+            fillRule="evenodd"
+            d="M12 4h6.586l-5.293 5.293l1.414 1.414L20 5.414V12h2V2H12zM4 18.586l5.293-5.293l1.414 1.414L5.414 20H12v2H2V12h2z"
+            clipRule="evenodd"
           />
         </svg>
       );
     }
-    case EIconButton.THEME_DARK: {
+    case EIconButton.FS_OFF: {
       return (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -71,8 +71,10 @@ const getIcon = (type: EnumIconType, hoverName: string) => {
           viewBox="0 0 24 24">
           <title>{hoverName}</title>
           <path
-            d="M12 11.807A9.002 9.002 0 0 1 10.049 2a9.942 9.942 0 0 0-5.12 2.735c-3.905 3.905-3.905 10.237 0 14.142c3.906 3.906 10.237 3.905 14.143 0a9.946 9.946 0 0 0 2.735-5.119A9.003 9.003 0 0 1 12 11.807z"
             fill="#FFFFFF"
+            fillRule="evenodd"
+            d="m16.414 9l6.793-6.793L21.793.793L15 7.586V1h-2v10h10V9zM9 16.414V23h2V13H1v2h6.586L.793 21.793l1.414 1.414z"
+            clipRule="evenodd"
           />
         </svg>
       );
