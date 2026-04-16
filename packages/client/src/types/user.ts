@@ -1,3 +1,5 @@
+import type { ETheme } from '../enums';
+
 export interface IUser {
   id?: string;
   first_name: string;
@@ -22,4 +24,17 @@ export interface IRegistrationForm extends IUser {
 
 export interface IRegistrationDto extends IUser {
   password: string;
+}
+
+export interface IServerUser {
+  userId: string;
+  theme?: ETheme;
+}
+
+export interface IServerUserTheme {
+  theme: ETheme;
+}
+
+export interface IServerUserThemeResponse {
+  data: IServerUserTheme;
 }

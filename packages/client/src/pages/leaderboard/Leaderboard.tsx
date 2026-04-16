@@ -14,12 +14,8 @@ import {
   FORM_CONTAINER_CLASS,
   FORM_PAGE_CONTAINER_CLASS,
   FORM_TITLE_CLASS,
-  MAIN_CONTAINER_CLASS,
 } from '../../constants/style-groups';
-import {
-  type PageInitArgs,
-  ROUTES
-} from '../../routes';
+import { type PageInitArgs, ROUTES } from '../../routes';
 import { IconButton } from '../../components/IconButton';
 import { EIconButton } from '../../enums';
 import { fromLeaderboardData } from '../../utils/fromLeaderboardData';
@@ -28,14 +24,20 @@ import { usePage } from '../../hooks';
 type TLeaderboardRow =
   | (ILeaderboard & {
       type: 'row';
-      sortCb?: (fieldName: keyof ILeaderboard, dir: TSortDirection | null | undefined) => void;
+      sortCb?: (
+        fieldName: keyof ILeaderboard,
+        dir: TSortDirection | null | undefined
+      ) => void;
     })
   | {
       type: 'header';
       id: string;
       name: string;
       flip7_rating: string;
-      sortCb?: (fieldName: keyof ILeaderboard, dir: TSortDirection | null | undefined) => void;
+      sortCb?: (
+        fieldName: keyof ILeaderboard,
+        dir: TSortDirection | null | undefined
+      ) => void;
     };
 
 const getDir = (dir: TSortDirection | null | undefined) => {
@@ -144,7 +146,9 @@ const LeaderboardRow: FC<TLeaderboardRow> = memo(
           }`}
           onClick={handleClick('flip7_rating')}>
           <span className="mr-2">{flip7_rating}</span>
-          {type === 'header' && <SortDirectionIcon dir={sortDir['flip7_rating']} />}
+          {type === 'header' && (
+            <SortDirectionIcon dir={sortDir['flip7_rating']} />
+          )}
         </div>
       </div>
     );
@@ -166,7 +170,6 @@ export const LeaderboardPage = () => {
     fieldName: keyof ILeaderboard,
     dir: TSortDirection | null | undefined
   ) => {
-
     if (!leaderboardItems.length) return;
 
     dispatch(
@@ -190,11 +193,11 @@ export const LeaderboardPage = () => {
   }, []);
 
   return (
-    <div className={MAIN_CONTAINER_CLASS}>
+    <>
       <Helmet>
         <meta charSet="utf-8" />
         <title>Страница лидерборд</title>
-        <meta name="description" content="Страница лидерборд"/>
+        <meta name="description" content="Страница лидерборд" />
       </Helmet>
       <div className={FORM_PAGE_CONTAINER_CLASS}>
         <div className={FORM_CONTAINER_CLASS}>
@@ -211,23 +214,19 @@ export const LeaderboardPage = () => {
               type={'header'}
               id={'header'}
               name={'Имя'}
-              flip7_rating= {'Очки'}
+              flip7_rating={'Очки'}
               sortCb={handleSort}
             />
             {leaderboardItems.map((el: ILeaderboard) => (
-              <LeaderboardRow
-                key={el.id}
-                type={'row'}
-                {...el}
-              />
+              <LeaderboardRow key={el.id} type={'row'} {...el} />
             ))}
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
-export const initLeaderBoardPage = async({ dispatch }: PageInitArgs) => {
+export const initLeaderBoardPage = async ({ dispatch }: PageInitArgs) => {
   return dispatch(fetchLeaderboardThunk({ cursor: 0 }));
-}
+};

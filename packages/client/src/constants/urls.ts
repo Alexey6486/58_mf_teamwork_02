@@ -29,3 +29,4 @@ export const SERVER_URI =
   (typeof __EXTERNAL_SERVER_URL__ !== 'undefined'
     ? __EXTERNAL_SERVER_URL__
     : 'http://localhost:3001') + '/api/v1';
+export const URL_THEME = '/theme';

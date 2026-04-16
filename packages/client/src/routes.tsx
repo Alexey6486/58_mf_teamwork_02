@@ -28,6 +28,7 @@ import {
 } from './pages';
 import { useIsAuthed } from './hooks';
 import { logoutThunk } from './slices/auth-slice';
+import { Layout } from './components/Layout';
 
 export type PageInitContext = {
   clientToken?: string;
@@ -78,19 +79,29 @@ export const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
 export const routes = [
   {
     path: ROUTES.login,
-    Component: AuthorizationPage,
+    element: (
+      <Layout>
+        <AuthorizationPage />
+      </Layout>
+    ),
     fetchData: initAuthPage,
   },
   {
     path: ROUTES.signup,
-    Component: RegistrationPage,
+    element: (
+      <Layout>
+        <RegistrationPage />
+      </Layout>
+    ),
     fetchData: initRegistrationPage,
   },
   {
     path: ROUTES.main,
     element: (
       <ProtectedRoute>
-        <MainPage />
+        <Layout>
+          <MainPage />
+        </Layout>
       </ProtectedRoute>
     ),
     fetchData: initMainPage,
@@ -99,7 +110,9 @@ export const routes = [
     path: ROUTES.profile,
     element: (
       <ProtectedRoute>
-        <ProfilePage />
+        <Layout>
+          <ProfilePage />
+        </Layout>
       </ProtectedRoute>
     ),
     fetchData: initProfilePage,
@@ -108,7 +121,9 @@ export const routes = [
     path: ROUTES.password,
     element: (
       <ProtectedRoute>
-        <PasswordChange />
+        <Layout>
+          <PasswordChange />
+        </Layout>
       </ProtectedRoute>
     ),
     fetchData: initPasswordChangePage,
@@ -117,7 +132,9 @@ export const routes = [
     path: ROUTES.game,
     element: (
       <ProtectedRoute>
-        <GamePage />
+        <Layout>
+          <GamePage />
+        </Layout>
       </ProtectedRoute>
     ),
     fetchData: initGamePage,
@@ -126,7 +143,9 @@ export const routes = [
     path: ROUTES.leaderboard,
     element: (
       <ProtectedRoute>
-        <LeaderboardPage />
+        <Layout>
+          <LeaderboardPage />
+        </Layout>
       </ProtectedRoute>
     ),
     fetchData: initLeaderBoardPage,
@@ -135,7 +154,9 @@ export const routes = [
     path: ROUTES.forum,
     element: (
       <ProtectedRoute>
-        <ForumPage />
+        <Layout>
+          <ForumPage />
+        </Layout>
       </ProtectedRoute>
     ),
     fetchData: initForumPage,
@@ -144,21 +165,29 @@ export const routes = [
     path: ROUTES.topic,
     element: (
       <ProtectedRoute>
-        <TopicPage />
+        <Layout>
+          <TopicPage />
+        </Layout>
       </ProtectedRoute>
     ),
     fetchData: initTopicPage,
   },
   {
     path: ROUTES.error500,
-    Component: Error500,
+    element: (
+      <Layout>
+        <Error500 />
+      </Layout>
+    ),
     fetchData: initErrorPage,
   },
   {
     path: '*',
     element: (
       <ProtectedRoute>
-        <NotFoundPage />
+        <Layout>
+          <NotFoundPage />
+        </Layout>
       </ProtectedRoute>
     ),
     fetchData: initNotFoundPage,

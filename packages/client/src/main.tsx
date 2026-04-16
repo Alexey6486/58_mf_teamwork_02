@@ -7,7 +7,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { store } from './store/store';
 import { routes } from './routes';
 import { ErrorFallback } from './components/ErrorFallback';
-import { IdleObserver } from './components/idle-observer/idle-observer';
+import { IdleObserver } from './components/IdleObserver/IdleObserver';
 import '../style.css';
 
 if ('serviceWorker' in navigator && import.meta.env.PROD) {

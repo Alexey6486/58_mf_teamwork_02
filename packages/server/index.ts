@@ -1,12 +1,11 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import { dbConnect } from './db';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import cookieParser from 'cookie-parser';
-import { routerForum } from './routes/forum';
-import { routerAuthentication } from './routes/authentication';
+import { dbConnect } from './db';
 import { YP_BASE_URL } from './constants/api';
+import { routerAuthentication, routerForum, routerTheme } from './routes';
 
 dotenv.config();
 
@@ -64,6 +63,7 @@ app.use(
 
 app.use('/api/v1/auth', routerAuthentication);
 app.use('/api/v1/forum', routerForum);
+app.use('/api/v1/theme', routerTheme);
 
 app.get('/', (_, res) => {
   res.json('👋 Howdy from the server :)');

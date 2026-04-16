@@ -1,3 +1,3 @@
 export { ERequestMethods } from './api';
 export { ENotificationPermissions } from './notifications';
-export { EIconButton } from './common';
+export { EIconButton, ETheme } from './common';

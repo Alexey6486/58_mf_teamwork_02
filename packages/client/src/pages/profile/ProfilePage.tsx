@@ -19,10 +19,7 @@ import {
 } from '../../slices/user-slice';
 import { type IUser } from '../../types';
 import { URL_BASE_IMG } from '../../constants/urls';
-import {
-  type PageInitArgs,
-  ROUTES
-} from '../../routes';
+import { type PageInitArgs, ROUTES } from '../../routes';
 import {
   BTN_CLASS,
   BTN_GROUP_CLASS,
@@ -32,7 +29,6 @@ import {
   FORM_PAGE_CONTAINER_CLASS,
   FORM_TITLE_CLASS,
   FORM_WRAPPER_CLASS,
-  MAIN_CONTAINER_CLASS,
 } from '../../constants/style-groups';
 import { logoutThunk } from '../../slices/auth-slice';
 import { IconButton } from '../../components/IconButton';
@@ -114,11 +110,11 @@ export const ProfilePage: FC = () => {
   };
 
   return (
-    <div className={MAIN_CONTAINER_CLASS}>
+    <>
       <Helmet>
         <meta charSet="utf-8" />
         <title>Страница профиля</title>
-        <meta name="description" content="Страница профиля"/>
+        <meta name="description" content="Страница профиля" />
       </Helmet>
       <div className={FORM_PAGE_CONTAINER_CLASS}>
         <div className={FORM_CONTAINER_CLASS}>
@@ -229,7 +225,7 @@ export const ProfilePage: FC = () => {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
