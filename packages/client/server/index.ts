@@ -27,8 +27,8 @@ async function createServer() {
   const app = express();
 
   app.use(cookieParser());
-  app.use(express.json());
   app.use(API_PROXY_PATH, apiProxy);
+  app.use(express.json());
 
   let vite: ViteDevServer | undefined;
   if (isDev) {

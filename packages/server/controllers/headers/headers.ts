@@ -1,5 +1,8 @@
-// const acao = {"Access-Control-Allow-Origin": "*"};
-const acao = { 'Access-Control-Allow-Origin': 'http://localhost' };
+const allowedOrigin = (process.env.CORS_ORIGINS || 'http://localhost')
+  .split(',')[0]
+  .trim();
+
+const acao = { 'Access-Control-Allow-Origin': allowedOrigin };
 const acac = { 'Access-Control-Allow-Credentials': 'true' };
 export const getHeaders = {
   ...acao,

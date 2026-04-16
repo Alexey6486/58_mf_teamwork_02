@@ -1,36 +1,9 @@
-import type { Request, NextFunction, Response } from 'express';
+import type { Request, Response } from 'express';
 import cookieParser from 'set-cookie-parser';
 import type { CookieOptions } from 'express-serve-static-core';
 import { catchAsync } from '../utils/catchAsync';
 import { cookiesToString } from '../utils/cookies';
 import { YP_BASE_URL, YP_COOKIE_AUTH, YP_COOKIE_UUID } from '../constants/api';
-
-export const protectController = async (
-  request: Request,
-  response: Response,
-  next: NextFunction
-) => {
-  try {
-    if (request.cookies[YP_COOKIE_UUID] && request.cookies[YP_COOKIE_AUTH]) {
-      const yp_user = await fetch(`${YP_BASE_URL}/auth/user`, {
-        method: 'GET',
-        headers: {
-          Cookie: cookiesToString(request.cookies),
-        },
-        credentials: 'include',
-      });
-
-      if (!yp_user?.ok) {
-        return response.status(403).json({ error: 'Доступ запрещен' });
-      }
-
-      return next();
-    }
-    return response.status(403).json({ error: 'Доступ запрещен' });
-  } catch (error) {
-    return response.status(403).json({ error: 'Доступ запрещен' });
-  }
-};
 
 export const signin = catchAsync(
   async (request: Request, response: Response) => {
