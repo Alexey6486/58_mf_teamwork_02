@@ -17,13 +17,8 @@ export const URL_PSW = `/user/password`;
 export const URL_OAUTH_SERVICE_ID = `/oauth/yandex/service-id`;
 export const URL_OAUTH_YANDEX = `/oauth/yandex`;
 export const OAUTH_REDIRECT_URI =
-  typeof __OAUTH_REDIRECT_URI__ !== 'undefined'
-    ? __OAUTH_REDIRECT_URI__
-    : 'http://localhost:3000';
-export const OAUTH_YANDEX_URL =
-  typeof __OAUTH_YANDEX_URL__ !== 'undefined'
-    ? __OAUTH_YANDEX_URL__
-    : 'https://oauth.yandex.ru/authorize';
+  typeof window !== 'undefined' ? window.location.origin : '';
+export const OAUTH_YANDEX_URL = `https://oauth.yandex.ru/authorize`;
 export const URL_LEADERBOARD = `/leaderboard`;
 export const SERVER_URI =
   (typeof __EXTERNAL_SERVER_URL__ !== 'undefined'

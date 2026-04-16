@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 import { dbConnect } from './db';
 import { YP_BASE_URL } from './constants/api';
 import { routerAuthentication, routerForum, routerTheme } from './routes';
+import { protect } from './middlewares/protect';
 
 dotenv.config();
 
@@ -62,6 +63,7 @@ app.use(
 );
 
 app.use('/api/v1/auth', routerAuthentication);
+app.use('/api/v1', protect);
 app.use('/api/v1/forum', routerForum);
 app.use('/api/v1/theme', routerTheme);
 
