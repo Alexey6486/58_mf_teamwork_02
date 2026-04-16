@@ -40,11 +40,7 @@ export const GamePlayScreen: FC<GamePlayScreenProps> = ({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const { isFullscreen, toggle, isSupported } = useFullscreen(containerRef, {
-    onEnter: () => console.log('Entered fullscreen'),
-    onExit: () => console.log('Exited fullscreen'),
-    onError: error => console.error('Fullscreen error:', error),
-  });
+  const { isFullscreen, toggle, isSupported } = useFullscreen(containerRef);
 
   const canvasProcessorRef = useRef<CanvasProcessor | null>(null);
   const buttonsRef = useRef<{ draw: Rect; end: Rect; confirm: Rect }>({
