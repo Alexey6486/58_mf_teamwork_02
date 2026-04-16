@@ -15,6 +15,15 @@ export default defineConfig({
   define: {
     __EXTERNAL_SERVER_URL__: JSON.stringify(process.env.EXTERNAL_SERVER_URL),
     __INTERNAL_SERVER_URL__: JSON.stringify(process.env.INTERNAL_SERVER_URL),
+    __YP_API_BASE__: JSON.stringify(
+      process.env.YP_API_BASE ?? 'https://ya-praktikum.tech/api/v2'
+    ),
+    __OAUTH_REDIRECT_URI__: JSON.stringify(
+      process.env.OAUTH_REDIRECT_URI ?? 'http://localhost:3000'
+    ),
+    __OAUTH_YANDEX_URL__: JSON.stringify(
+      process.env.OAUTH_YANDEX_URL ?? 'https://oauth.yandex.ru/authorize'
+    ),
   },
   build: {
     outDir: distClientDir,
