@@ -5,9 +5,18 @@ import { catchAsync } from '../utils/catchAsync';
 import { TextValidation } from '../utils/validation';
 import { escapeHTML } from '../utils/xss';
 
+type AuthRequest = Request & {
+  user?: {
+    id?: number;
+  };
+};
+
 export const getAllTopics = catchAsync(
   async (request: Request, response: Response) => {
     const { page = 1, size = 10, search = '' } = request.query;
+
+    const pageNum = Math.max(1, Number(page) || 1);
+    const sizeNum = Math.max(1, Number(size) || 10);
 
     const whereCondition = search
       ? {
@@ -15,11 +24,9 @@ export const getAllTopics = catchAsync(
         }
       : {};
 
-    const limit = Number(size);
-    const offset = Number(page);
     const topics = await Topic.findAll({
-      limit: limit > 0 ? limit : 10,
-      offset: (offset > 0 ? offset - 1 : 1) * limit,
+      limit: sizeNum,
+      offset: (pageNum - 1) * sizeNum,
       order: [['createdAt', 'DESC']],
       where: whereCondition,
     });
@@ -31,9 +38,9 @@ export const getAllTopics = catchAsync(
       .json({
         status: 'success',
         total: topics.length,
-        pages: Math.ceil(total / (size as number)),
-        hasNext: (size as number) * (size as number) < total,
-        hasPrev: page > 1,
+        pages: Math.ceil(total / sizeNum),
+        hasNext: pageNum * sizeNum < total,
+        hasPrev: pageNum > 1,
         data: {
           topics,
         },
@@ -44,12 +51,19 @@ export const getAllTopics = catchAsync(
 export const createTopic = catchAsync(
   async (request: Request, response: Response) => {
     const { title, text, authorId } = request.body;
+    const authAuthorId = (request as AuthRequest).user?.id;
+    const resolvedAuthorId = authorId ?? authAuthorId;
+
+    if (!resolvedAuthorId) {
+      response.status(401).json({ error: 'unauthorized' });
+      return;
+    }
 
     if (TextValidation(title) && TextValidation(text)) {
       const topic = await Topic.create({
         title: escapeHTML(title),
         text: escapeHTML(text),
-        authorId,
+        authorId: resolvedAuthorId,
       });
 
       response.status(200).json({

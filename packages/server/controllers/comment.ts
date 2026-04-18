@@ -6,6 +6,12 @@ import { ReactionAssociationAlias } from '../models/reaction';
 import { TextValidation } from '../utils/validation';
 import { escapeHTML } from '../utils/xss';
 
+type AuthRequest = Request & {
+  user?: {
+    id?: number;
+  };
+};
+
 export const getAllComments = catchAsync(
   async (request: Request, response: Response) => {
     const { topicId } = request.params;
@@ -41,7 +47,15 @@ export const getAllComments = catchAsync(
 
 export const createComment = catchAsync(
   async (request: Request, response: Response) => {
-    const { topicId, authorId, text, replyToCommentId = null } = request.body;
+    const topicId = Number(request.params.topicId ?? request.body.topicId);
+    const { authorId, text, replyToCommentId = null } = request.body;
+    const authAuthorId = (request as AuthRequest).user?.id;
+    const resolvedAuthorId = authorId ?? authAuthorId;
+
+    if (!resolvedAuthorId) {
+      response.status(401).json({ error: 'unauthorized' });
+      return;
+    }
 
     // Проверяем существование topic
     const targetTopic = await Topic.findByPk(topicId);
@@ -53,7 +67,7 @@ export const createComment = catchAsync(
     if (TextValidation(text)) {
       // Создаем комментарий
       const comment = await Comment.create({
-        authorId,
+        authorId: resolvedAuthorId,
         topicId,
         text: escapeHTML(text),
         replyToCommentId: replyToCommentId || null,
@@ -75,7 +89,15 @@ export const createComment = catchAsync(
 
 export const createReply = catchAsync(
   async (request: Request, response: Response) => {
-    const { topicId, authorId, text, replyToCommentId } = request.body;
+    const topicId = Number(request.params.topicId ?? request.body.topicId);
+    const { authorId, text, replyToCommentId } = request.body;
+    const authAuthorId = (request as AuthRequest).user?.id;
+    const resolvedAuthorId = authorId ?? authAuthorId;
+
+    if (!resolvedAuthorId) {
+      response.status(401).json({ error: 'unauthorized' });
+      return;
+    }
 
     const targetTopic = await Topic.findByPk(topicId);
     const targetComment = await Comment.findByPk(replyToCommentId);
@@ -87,7 +109,7 @@ export const createReply = catchAsync(
     if (TextValidation(text)) {
       // Создаем ответ
       const comment = await Comment.create({
-        authorId,
+        authorId: resolvedAuthorId,
         topicId,
         text: escapeHTML(text),
         replyToCommentId,

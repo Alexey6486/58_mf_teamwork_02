@@ -1,4 +1,4 @@
-import { type FC, useMemo, useState } from 'react';
+import { type FC, useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { Logo } from '../../components/Logo/Logo';
@@ -8,7 +8,10 @@ import {
   FORM_PAGE_CONTAINER_CLASS,
 } from '../../constants/style-groups';
 import { useDispatch, useSelector } from '../../store/store';
-import { addMessage } from '../../slices/forum-slice';
+import {
+  createCommentThunk,
+  fetchTopicCommentsThunk,
+} from '../../slices/forum-slice';
 import { type PageInitArgs, ROUTES } from '../../routes';
 import { IconButton } from '../../components/IconButton';
 import { EIconButton } from '../../enums';
@@ -33,12 +36,22 @@ export const TopicPage: FC = () => {
     return topic?.title ?? 'Топик не найден';
   }, [topic?.title, topicId]);
 
-  const handleSend = () => {
+  useEffect(() => {
     if (!Number.isFinite(topicId)) return;
-    if (!text.trim()) return;
+    void dispatch(fetchTopicCommentsThunk(topicId));
+  }, [dispatch, topicId]);
 
-    dispatch(addMessage({ topicId, text }));
-    setText('');
+  const handleSend = async () => {
+    if (!Number.isFinite(topicId)) return;
+    const normalized = text.trim();
+    if (!normalized) return;
+
+    try {
+      await dispatch(createCommentThunk({ topicId, text: normalized })).unwrap();
+      setText('');
+    } catch {
+      // ...optional ui error handling...
+    }
   };
 
   const toForum = () => {
@@ -91,4 +104,14 @@ export const TopicPage: FC = () => {
   );
 };
 
-export const initTopicPage = async (_: PageInitArgs) => Promise.resolve();
+export const initTopicPage = async (args: PageInitArgs) => {
+  const rawId =
+    (args as { params?: Record<string, string> })?.params?.id ??
+    (args as { match?: { params?: Record<string, string> } })?.match?.params?.id;
+  const topicId = Number(rawId);
+
+  if (!Number.isFinite(topicId)) return;
+  await (args as { store?: { dispatch?: (action: unknown) => Promise<unknown> } })
+    ?.store
+    ?.dispatch?.(fetchTopicCommentsThunk(topicId));
+};

@@ -15,7 +15,7 @@ import userReducer, {
 } from '../slices/user-slice';
 import authReducer from '../slices/auth-slice';
 import leaderboardReducer from '../slices/leaderboard-slice';
-import { forumReducer, FORUM_LS_KEY } from '../slices/forum-slice';
+import { forumReducer } from '../slices/forum-slice';
 
 // Глобально декларируем в window наш ключик
 // и задаем ему тип такой же как у стейта в сторе
@@ -73,17 +73,6 @@ listenerMiddleware.startListening({
     }
   },
 });
-
-if (typeof window !== 'undefined') {
-  store.subscribe(() => {
-    try {
-      const { forum } = store.getState();
-      localStorage.setItem(FORUM_LS_KEY, JSON.stringify(forum));
-    } catch (error) {
-      console.error('Failed to persist forum state:', error);
-    }
-  });
-}
 
 export type RootState = ReturnType<typeof reducer>;
 export type AppDispatch = typeof store.dispatch;
