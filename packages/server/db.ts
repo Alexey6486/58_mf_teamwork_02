@@ -80,40 +80,55 @@ Topic.hasMany(Comment, {
   as: CommentAssociationAlias, // Псевдоним для выборки, например Topic.getComments() (также set..., add...)***
   onDelete: 'CASCADE', // Каскадное удаление строк других таблиц с внешними ключами, которые ссылались на этот топик
 });
-
-// belongsTo = Comment всегда принадлежит какому-то топику (Topic id будет лежать в поле topicId комментария)
-Comment.belongsTo(Topic, {
-  foreignKey: 'topicId',
-  as: 'topic',
-  onDelete: 'CASCADE',
-});
-
-Comment.hasMany(Comment, {
-  foreignKey: 'replyToCommentId',
-  as: 'replies',
-  onDelete: 'CASCADE',
-});
-
-Comment.belongsTo(Comment, {
-  foreignKey: 'replyToCommentId',
-  as: 'targetComment',
-  onDelete: 'CASCADE',
-});
-
 Topic.hasMany(Reaction, {
   foreignKey: 'topicId',
   as: ReactionAssociationAlias,
 });
+Topic.belongsTo(User, {
+  foreignKey: 'authorId', // по этому значению будет обращение к id пользователя (НЕ к user.userId, а к user.id)
+});
+
+// belongsTo = Comment всегда принадлежит какому-то топику (Topic id будет лежать в поле topicId комментария)
+Comment.belongsTo(Topic, {
+  foreignKey: 'topicId',
+  onDelete: 'CASCADE',
+});
+Comment.belongsTo(User, {
+  foreignKey: 'authorId',
+});
+
+Comment.hasMany(Comment, {
+  foreignKey: 'replyToCommentId',
+  onDelete: 'CASCADE',
+});
+Comment.belongsTo(Comment, {
+  foreignKey: 'replyToCommentId',
+  onDelete: 'CASCADE',
+});
 
 Comment.hasMany(Reaction, {
   foreignKey: 'commentId',
-  as: 'reactions',
   onDelete: 'CASCADE',
 });
 
 Reaction.belongsTo(Comment, {
   foreignKey: 'commentId',
-  as: 'targetComment',
+  onDelete: 'CASCADE',
+});
+Reaction.belongsTo(User, {
+  foreignKey: 'authorId',
+});
+
+User.hasMany(Topic, {
+  foreignKey: 'authorId',
+  onDelete: 'CASCADE',
+});
+User.hasMany(Comment, {
+  foreignKey: 'authorId',
+  onDelete: 'CASCADE',
+});
+User.hasMany(Reaction, {
+  foreignKey: 'authorId',
   onDelete: 'CASCADE',
 });
 

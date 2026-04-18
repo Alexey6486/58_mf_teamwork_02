@@ -1,4 +1,4 @@
-import { type FC, useEffect, useMemo, useState } from 'react';
+import { type FC, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { Logo } from '../../components/Logo/Logo';
@@ -11,10 +11,13 @@ import { useDispatch, useSelector } from '../../store/store';
 import {
   createCommentThunk,
   fetchTopicCommentsThunk,
+  resetTopic,
+  selectTopic,
 } from '../../slices/forum-slice';
 import { type PageInitArgs, ROUTES } from '../../routes';
 import { IconButton } from '../../components/IconButton';
 import { EIconButton } from '../../enums';
+import { formatDate } from '../../utils/formatDate';
 
 export const TopicPage: FC = () => {
   const navigate = useNavigate();
@@ -22,24 +25,10 @@ export const TopicPage: FC = () => {
   const { id } = useParams();
 
   const topicId = Number(id);
-  const topic = useSelector(state =>
-    state.forum.topics.find(t => t.id === topicId)
-  );
-  const messages = useSelector(
-    state => state.forum.messagesByTopicId[topicId] ?? []
-  );
+  const topic = useSelector(selectTopic);
+  console.log({ topic });
 
   const [text, setText] = useState('');
-
-  const title = useMemo(() => {
-    if (!Number.isFinite(topicId)) return 'Топик не найден';
-    return topic?.title ?? 'Топик не найден';
-  }, [topic?.title, topicId]);
-
-  useEffect(() => {
-    if (!Number.isFinite(topicId)) return;
-    void dispatch(fetchTopicCommentsThunk(topicId));
-  }, [dispatch, topicId]);
 
   const handleSend = async () => {
     if (!Number.isFinite(topicId)) return;
@@ -47,7 +36,9 @@ export const TopicPage: FC = () => {
     if (!normalized) return;
 
     try {
-      await dispatch(createCommentThunk({ topicId, text: normalized })).unwrap();
+      await dispatch(
+        createCommentThunk({ topicId, text: normalized })
+      ).unwrap();
       setText('');
     } catch {
       // ...optional ui error handling...
@@ -57,6 +48,15 @@ export const TopicPage: FC = () => {
   const toForum = () => {
     navigate(ROUTES.forum);
   };
+
+  useEffect(() => {
+    if (!Number.isFinite(topicId)) return;
+    dispatch(fetchTopicCommentsThunk(topicId));
+
+    return () => {
+      dispatch(resetTopic());
+    };
+  }, [dispatch, topicId]);
 
   return (
     <>
@@ -79,12 +79,38 @@ export const TopicPage: FC = () => {
             />
           </div>
           <div className="mt-4 h-[500px] overflow-y-auto rounded-[10px] bg-white custom-scroll p-6 flex flex-col gap-[10px]">
-            <h1 className="text-2xl font-bold text-center">
-              {title || 'Топик не найден'}
-            </h1>
-            {messages.map(message => (
-              <Message key={message.id} message={message} />
-            ))}
+            {topic && (
+              <>
+                <div className="flex justify-between -mt-4">
+                  <span className="text-sm">
+                    автор: {topic?.User?.login ?? ''}
+                  </span>
+                  <span className="text-sm">
+                    создано: {formatDate(topic?.createdAt ?? '')}
+                  </span>
+                </div>
+                <div>
+                  <p className="mb-2">Тема:</p>
+                  <h3 className="text-2xl font-bold">
+                    {topic?.title || 'Топик не найден'}
+                  </h3>
+                </div>
+                <div>
+                  <p className="mb-2">Сообщение:</p>
+                  <span>{topic?.text ?? ''}</span>
+                </div>
+                <div>
+                  <p className="mb-2">Комментарии:</p>
+                  <div>
+                    {Array.isArray(topic?.comments)
+                      ? topic?.comments?.map?.(comment => (
+                          <Message key={comment.id} message={comment} />
+                        ))
+                      : ''}
+                  </div>
+                </div>
+              </>
+            )}
           </div>
           <div className="mt-4 flex gap-3">
             <input
@@ -107,11 +133,12 @@ export const TopicPage: FC = () => {
 export const initTopicPage = async (args: PageInitArgs) => {
   const rawId =
     (args as { params?: Record<string, string> })?.params?.id ??
-    (args as { match?: { params?: Record<string, string> } })?.match?.params?.id;
+    (args as { match?: { params?: Record<string, string> } })?.match?.params
+      ?.id;
   const topicId = Number(rawId);
 
   if (!Number.isFinite(topicId)) return;
-  await (args as { store?: { dispatch?: (action: unknown) => Promise<unknown> } })
-    ?.store
-    ?.dispatch?.(fetchTopicCommentsThunk(topicId));
+  await (
+    args as { store?: { dispatch?: (action: unknown) => Promise<unknown> } }
+  )?.store?.dispatch?.(fetchTopicCommentsThunk(topicId));
 };

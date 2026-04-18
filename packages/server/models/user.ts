@@ -11,10 +11,12 @@ export interface IUser {
   id: number;
   userId: number;
   theme: TTheme;
+  login: string;
 }
 
 export const UserModelName = 'User';
-export const UserTableName = 'user';
+export const UserTableName = 'users';
+export const UserAssociationAlias = 'users';
 
 export const UserAttributes: ModelAttributes<Model, IUser> = {
   id: {
@@ -30,6 +32,10 @@ export const UserAttributes: ModelAttributes<Model, IUser> = {
   theme: {
     type: DataType.ENUM(TTheme.light, TTheme.dark),
     defaultValue: TTheme.light,
+    allowNull: false,
+  },
+  login: {
+    type: DataType.STRING,
     allowNull: false,
   },
 };

@@ -53,7 +53,9 @@ listenerMiddleware.startListening({
   effect: async (action, listenerApi) => {
     try {
       const user = await listenerApi.dispatch(fetchUserThunk()).unwrap();
-      await listenerApi.dispatch(fetchUserTheme({ userId: user.id }));
+      await listenerApi.dispatch(
+        fetchUserTheme({ userId: user.id, login: user.login })
+      );
     } catch (error) {
       console.error('Failed to fetch user data:', error);
     }

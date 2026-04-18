@@ -1,8 +1,7 @@
 import type { Response, Request } from 'express';
-import { Comment, Reaction, Topic } from '../db';
+import { Comment, Reaction, Topic, User } from '../db';
 import { catchAsync } from '../utils/catchAsync';
 import { CommentAssociationAlias } from '../models/comment';
-import { ReactionAssociationAlias } from '../models/reaction';
 import { TextValidation } from '../utils/validation';
 import { escapeHTML } from '../utils/xss';
 
@@ -28,11 +27,26 @@ export const getAllComments = catchAsync(
     const topic = await Topic.findByPk(topicId, {
       include: [
         {
+          model: User,
+          attributes: ['id', 'userId', 'login'],
+        },
+        {
           model: Comment,
+          required: false, // LEFT JOIN - пост без комментариев тоже вернется
+          separate: true, // отдельный запрос для комментариев (лучше для производительности)
           as: CommentAssociationAlias,
           order: [['createdAt', 'ASC']],
+          include: [
+            {
+              model: User,
+              attributes: ['id', 'userId', 'login'],
+            },
+            {
+              model: Reaction,
+              attributes: ['id', 'text', 'authorId', 'topicId', 'commentId'],
+            },
+          ],
         },
-        { model: Reaction, as: ReactionAssociationAlias },
       ],
     });
 
@@ -52,6 +66,12 @@ export const createComment = catchAsync(
     const authAuthorId = (request as AuthRequest).user?.id;
     const resolvedAuthorId = authorId ?? authAuthorId;
 
+    const user = await User.findOne({
+      where: {
+        userId: resolvedAuthorId,
+      },
+    });
+
     if (!resolvedAuthorId) {
       response.status(401).json({ error: 'unauthorized' });
       return;
@@ -67,7 +87,7 @@ export const createComment = catchAsync(
     if (TextValidation(text)) {
       // Создаем комментарий
       const comment = await Comment.create({
-        authorId: resolvedAuthorId,
+        authorId: user?.dataValues?.id,
         topicId,
         text: escapeHTML(text),
         replyToCommentId: replyToCommentId || null,

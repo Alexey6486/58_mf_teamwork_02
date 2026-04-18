@@ -1,9 +1,10 @@
 import type { Response, Request } from 'express';
-import { Op } from 'sequelize';
-import { Topic } from '../db';
+import { Op, Sequelize } from 'sequelize';
+import { Comment, Topic, User } from '../db';
 import { catchAsync } from '../utils/catchAsync';
 import { TextValidation } from '../utils/validation';
 import { escapeHTML } from '../utils/xss';
+import { CommentAssociationAlias } from '../models/comment';
 
 type AuthRequest = Request & {
   user?: {
@@ -28,7 +29,32 @@ export const getAllTopics = catchAsync(
       limit: sizeNum,
       offset: (pageNum - 1) * sizeNum,
       order: [['createdAt', 'DESC']],
+      group: ['Topic.id', 'User.id'],
+      include: [
+        {
+          model: Comment,
+          as: CommentAssociationAlias,
+          attributes: [], // Don't fetch comment details
+          required: false, // LEFT JOIN - включаем темы без комментариев
+        },
+        {
+          model: User,
+          attributes: ['id', 'userId', 'login'],
+        },
+      ],
+      attributes: [
+        'id',
+        'title',
+        'text',
+        'authorId',
+        'createdAt',
+        [
+          Sequelize.fn('COUNT', Sequelize.col(`${CommentAssociationAlias}.id`)),
+          'commentCount',
+        ],
+      ],
       where: whereCondition,
+      subQuery: false,
     });
 
     const total = await Topic.count({ where: whereCondition });
@@ -54,6 +80,12 @@ export const createTopic = catchAsync(
     const authAuthorId = (request as AuthRequest).user?.id;
     const resolvedAuthorId = authorId ?? authAuthorId;
 
+    const user = await User.findOne({
+      where: {
+        userId: resolvedAuthorId,
+      },
+    });
+
     if (!resolvedAuthorId) {
       response.status(401).json({ error: 'unauthorized' });
       return;
@@ -63,7 +95,7 @@ export const createTopic = catchAsync(
       const topic = await Topic.create({
         title: escapeHTML(title),
         text: escapeHTML(text),
-        authorId: resolvedAuthorId,
+        authorId: user?.dataValues?.id,
       });
 
       response.status(200).json({

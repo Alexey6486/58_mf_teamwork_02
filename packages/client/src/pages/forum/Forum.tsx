@@ -12,6 +12,8 @@ import { useDispatch, useSelector } from '../../store/store';
 import {
   createTopicThunk,
   fetchTopicsThunk,
+  selectTopic,
+  selectTopics,
 } from '../../slices/forum-slice';
 import { IconButton } from '../../components/IconButton';
 import { EIconButton } from '../../enums';
@@ -19,14 +21,15 @@ import { EIconButton } from '../../enums';
 export const ForumPage: FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const topics = useSelector(state => state.forum.topics);
-
+  const topics = useSelector(selectTopics);
+  const topic = useSelector(selectTopic);
+  console.log('ForumPage', { topic });
   const [isAddingTopic, setIsAddingTopic] = useState(false);
   const [newTopicTitle, setNewTopicTitle] = useState('');
   const [newTopicText, setNewTopicText] = useState('');
 
   useEffect(() => {
-    void dispatch(fetchTopicsThunk());
+    dispatch(fetchTopicsThunk());
   }, [dispatch]);
 
   const handleAddClick = () => setIsAddingTopic(true);
@@ -130,7 +133,7 @@ export const ForumPage: FC = () => {
 };
 
 export const initForumPage = async (args: PageInitArgs) => {
-  await (args as { store?: { dispatch?: (action: unknown) => Promise<unknown> } })
-    ?.store
-    ?.dispatch?.(fetchTopicsThunk());
+  await (
+    args as { store?: { dispatch?: (action: unknown) => Promise<unknown> } }
+  )?.store?.dispatch?.(fetchTopicsThunk());
 };

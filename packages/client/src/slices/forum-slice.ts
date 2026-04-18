@@ -1,42 +1,24 @@
-import {
-  createAsyncThunk,
-  createSlice,
-} from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import {
   URL_FORUM_TOPICS,
   URL_FORUM_TOPIC,
   URL_FORUM_TOPIC_COMMENT,
   URL_FORUM_TOPIC_COMMENTS,
 } from '../constants/urls';
-import { type Message, type Topic } from '../types/forum';
-
-type ApiTopic = {
-  id: number;
-  title: string;
-  comments?: Array<{ id: number; text: string; replyToCommentId?: number | null }>;
-};
-
-const mapTopic = (topic: ApiTopic): Topic => ({
-  id: Number(topic.id),
-  title: String(topic.title ?? ''),
-});
-
-const mapMessage = (comment: { id: number; text: string }): Message => ({
-  id: Number(comment.id),
-  text: String(comment.text ?? ''),
-});
+import type { ITopic, ITopicDetails, ITopicComment } from '../types';
+import { type RootState } from '../store/store';
 
 export interface ForumState {
-  topics: Topic[];
-  messagesByTopicId: Record<number, Message[]>;
+  topics: ITopic[];
+  topic: ITopicDetails | null;
 }
 
 const initialState: ForumState = {
   topics: [],
-  messagesByTopicId: {},
+  topic: null,
 };
 
-export const fetchTopicsThunk = createAsyncThunk<Topic[]>(
+export const fetchTopicsThunk = createAsyncThunk<ITopic[]>(
   'forum/fetchTopics',
   async () => {
     const response = await fetch(URL_FORUM_TOPICS, {
@@ -46,17 +28,17 @@ export const fetchTopicsThunk = createAsyncThunk<Topic[]>(
     if (!response.ok) throw new Error('Failed to fetch topics');
 
     const json = (await response.json()) as {
-      data?: { topics?: ApiTopic[] };
+      data?: { topics?: ITopic[] };
     };
 
-    return (json.data?.topics ?? []).map(mapTopic);
+    return json.data?.topics ?? [];
   }
 );
 
 type AppStateLike = {
   user?: {
     id?: number;
-    user?: { id?: number };
+    data?: { id?: number; login: string };
   };
   auth?: {
     user?: { id?: number };
@@ -65,16 +47,18 @@ type AppStateLike = {
 
 const resolveAuthorIdFromState = (state: unknown): number | undefined => {
   const s = state as AppStateLike;
-  const candidates = [s?.user?.id, s?.user?.user?.id, s?.auth?.user?.id];
+  const candidates = [s?.user?.id, s?.user?.data?.id, s?.auth?.user?.id];
   return candidates.find((id): id is number => Number.isFinite(id));
 };
 
 export const createTopicThunk = createAsyncThunk<
-  Topic,
+  ITopic,
   { title: string; text: string },
   { state: unknown }
 >('forum/createTopic', async ({ title, text }, { getState, dispatch }) => {
-  const authorId = resolveAuthorIdFromState(getState());
+  const state = getState();
+  const authorId = resolveAuthorIdFromState(state);
+  console.log('createTopicThunk', { state });
 
   const response = await fetch(URL_FORUM_TOPIC, {
     method: 'POST',
@@ -84,23 +68,24 @@ export const createTopicThunk = createAsyncThunk<
       title,
       text,
       ...(authorId ? { authorId } : {}),
+      login: (state as AppStateLike)?.user?.data?.login ?? '',
     }),
   });
 
   if (!response.ok) throw new Error('Failed to create topic');
 
   const json = (await response.json()) as {
-    data?: { topic?: ApiTopic };
+    data?: { topic?: ITopic };
   };
 
   if (!json.data?.topic) throw new Error('Invalid topic payload');
 
   await dispatch(fetchTopicsThunk());
-  return mapTopic(json.data.topic);
+  return json.data.topic;
 });
 
 export const fetchTopicCommentsThunk = createAsyncThunk<
-  { topic: Topic; messages: Message[]; topicId: number },
+  { topic: ITopicDetails | null },
   number
 >('forum/fetchTopicComments', async topicId => {
   const response = await fetch(URL_FORUM_TOPIC_COMMENTS(topicId), {
@@ -110,85 +95,83 @@ export const fetchTopicCommentsThunk = createAsyncThunk<
   if (!response.ok) throw new Error('Failed to fetch topic comments');
 
   const json = (await response.json()) as {
-    data?: { topic?: ApiTopic };
+    data?: { topic?: ITopicDetails };
   };
 
   const topic = json.data?.topic;
   if (!topic) {
     return {
-      topic: { id: topicId, title: 'Топик не найден' },
-      messages: [],
-      topicId,
+      topic: null,
     };
   }
 
   return {
-    topic: mapTopic(topic),
-    messages: (topic.comments ?? []).map(mapMessage),
-    topicId: Number(topic.id),
+    topic,
   };
 });
 
 export const createCommentThunk = createAsyncThunk<
-  { topicId: number; message: Message },
+  { topicId: number; message: ITopicComment },
   { topicId: number; text: string; replyToCommentId?: number | null },
   { state: unknown }
->('forum/createComment', async ({ topicId, text, replyToCommentId = null }, { getState, dispatch }) => {
-  const authorId = resolveAuthorIdFromState(getState());
+>(
+  'forum/createComment',
+  async (
+    { topicId, text, replyToCommentId = null },
+    { getState, dispatch }
+  ) => {
+    const authorId = resolveAuthorIdFromState(getState());
 
-  const response = await fetch(URL_FORUM_TOPIC_COMMENT(topicId), {
-    method: 'POST',
-    credentials: 'include',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      topicId,
-      text,
-      replyToCommentId,
-      ...(authorId ? { authorId } : {}),
-    }),
-  });
+    const response = await fetch(URL_FORUM_TOPIC_COMMENT(topicId), {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        topicId,
+        text,
+        replyToCommentId,
+        ...(authorId ? { authorId } : {}),
+      }),
+    });
 
-  if (!response.ok) throw new Error('Failed to create comment');
+    if (!response.ok) throw new Error('Failed to create comment');
 
-  const json = (await response.json()) as {
-    data?: { comment?: { id: number; text: string; topicId?: number } };
-  };
+    const json = (await response.json()) as {
+      data?: { comment?: ITopicComment };
+    };
 
-  const comment = json.data?.comment;
-  if (!comment) throw new Error('Invalid comment payload');
+    const comment = json.data?.comment;
+    if (!comment) throw new Error('Invalid comment payload');
 
-  await dispatch(fetchTopicCommentsThunk(topicId));
+    await dispatch(fetchTopicCommentsThunk(topicId));
 
-  return {
-    topicId: Number(comment.topicId ?? topicId),
-    message: mapMessage(comment),
-  };
-});
-
-const upsertTopic = (state: ForumState, topic: Topic) => {
-  const index = state.topics.findIndex(t => t.id === topic.id);
-  if (index >= 0) {
-    state.topics[index] = topic;
-  } else {
-    state.topics.unshift(topic);
+    return {
+      topicId: Number(comment.topicId ?? topicId),
+      message: comment as ITopicComment,
+    };
   }
-};
+);
 
 const forumSlice = createSlice({
   name: 'forum',
   initialState,
-  reducers: {},
+  reducers: {
+    resetTopic: state => {
+      state.topic = null;
+    },
+  },
   extraReducers: builder => {
     builder
       .addCase(fetchTopicsThunk.fulfilled, (state, action) => {
         state.topics = action.payload;
       })
       .addCase(fetchTopicCommentsThunk.fulfilled, (state, action) => {
-        const { topic, messages, topicId } = action.payload;
-        upsertTopic(state, topic);
-        state.messagesByTopicId[topicId] = messages;
+        state.topic = action.payload.topic;
       });
   },
 });
-
+export const selectTopics = (state: RootState) => state.forum.topics;
+export const selectTopic = (state: RootState): ITopicDetails | null =>
+  state.forum.topic;
+export const { resetTopic } = forumSlice.actions;
 export const forumReducer = forumSlice.reducer;
