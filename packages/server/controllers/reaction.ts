@@ -1,5 +1,5 @@
 import type { Response, Request } from 'express';
-import { Comment, Topic, Reaction } from '../db';
+import { Comment, Topic, Reaction, User } from '../db';
 import { catchAsync } from '../utils/catchAsync';
 import { TextValidation } from '../utils/validation';
 import { escapeHTML } from '../utils/xss';
@@ -17,12 +17,18 @@ export const createReaction = catchAsync(
         throw new Error('Topic or comment not found');
       }
 
+      const user = await User.findOne({
+        where: {
+          userId: authorId,
+        },
+      });
+
       if (TextValidation(text) && REACTIONS.includes(text)) {
         // Создаем ответ
         const reaction = await Reaction.create({
           topicId,
           commentId,
-          authorId,
+          authorId: user?.dataValues?.id,
           text: escapeHTML(text),
         });
 
@@ -42,8 +48,9 @@ export const createReaction = catchAsync(
 
       if (reaction) {
         // Обновляем запись
+
         const [updated] = await Reaction.update(
-          { topicId, commentId, authorId, text },
+          { text },
           {
             where: { id },
             returning: true,
