@@ -15,6 +15,7 @@ import {
   selectTopic,
   selectTopics,
 } from '../../slices/forum-slice';
+import { selectUser } from '../../slices/user-slice';
 import { IconButton } from '../../components/IconButton';
 import { EIconButton } from '../../enums';
 
@@ -28,7 +29,8 @@ export const ForumPage: FC = () => {
   const dispatch = useDispatch();
   const topics = useSelector(selectTopics);
   const topic = useSelector(selectTopic);
-  console.log('ForumPage', { topic });
+  const user = useSelector(selectUser);
+
   const [isAddingTopic, setIsAddingTopic] = useState(false);
   const [newTopicTitle, setNewTopicTitle] = useState('');
   const [newTopicText, setNewTopicText] = useState('');
@@ -59,7 +61,9 @@ export const ForumPage: FC = () => {
     setIsCreatingTopic(true);
 
     try {
-      await dispatch(createTopicThunk({ title, text })).unwrap();
+      await dispatch(
+        createTopicThunk({ title, text, authorId: Number(user?.id) })
+      ).unwrap();
       setNewTopicTitle('');
       setNewTopicText('');
       setIsAddingTopic(false);
@@ -143,7 +147,7 @@ export const ForumPage: FC = () => {
             <p className="mt-2 text-sm text-red-600">{createError}</p>
           ) : null}
 
-          <div className="mt-4 max-h-[650px] overflow-y-auto overflow-x-hidden rounded-[10px] bg-white custom-scroll p-6 flex flex-col gap-[10px]">
+          <div className="mt-4 max-h-[650px] overflow-y-auto overflow-x-hidden rounded-[10px] bg-white custom-scroll p-6 flex flex-col gap-[10px] bg-white dark:bg-form-dark">
             {topics.map(topic => (
               <Topic
                 key={topic.id}

@@ -69,9 +69,6 @@ DEV_COOKIE_DOMAIN=localhost:2000
 Добавить комментарий к теме с id=1:\
 `curl -X POST -H "Content-Type: application/json" -d "{\"topicId\": 1, \"text\": \"Комментарий №1 к теме форума №1\", \"authorId\": 1}" http://localhost:3001/api/v1/forum/topic/1/comment`
 
-Добавить ответ на комментарий с id=1 к теме с id=1:\
-`curl -X POST -H "Content-Type: application/json" -d "{\"topicId\": 1, \"text\": \"Ответ №1 к Комментарию №1 к теме форума №1\", \"authorId\": 1, \"replyToCommentId\": 1}" http://localhost:3001/api/v1/forum/topic/1/comment/1/reply`
-
 Добавить реакцию на комментарий с id=1 к теме с id=1:\
 `curl -X POST -H "Content-Type: application/json" -d "{\"topicId\": 1, \"text\": \"реакция\", \"authorId\": 1, \"commentId\": 1}" http://localhost:3001/api/v1/forum/topic/1/comment/1/reaction`
 

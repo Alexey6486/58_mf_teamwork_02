@@ -46,6 +46,8 @@ export const store = configureStore({
 listenerMiddleware.startListening({
   predicate: action => {
     return (
+      action.type === 'auth/oauthGetServiceId/fulfilled' ||
+      action.type === 'auth/oauthYandex/fulfilled' ||
       action.type === 'auth/loginThunk/fulfilled' ||
       action.type === 'auth/signupThunk/fulfilled'
     );

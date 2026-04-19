@@ -35,37 +35,11 @@ export const fetchTopicsThunk = createAsyncThunk<ITopic[]>(
   }
 );
 
-type AppStateLike = {
-  user?: {
-    id?: number;
-    data?: { id?: number; login: string };
-  };
-  auth?: {
-    user?: { id?: number };
-  };
-};
-
-const resolveAuthorIdFromState = (state: unknown): number | undefined => {
-  const s = state as AppStateLike;
-  const candidates = [
-    s?.user?.data?.id,
-    s?.auth?.data?.id,
-    s?.user?.id,
-    s?.user?.user?.id,
-    s?.auth?.user?.id,
-  ];
-  return candidates.find((id): id is number => Number.isFinite(id));
-};
-
 export const createTopicThunk = createAsyncThunk<
   ITopic,
-  { title: string; text: string },
-  { state: unknown }
->('forum/createTopic', async ({ title, text }, { getState, dispatch }) => {
-  const state = getState();
-  const authorId = resolveAuthorIdFromState(state);
-  console.log('createTopicThunk', { state });
-
+  { title: string; text: string; authorId: number },
+  { state: RootState }
+>('forum/createTopic', async ({ title, text, authorId }, { dispatch }) => {
   const response = await fetch(URL_FORUM_TOPIC, {
     method: 'POST',
     credentials: 'include',
@@ -73,8 +47,7 @@ export const createTopicThunk = createAsyncThunk<
     body: JSON.stringify({
       title,
       text,
-      ...(authorId ? { authorId } : {}),
-      login: (state as AppStateLike)?.user?.data?.login ?? '',
+      authorId,
     }),
   });
 
@@ -118,16 +91,19 @@ export const fetchTopicCommentsThunk = createAsyncThunk<
 
 export const createCommentThunk = createAsyncThunk<
   { topicId: number; message: ITopicComment },
-  { topicId: number; text: string; replyToCommentId?: number | null },
+  {
+    topicId: number;
+    text: string;
+    authorId: number;
+    replyToCommentId?: number | null;
+  },
   { state: unknown }
 >(
   'forum/createComment',
   async (
-    { topicId, text, replyToCommentId = null },
-    { getState, dispatch }
+    { topicId, text, authorId, replyToCommentId = null },
+    { dispatch }
   ) => {
-    const authorId = resolveAuthorIdFromState(getState());
-
     const response = await fetch(URL_FORUM_TOPIC_COMMENT(topicId), {
       method: 'POST',
       credentials: 'include',
@@ -136,7 +112,7 @@ export const createCommentThunk = createAsyncThunk<
         topicId,
         text,
         replyToCommentId,
-        ...(authorId ? { authorId } : {}),
+        authorId,
       }),
     });
 
@@ -176,6 +152,7 @@ const forumSlice = createSlice({
       });
   },
 });
+
 export const selectTopics = (state: RootState) => state.forum.topics;
 export const selectTopic = (state: RootState): ITopicDetails | null =>
   state.forum.topic;

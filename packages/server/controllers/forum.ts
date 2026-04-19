@@ -6,20 +6,9 @@ import { TextValidation } from '../utils/validation';
 import { escapeHTML } from '../utils/xss';
 import { CommentAssociationAlias } from '../models/comment';
 
-type AuthRequest = Request & {
-  user?: {
-    id?: number;
-  };
-};
-
 const toPositiveInt = (value: unknown, fallback: number): number => {
   const num = Number(value);
   return Number.isFinite(num) && num > 0 ? Math.floor(num) : fallback;
-};
-
-const toOptionalInt = (value: unknown): number | undefined => {
-  const num = Number(value);
-  return Number.isFinite(num) ? Math.floor(num) : undefined;
 };
 
 const toSearchString = (value: unknown): string => {
@@ -89,20 +78,11 @@ export const createTopic = catchAsync(
       authorId?: unknown;
     };
 
-    const authAuthorId = toOptionalInt((request as AuthRequest).user?.id);
-    const bodyAuthorId = toOptionalInt(authorId);
-    const resolvedAuthorId = authAuthorId ?? bodyAuthorId; // приоритет protect
-
     const user = await User.findOne({
       where: {
-        userId: resolvedAuthorId,
+        userId: authorId,
       },
     });
-
-    if (!resolvedAuthorId) {
-      response.status(401).json({ error: 'unauthorized' });
-      return;
-    }
 
     const normalizedTitle = typeof title === 'string' ? title.trim() : '';
     const normalizedText = typeof text === 'string' ? text.trim() : '';

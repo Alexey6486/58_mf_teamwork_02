@@ -3,10 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { Logo } from '../../components/Logo/Logo';
 import { Message } from '../../components/Message/Message';
-import {
-  BTN_CLASS,
-  FORM_PAGE_CONTAINER_CLASS,
-} from '../../constants/style-groups';
+import { FORM_PAGE_CONTAINER_CLASS } from '../../constants/style-groups';
 import { useDispatch, useSelector } from '../../store/store';
 import {
   createCommentThunk,
@@ -14,6 +11,7 @@ import {
   resetTopic,
   selectTopic,
 } from '../../slices/forum-slice';
+import { selectUser } from '../../slices/user-slice';
 import { type PageInitArgs, ROUTES } from '../../routes';
 import { IconButton } from '../../components/IconButton';
 import { EIconButton } from '../../enums';
@@ -32,6 +30,7 @@ export const TopicPage: FC = () => {
 
   const topicId = Number(id);
   const topic = useSelector(selectTopic);
+  const user = useSelector(selectUser);
 
   const [response, setResponse] = useState<ITopicComment | null>(null);
   const [text, setText] = useState('');
@@ -54,6 +53,7 @@ export const TopicPage: FC = () => {
         createCommentThunk({
           topicId,
           text: normalized,
+          authorId: Number(user?.id),
           ...(response && { replyToCommentId: response.id }),
         })
       ).unwrap();
@@ -124,10 +124,10 @@ export const TopicPage: FC = () => {
               hoverName={'На страницу форума'}
             />
           </div>
-          <div className="mt-4 h-[700px] rounded-[10px] bg-white p-6 flex flex-col gap-[10px]">
+          <div className="mt-4 h-[700px] rounded-[10px] bg-white p-6 flex flex-col gap-[10px] bg-white dark:bg-form-dark">
             {topic && (
               <>
-                <div className="flex justify-between -mt-4 border-b">
+                <div className="flex justify-between -mt-4 border-b dark:text-white">
                   <span className="text-sm">
                     автор: {topic?.User?.login ?? ''}
                   </span>
@@ -135,17 +135,17 @@ export const TopicPage: FC = () => {
                     создано: {formatDate(topic?.createdAt ?? '')}
                   </span>
                 </div>
-                <div>
+                <div className="dark:text-white">
                   <p>Тема:</p>
                   <h3 className="text-2xl font-semibold">
                     {topic?.title || 'Топик не найден'}
                   </h3>
                 </div>
-                <div>
+                <div className="dark:text-white">
                   <p>Сообщение:</p>
                   <span className="font-medium">{topic?.text ?? ''}</span>
                 </div>
-                <div>
+                <div className="dark:text-white">
                   <p className="mb-2">Комментарии:</p>
                   <div className="overflow-y-auto custom-scroll h-[480px]">
                     {isArray(topic?.comments, true)

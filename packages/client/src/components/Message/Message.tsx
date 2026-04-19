@@ -17,7 +17,7 @@ export const Message: FC<MessageProps> = ({ message, onResponse }) => {
   };
 
   return (
-    <div className="border-2 border-[#F7EED2] rounded-[10px] py-1.5 px-2.5 mb-2">
+    <div className="border-2 border-[#F7EED2] rounded-[10px] py-1.5 px-2.5 mb-2 dark:bg-form-dark">
       <div className="flex justify-between border-b">
         <span className="text-sm">автор: {User?.login ?? ''}</span>
         <span className="text-sm">создано: {formatDate(createdAt ?? '')}</span>

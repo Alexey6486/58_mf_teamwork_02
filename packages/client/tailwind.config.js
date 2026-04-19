@@ -14,6 +14,7 @@ export default {
       fill: {
         'path-light': 'rgb(30, 41, 59)',
         'path-dark': 'rgb(248, 250, 252)',
+        'path-blue': '#7cbdff',
       },
       borderColor: {
         'btn-light': 'rgb(3, 105, 161)',
