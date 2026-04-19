@@ -9,21 +9,28 @@ import {
 } from '../../constants/style-groups';
 import { type PageInitArgs, ROUTES } from '../../routes';
 import { useDispatch, useSelector } from '../../store/store';
-import {
-  createTopicThunk,
-  fetchTopicsThunk,
-} from '../../slices/forum-slice';
+import { createTopicThunk, fetchTopicsThunk } from '../../slices/forum-slice';
 import { IconButton } from '../../components/IconButton';
 import { EIconButton } from '../../enums';
+
+const getErrorMessage = (error: unknown, fallback: string) => {
+  if (error instanceof Error && error.message) return error.message;
+  return fallback;
+};
 
 export const ForumPage: FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const topics = useSelector(state => state.forum.topics);
+  const topicTextByTopicId = useSelector(
+    state => state.forum.topicTextByTopicId
+  );
 
   const [isAddingTopic, setIsAddingTopic] = useState(false);
   const [newTopicTitle, setNewTopicTitle] = useState('');
   const [newTopicText, setNewTopicText] = useState('');
+  const [isCreatingTopic, setIsCreatingTopic] = useState(false);
+  const [createError, setCreateError] = useState<string | null>(null);
 
   useEffect(() => {
     void dispatch(fetchTopicsThunk());
@@ -34,19 +41,29 @@ export const ForumPage: FC = () => {
     setIsAddingTopic(false);
     setNewTopicTitle('');
     setNewTopicText('');
+    setCreateError(null);
   };
   const handleDone = async () => {
     const title = newTopicTitle.trim();
     const text = newTopicText.trim();
-    if (!title || !text) return;
+
+    if (!title || !text) {
+      setCreateError('Заполните название и текст топика');
+      return;
+    }
+
+    setCreateError(null);
+    setIsCreatingTopic(true);
 
     try {
       await dispatch(createTopicThunk({ title, text })).unwrap();
       setNewTopicTitle('');
       setNewTopicText('');
       setIsAddingTopic(false);
-    } catch {
-      // ...optional ui error handling...
+    } catch (error) {
+      setCreateError(getErrorMessage(error, 'Не удалось создать топик'));
+    } finally {
+      setIsCreatingTopic(false);
     }
   };
 
@@ -92,6 +109,7 @@ export const ForumPage: FC = () => {
                     placeholder="Введите название топика"
                     value={newTopicTitle}
                     onChange={e => setNewTopicTitle(e.target.value)}
+                    disabled={isCreatingTopic}
                   />
                   <input
                     type="text"
@@ -99,26 +117,35 @@ export const ForumPage: FC = () => {
                     placeholder="Введите текст топика"
                     value={newTopicText}
                     onChange={e => setNewTopicText(e.target.value)}
+                    disabled={isCreatingTopic}
                   />
                 </div>
                 <button
                   className={`${BTN_CLASS} !mb-0 flex items-center justify-center max-w-[100px]`}
-                  onClick={handleDone}>
-                  Готово
+                  onClick={handleDone}
+                  disabled={isCreatingTopic}>
+                  {isCreatingTopic ? 'Создание...' : 'Готово'}
                 </button>
                 <button
                   className={`${BTN_CLASS} !mb-0 flex items-center justify-center max-w-[100px]`}
-                  onClick={handleCancel}>
+                  onClick={handleCancel}
+                  disabled={isCreatingTopic}>
                   Отмена
                 </button>
               </div>
             )}
           </div>
+
+          {createError ? (
+            <p className="mt-2 text-sm text-red-600">{createError}</p>
+          ) : null}
+
           <div className="mt-4 max-h-[650px] overflow-y-auto overflow-x-hidden rounded-[10px] bg-white custom-scroll p-6 flex flex-col gap-[10px]">
             {topics.map(topic => (
               <Topic
                 key={topic.id}
                 topic={topic}
+                subtitle={topicTextByTopicId[topic.id] ?? ''}
                 onClick={() => handleTopicClick(topic.id)}
               />
             ))}
@@ -130,7 +157,7 @@ export const ForumPage: FC = () => {
 };
 
 export const initForumPage = async (args: PageInitArgs) => {
-  await (args as { store?: { dispatch?: (action: unknown) => Promise<unknown> } })
-    ?.store
-    ?.dispatch?.(fetchTopicsThunk());
+  await (
+    args as { store?: { dispatch?: (action: unknown) => Promise<unknown> } }
+  )?.store?.dispatch?.(fetchTopicsThunk());
 };
