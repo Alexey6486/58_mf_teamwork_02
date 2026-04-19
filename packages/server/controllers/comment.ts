@@ -45,6 +45,17 @@ export const getAllComments = catchAsync(
               model: Reaction,
               attributes: ['id', 'text', 'authorId', 'topicId', 'commentId'],
             },
+            {
+              model: Comment,
+              attributes: ['id', 'text', 'authorId', 'createdAt'],
+              as: 'repliedToComment',
+              include: [
+                {
+                  model: User,
+                  attributes: ['id', 'userId', 'login'],
+                },
+              ],
+            },
           ],
         },
       ],

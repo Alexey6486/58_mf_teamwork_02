@@ -16,6 +16,7 @@ export interface ITopicComment {
   authorId: number;
   text: string;
   replyToCommentId: number | null;
+  repliedToComment: ITopicComment | null;
   createdAt: string;
   updatedAt: string;
   User: IServerUser;

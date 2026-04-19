@@ -38,6 +38,7 @@ export default {
         'main-blue': '#0369a1',
         'main-black': '#3f3f46',
         'main-white': '#FFF',
+        'main-light': '#F5F5F5',
         'main-red-light': '#ef4444',
         'main-red-dark': '#f87171',
       },

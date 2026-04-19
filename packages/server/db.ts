@@ -99,10 +99,12 @@ Comment.belongsTo(User, {
 
 Comment.hasMany(Comment, {
   foreignKey: 'replyToCommentId',
+  as: 'replies',
   onDelete: 'CASCADE',
 });
 Comment.belongsTo(Comment, {
   foreignKey: 'replyToCommentId',
+  as: 'repliedToComment',
   onDelete: 'CASCADE',
 });
 

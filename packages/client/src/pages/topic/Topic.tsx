@@ -17,7 +17,8 @@ import {
 import { type PageInitArgs, ROUTES } from '../../routes';
 import { IconButton } from '../../components/IconButton';
 import { EIconButton } from '../../enums';
-import { formatDate } from '../../utils/formatDate';
+import { formatDate, isArray } from '../../utils';
+import { type ITopicComment } from '../../types';
 
 export const TopicPage: FC = () => {
   const navigate = useNavigate();
@@ -26,8 +27,8 @@ export const TopicPage: FC = () => {
 
   const topicId = Number(id);
   const topic = useSelector(selectTopic);
-  console.log({ topic });
 
+  const [response, setResponse] = useState<ITopicComment | null>(null);
   const [text, setText] = useState('');
 
   const handleSend = async () => {
@@ -37,8 +38,15 @@ export const TopicPage: FC = () => {
 
     try {
       await dispatch(
-        createCommentThunk({ topicId, text: normalized })
+        createCommentThunk({
+          topicId,
+          text: normalized,
+          ...(response && { replyToCommentId: response.id }),
+        })
       ).unwrap();
+      if (response) {
+        setResponse(null);
+      }
       setText('');
     } catch {
       // ...optional ui error handling...
@@ -47,6 +55,14 @@ export const TopicPage: FC = () => {
 
   const toForum = () => {
     navigate(ROUTES.forum);
+  };
+
+  const onCommentResponse = (comment: ITopicComment) => {
+    setResponse(comment);
+  };
+
+  const onCancelResponse = () => {
+    setResponse(null);
   };
 
   useEffect(() => {
@@ -78,10 +94,10 @@ export const TopicPage: FC = () => {
               hoverName={'На страницу форума'}
             />
           </div>
-          <div className="mt-4 h-[500px] overflow-y-auto rounded-[10px] bg-white custom-scroll p-6 flex flex-col gap-[10px]">
+          <div className="mt-4 h-[700px] rounded-[10px] bg-white p-6 flex flex-col gap-[10px]">
             {topic && (
               <>
-                <div className="flex justify-between -mt-4">
+                <div className="flex justify-between -mt-4 border-b">
                   <span className="text-sm">
                     автор: {topic?.User?.login ?? ''}
                   </span>
@@ -90,39 +106,68 @@ export const TopicPage: FC = () => {
                   </span>
                 </div>
                 <div>
-                  <p className="mb-2">Тема:</p>
-                  <h3 className="text-2xl font-bold">
+                  <p>Тема:</p>
+                  <h3 className="text-2xl font-semibold">
                     {topic?.title || 'Топик не найден'}
                   </h3>
                 </div>
                 <div>
-                  <p className="mb-2">Сообщение:</p>
-                  <span>{topic?.text ?? ''}</span>
+                  <p>Сообщение:</p>
+                  <span className="font-medium">{topic?.text ?? ''}</span>
                 </div>
                 <div>
                   <p className="mb-2">Комментарии:</p>
-                  <div>
-                    {Array.isArray(topic?.comments)
-                      ? topic?.comments?.map?.(comment => (
-                          <Message key={comment.id} message={comment} />
+                  <div className="overflow-y-auto custom-scroll h-[480px]">
+                    {isArray(topic?.comments, true)
+                      ? topic?.comments?.map?.((comment: ITopicComment) => (
+                          <Message
+                            key={comment.id}
+                            message={comment}
+                            onResponse={onCommentResponse}
+                          />
                         ))
-                      : ''}
+                      : 'Пока никто не ответил...'}
                   </div>
                 </div>
               </>
             )}
           </div>
-          <div className="mt-4 flex gap-3">
-            <input
-              type="text"
-              className="flex-1 text-main-black p-3 shadow-inset-light dark:bg-input-dark dark:shadow-inset-dark rounded-main-radius"
-              placeholder="Введите сообщение"
-              value={text}
-              onChange={e => setText(e.target.value)}
-            />
-            <button className={`${BTN_CLASS} !mb-0`} onClick={handleSend}>
-              Отправить
-            </button>
+          <div className="mt-4 flex gap-3 w-full">
+            <div className="w-full flex flex-col p-2 text-main-black bg-white dark:bg-input-dark shadow-inset-light dark:shadow-inset-dark rounded-main-radius overflow-hidden">
+              {response && (
+                <div className="relative mb-2 p-2 bg-input-dark rounded-main-radius dark:bg-main-dark dark:text-main-light truncate">
+                  <div>
+                    <div className="absolute top-1 right-1">
+                      <IconButton
+                        iconName={EIconButton.CROSS}
+                        hoverName="Отмена ответа"
+                        onClick={onCancelResponse}
+                      />
+                    </div>
+                    <div className="border-b mb-2 text-sm">
+                      Ответ на комментарий:
+                    </div>
+                    <div className="w-full truncate">{response.text}</div>
+                  </div>
+                </div>
+              )}
+              <div className="flex align-end">
+                <input
+                  type="text"
+                  className="flex-1 text-main-black p-3 dark:bg-input-dark"
+                  placeholder="Введите сообщение"
+                  value={text}
+                  onChange={e => setText(e.target.value)}
+                />
+                <div className="mx-2 h-[48px] flex align-center">
+                  <IconButton
+                    iconName={EIconButton.SEND}
+                    onClick={handleSend}
+                    hoverName="Отправить"
+                  />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
