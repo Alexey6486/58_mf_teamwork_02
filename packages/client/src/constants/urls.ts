@@ -24,4 +24,10 @@ export const SERVER_URI =
   (typeof __EXTERNAL_SERVER_URL__ !== 'undefined'
     ? __EXTERNAL_SERVER_URL__
     : 'http://localhost:3001') + '/api/v1';
+export const URL_FORUM_TOPICS = `${SERVER_URI}/forum/topics`;
+export const URL_FORUM_TOPIC = `${SERVER_URI}/forum/topic`;
+export const URL_FORUM_TOPIC_COMMENTS = (topicId: number | string) =>
+  `${SERVER_URI}/forum/topic/${topicId}/comments`;
+export const URL_FORUM_TOPIC_COMMENT = (topicId: number | string) =>
+  `${SERVER_URI}/forum/topic/${topicId}/comment`;
 export const URL_THEME = '/theme';

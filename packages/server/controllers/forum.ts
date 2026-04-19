@@ -5,63 +5,89 @@ import { catchAsync } from '../utils/catchAsync';
 import { TextValidation } from '../utils/validation';
 import { escapeHTML } from '../utils/xss';
 
+type AuthRequest = Request & {
+  user?: {
+    id?: number;
+  };
+};
+
+const toPositiveInt = (value: unknown, fallback: number): number => {
+  const num = Number(value);
+  return Number.isFinite(num) && num > 0 ? Math.floor(num) : fallback;
+};
+
+const toOptionalInt = (value: unknown): number | undefined => {
+  const num = Number(value);
+  return Number.isFinite(num) ? Math.floor(num) : undefined;
+};
+
+const toSearchString = (value: unknown): string => {
+  return typeof value === 'string' ? value.trim() : '';
+};
+
 export const getAllTopics = catchAsync(
   async (request: Request, response: Response) => {
-    const { page = 1, size = 10, search = '' } = request.query;
+    const pageNum = toPositiveInt(request.query.page, 1);
+    const sizeNum = toPositiveInt(request.query.size, 10);
+    const search = toSearchString(request.query.search);
 
     const whereCondition = search
-      ? {
-          title: { [Op.iLike]: `%${search}%` }, // поиск без учёта регистра
-        }
+      ? { title: { [Op.iLike]: `%${search}%` } }
       : {};
 
-    const limit = Number(size);
-    const offset = Number(page);
     const topics = await Topic.findAll({
-      limit: limit > 0 ? limit : 10,
-      offset: (offset > 0 ? offset - 1 : 1) * limit,
+      limit: sizeNum,
+      offset: (pageNum - 1) * sizeNum,
       order: [['createdAt', 'DESC']],
       where: whereCondition,
     });
 
     const total = await Topic.count({ where: whereCondition });
 
-    response //.set(getHeaders) не нужны, т.к. установлены глобально в index.ts app.use(cors...
-      .status(200)
-      .json({
-        status: 'success',
-        total: topics.length,
-        pages: Math.ceil(total / (size as number)),
-        hasNext: (size as number) * (size as number) < total,
-        hasPrev: page > 1,
-        data: {
-          topics,
-        },
-      });
+    response.status(200).json({
+      status: 'success',
+      total,
+      pages: Math.ceil(total / sizeNum),
+      hasNext: pageNum * sizeNum < total,
+      hasPrev: pageNum > 1,
+      data: { topics },
+    });
   }
 );
 
 export const createTopic = catchAsync(
   async (request: Request, response: Response) => {
-    const { title, text, authorId } = request.body;
+    const { title, text, authorId } = request.body as {
+      title?: unknown;
+      text?: unknown;
+      authorId?: unknown;
+    };
 
-    if (TextValidation(title) && TextValidation(text)) {
+    const authAuthorId = toOptionalInt((request as AuthRequest).user?.id);
+    const bodyAuthorId = toOptionalInt(authorId);
+    const resolvedAuthorId = authAuthorId ?? bodyAuthorId; // приоритет protect
+
+    if (!resolvedAuthorId) {
+      response.status(401).json({ error: 'unauthorized' });
+      return;
+    }
+
+    const normalizedTitle = typeof title === 'string' ? title.trim() : '';
+    const normalizedText = typeof text === 'string' ? text.trim() : '';
+
+    if (TextValidation(normalizedTitle) && TextValidation(normalizedText)) {
       const topic = await Topic.create({
-        title: escapeHTML(title),
-        text: escapeHTML(text),
-        authorId,
+        title: escapeHTML(normalizedTitle),
+        text: escapeHTML(normalizedText),
+        authorId: resolvedAuthorId,
       });
 
       response.status(200).json({
         status: 'success',
-        data: {
-          topic,
-        },
+        data: { topic },
       });
     } else {
-      response.status(400).json({
-        error: 'wrong data type',
-      });
+      response.status(400).json({ error: 'wrong data type' });
     }
   }
 );

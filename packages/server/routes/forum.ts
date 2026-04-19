@@ -11,22 +11,13 @@ const routerForum = express.Router();
 
 routerForum.route('/topics').get(getAllTopics);
 
-routerForum
-  .route('/topic')
-  .post(createTopic)
-  .delete(deleteTopic);
+routerForum.route('/topic').post(createTopic).delete(deleteTopic);
 
-routerForum
-  .route('/topic/:topicId/comments')
-  .get(getAllComments);
+routerForum.route('/topic/:topicId/comments').get(getAllComments);
 
-routerForum
-  .route('/topic/:topicId/comment')
-  .post(createComment);
+routerForum.route('/topic/:topicId/comment').post(createComment);
 
-routerForum
-  .route('/topic/:topicId/comment/:commentId/reply')
-  .post(createReply);
+routerForum.route('/topic/:topicId/comment/:commentId/reply').post(createReply);
 
 routerForum
   .route('/topic/:topicId/comment/:commentId/reaction')
