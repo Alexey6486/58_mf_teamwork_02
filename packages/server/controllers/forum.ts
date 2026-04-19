@@ -1,24 +1,14 @@
 import type { Response, Request } from 'express';
-import { Op } from 'sequelize';
-import { Topic } from '../db';
+import { Op, Sequelize } from 'sequelize';
+import { Comment, Topic, User } from '../db';
 import { catchAsync } from '../utils/catchAsync';
 import { TextValidation } from '../utils/validation';
 import { escapeHTML } from '../utils/xss';
-
-type AuthRequest = Request & {
-  user?: {
-    id?: number;
-  };
-};
+import { CommentAssociationAlias } from '../models/comment';
 
 const toPositiveInt = (value: unknown, fallback: number): number => {
   const num = Number(value);
   return Number.isFinite(num) && num > 0 ? Math.floor(num) : fallback;
-};
-
-const toOptionalInt = (value: unknown): number | undefined => {
-  const num = Number(value);
-  return Number.isFinite(num) ? Math.floor(num) : undefined;
 };
 
 const toSearchString = (value: unknown): string => {
@@ -39,7 +29,32 @@ export const getAllTopics = catchAsync(
       limit: sizeNum,
       offset: (pageNum - 1) * sizeNum,
       order: [['createdAt', 'DESC']],
+      group: ['Topic.id', 'User.id'],
+      include: [
+        {
+          model: Comment,
+          as: CommentAssociationAlias,
+          attributes: [], // Don't fetch comment details
+          required: false, // LEFT JOIN - включаем темы без комментариев
+        },
+        {
+          model: User,
+          attributes: ['id', 'userId', 'login'],
+        },
+      ],
+      attributes: [
+        'id',
+        'title',
+        'text',
+        'authorId',
+        'createdAt',
+        [
+          Sequelize.fn('COUNT', Sequelize.col(`${CommentAssociationAlias}.id`)),
+          'commentCount',
+        ],
+      ],
       where: whereCondition,
+      subQuery: false,
     });
 
     const total = await Topic.count({ where: whereCondition });
@@ -63,14 +78,11 @@ export const createTopic = catchAsync(
       authorId?: unknown;
     };
 
-    const authAuthorId = toOptionalInt((request as AuthRequest).user?.id);
-    const bodyAuthorId = toOptionalInt(authorId);
-    const resolvedAuthorId = authAuthorId ?? bodyAuthorId; // приоритет protect
-
-    if (!resolvedAuthorId) {
-      response.status(401).json({ error: 'unauthorized' });
-      return;
-    }
+    const user = await User.findOne({
+      where: {
+        userId: authorId,
+      },
+    });
 
     const normalizedTitle = typeof title === 'string' ? title.trim() : '';
     const normalizedText = typeof text === 'string' ? text.trim() : '';
@@ -79,7 +91,7 @@ export const createTopic = catchAsync(
       const topic = await Topic.create({
         title: escapeHTML(normalizedTitle),
         text: escapeHTML(normalizedText),
-        authorId: resolvedAuthorId,
+        authorId: user?.dataValues?.id,
       });
 
       response.status(200).json({

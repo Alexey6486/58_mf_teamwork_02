@@ -10,3 +10,4 @@ export type {
 export type { TNullable, TSortDirection } from './common';
 export type { IAuthorizationForm } from './authorization';
 export type { ILeaderboard } from './leaderboard';
+export type { ITopic, ITopicDetails, ITopicComment } from './forum';

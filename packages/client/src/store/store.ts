@@ -46,6 +46,8 @@ export const store = configureStore({
 listenerMiddleware.startListening({
   predicate: action => {
     return (
+      action.type === 'auth/oauthGetServiceId/fulfilled' ||
+      action.type === 'auth/oauthYandex/fulfilled' ||
       action.type === 'auth/loginThunk/fulfilled' ||
       action.type === 'auth/signupThunk/fulfilled'
     );
@@ -53,7 +55,9 @@ listenerMiddleware.startListening({
   effect: async (action, listenerApi) => {
     try {
       const user = await listenerApi.dispatch(fetchUserThunk()).unwrap();
-      await listenerApi.dispatch(fetchUserTheme({ userId: user.id }));
+      await listenerApi.dispatch(
+        fetchUserTheme({ userId: user.id, login: user.login })
+      );
     } catch (error) {
       console.error('Failed to fetch user data:', error);
     }

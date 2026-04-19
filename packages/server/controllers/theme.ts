@@ -5,7 +5,7 @@ import { TTheme } from '../models/user';
 
 export const getTheme = catchAsync(
   async (request: Request, response: Response) => {
-    const { userId } = request.body;
+    const { userId, login } = request.body;
 
     const user = await User.findOne({
       attributes: ['theme'],
@@ -16,6 +16,7 @@ export const getTheme = catchAsync(
       const [data] = await User.upsert(
         {
           userId: parseInt(userId),
+          login,
           theme: TTheme.light,
         },
         { returning: true }

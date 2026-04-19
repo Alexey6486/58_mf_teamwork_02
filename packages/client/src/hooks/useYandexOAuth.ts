@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import type { AppDispatch } from '../store/store';
 import { oauthGetServiceIdThunk, oauthYandexThunk } from '../slices/auth-slice';
-import { fetchUserThunk } from '../slices/user-slice';
 import { OAUTH_REDIRECT_URI, OAUTH_YANDEX_URL } from '../constants/urls';
 
 export function useYandexOAuth() {
@@ -12,9 +11,7 @@ export function useYandexOAuth() {
     const code = new URLSearchParams(window.location.search).get('code');
     if (code) {
       window.history.replaceState({}, '', window.location.pathname);
-      dispatch(oauthYandexThunk({ code })).then(() => {
-        dispatch(fetchUserThunk());
-      });
+      dispatch(oauthYandexThunk({ code }));
     }
   }, []);
 

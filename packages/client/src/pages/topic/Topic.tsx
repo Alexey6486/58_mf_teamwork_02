@@ -1,20 +1,22 @@
-import { type FC, useEffect, useMemo, useState } from 'react';
+import { type FC, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { Logo } from '../../components/Logo/Logo';
 import { Message } from '../../components/Message/Message';
-import {
-  BTN_CLASS,
-  FORM_PAGE_CONTAINER_CLASS,
-} from '../../constants/style-groups';
+import { FORM_PAGE_CONTAINER_CLASS } from '../../constants/style-groups';
 import { useDispatch, useSelector } from '../../store/store';
 import {
   createCommentThunk,
   fetchTopicCommentsThunk,
+  resetTopic,
+  selectTopic,
 } from '../../slices/forum-slice';
+import { selectUser } from '../../slices/user-slice';
 import { type PageInitArgs, ROUTES } from '../../routes';
 import { IconButton } from '../../components/IconButton';
 import { EIconButton } from '../../enums';
+import { formatDate, isArray } from '../../utils';
+import { type ITopicComment } from '../../types';
 
 const getErrorMessage = (error: unknown, fallback: string) => {
   if (error instanceof Error && error.message) return error.message;
@@ -27,30 +29,59 @@ export const TopicPage: FC = () => {
   const { id } = useParams();
 
   const topicId = Number(id);
-  const topic = useSelector(state =>
-    state.forum.topics.find(t => t.id === topicId)
-  );
-  const messages = useSelector(
-    state => state.forum.messagesByTopicId[topicId] ?? []
-  );
-  const subtitle = useSelector(
-    state => state.forum.topicTextByTopicId[topicId] ?? ''
-  );
+  const topic = useSelector(selectTopic);
+  const user = useSelector(selectUser);
 
+  const [response, setResponse] = useState<ITopicComment | null>(null);
   const [text, setText] = useState('');
   const [isLoadingTopic, setIsLoadingTopic] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [sendError, setSendError] = useState<string | null>(null);
 
-  const title = useMemo(() => {
-    if (!Number.isFinite(topicId)) return 'Топик не найден';
-    return topic?.title ?? 'Топик не найден';
-  }, [topic?.title, topicId]);
+  const handleSend = async () => {
+    if (!Number.isFinite(topicId) || isSending) return;
+
+    const normalized = text.trim();
+    if (!normalized) return;
+
+    setSendError(null);
+    setIsSending(true);
+
+    try {
+      await dispatch(
+        createCommentThunk({
+          topicId,
+          text: normalized,
+          authorId: Number(user?.id),
+          ...(response && { replyToCommentId: response.id }),
+        })
+      ).unwrap();
+      if (response) {
+        setResponse(null);
+      }
+      setText('');
+    } catch (error) {
+      setSendError(getErrorMessage(error, 'Не удалось отправить комментарий'));
+    } finally {
+      setIsSending(false);
+    }
+  };
+
+  const toForum = () => {
+    navigate(ROUTES.forum);
+  };
+
+  const onCommentResponse = (comment: ITopicComment) => {
+    setResponse(comment);
+  };
+
+  const onCancelResponse = () => {
+    setResponse(null);
+  };
 
   useEffect(() => {
     if (!Number.isFinite(topicId)) return;
-
     const run = async () => {
       setIsLoadingTopic(true);
       setLoadError(null);
@@ -67,32 +98,11 @@ export const TopicPage: FC = () => {
     };
 
     void run();
+
+    return () => {
+      dispatch(resetTopic());
+    };
   }, [dispatch, topicId]);
-
-  const handleSend = async () => {
-    if (!Number.isFinite(topicId) || isSending) return;
-
-    const normalized = text.trim();
-    if (!normalized) return;
-
-    setSendError(null);
-    setIsSending(true);
-
-    try {
-      await dispatch(
-        createCommentThunk({ topicId, text: normalized })
-      ).unwrap();
-      setText('');
-    } catch (error) {
-      setSendError(getErrorMessage(error, 'Не удалось отправить комментарий'));
-    } finally {
-      setIsSending(false);
-    }
-  };
-
-  const toForum = () => {
-    navigate(ROUTES.forum);
-  };
 
   return (
     <>
@@ -114,13 +124,43 @@ export const TopicPage: FC = () => {
               hoverName={'На страницу форума'}
             />
           </div>
-          <div className="mt-4 h-[500px] overflow-y-auto rounded-[10px] bg-white custom-scroll p-6 flex flex-col gap-[10px]">
-            <h1 className="text-2xl font-bold text-center">
-              {title || 'Топик не найден'}
-            </h1>
-            <h2 className="text-center text-sm opacity-70 break-words">
-              {subtitle}
-            </h2>
+          <div className="mt-4 h-[700px] rounded-[10px] bg-white p-6 flex flex-col gap-[10px] bg-white dark:bg-form-dark">
+            {topic && (
+              <>
+                <div className="flex justify-between -mt-4 border-b dark:text-white">
+                  <span className="text-sm">
+                    автор: {topic?.User?.login ?? ''}
+                  </span>
+                  <span className="text-sm">
+                    создано: {formatDate(topic?.createdAt ?? '')}
+                  </span>
+                </div>
+                <div className="dark:text-white">
+                  <p>Тема:</p>
+                  <h3 className="text-2xl font-semibold">
+                    {topic?.title || 'Топик не найден'}
+                  </h3>
+                </div>
+                <div className="dark:text-white">
+                  <p>Сообщение:</p>
+                  <span className="font-medium">{topic?.text ?? ''}</span>
+                </div>
+                <div className="dark:text-white">
+                  <p className="mb-2">Комментарии:</p>
+                  <div className="overflow-y-auto custom-scroll h-[480px]">
+                    {isArray(topic?.comments, true)
+                      ? topic?.comments?.map?.((comment: ITopicComment) => (
+                          <Message
+                            key={comment.id}
+                            message={comment}
+                            onResponse={onCommentResponse}
+                          />
+                        ))
+                      : 'Пока никто не ответил...'}
+                  </div>
+                </div>
+              </>
+            )}
 
             {isLoadingTopic ? (
               <p className="text-center text-sm opacity-70">Загрузка...</p>
@@ -129,26 +169,44 @@ export const TopicPage: FC = () => {
             {loadError ? (
               <p className="text-center text-sm text-red-600">{loadError}</p>
             ) : null}
-
-            {messages.map(message => (
-              <Message key={message.id} message={message} />
-            ))}
           </div>
-          <div className="mt-4 flex gap-3">
-            <input
-              type="text"
-              className="flex-1 text-main-black p-3 shadow-inset-light dark:bg-input-dark dark:shadow-inset-dark rounded-main-radius"
-              placeholder="Введите сообщение"
-              value={text}
-              onChange={e => setText(e.target.value)}
-              disabled={isSending}
-            />
-            <button
-              className={`${BTN_CLASS} !mb-0`}
-              onClick={handleSend}
-              disabled={isSending}>
-              {isSending ? 'Отправка...' : 'Отправить'}
-            </button>
+          <div className="mt-4 flex gap-3 w-full">
+            <div className="w-full flex flex-col p-2 text-main-black bg-white dark:bg-input-dark shadow-inset-light dark:shadow-inset-dark rounded-main-radius overflow-hidden">
+              {response && (
+                <div className="relative mb-2 p-2 bg-input-dark rounded-main-radius dark:bg-main-dark dark:text-main-light truncate">
+                  <div>
+                    <div className="absolute top-1 right-1">
+                      <IconButton
+                        iconName={EIconButton.CROSS}
+                        hoverName="Отмена ответа"
+                        onClick={onCancelResponse}
+                      />
+                    </div>
+                    <div className="border-b mb-2 text-sm">
+                      Ответ на комментарий:
+                    </div>
+                    <div className="w-full truncate">{response.text}</div>
+                  </div>
+                </div>
+              )}
+              <div className="flex align-end">
+                <input
+                  type="text"
+                  className="flex-1 text-main-black p-3 dark:bg-input-dark"
+                  placeholder="Введите сообщение"
+                  value={text}
+                  onChange={e => setText(e.target.value)}
+                  disabled={isSending}
+                />
+                <div className="mx-2 h-[48px] flex align-center">
+                  <IconButton
+                    iconName={EIconButton.SEND}
+                    onClick={handleSend}
+                    hoverName="Отправить"
+                  />
+                </div>
+              </div>
+            </div>
           </div>
           {sendError ? (
             <p className="mt-2 text-sm text-red-600">{sendError}</p>

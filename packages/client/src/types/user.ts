@@ -28,7 +28,9 @@ export interface IRegistrationDto extends IUser {
 
 export interface IServerUser {
   userId: string;
+  login: string;
   theme?: ETheme;
+  id?: string;
 }
 
 export interface IServerUserTheme {

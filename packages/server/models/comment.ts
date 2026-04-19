@@ -3,6 +3,7 @@ import type { Model } from 'sequelize-typescript';
 import type { ModelAttributes } from 'sequelize';
 import { TopicTableName } from './topic';
 import { MAX_TEXT, MIN_TEXT } from '../constants/constrains';
+import { UserTableName } from './user';
 
 export interface IComment {
   id: number;
@@ -26,10 +27,6 @@ export const CommentAttributes: ModelAttributes<Model, IComment> = {
     primaryKey: true,
     autoIncrement: true,
   },
-  authorId: {
-    type: DataType.INTEGER,
-    allowNull: false,
-  },
   topicId: {
     type: DataType.INTEGER,
     allowNull: false,
@@ -38,6 +35,15 @@ export const CommentAttributes: ModelAttributes<Model, IComment> = {
       key: 'id',
     },
     onDelete: 'CASCADE', // при удалении топика, комментарий связанный с ним будет удален
+  },
+  authorId: {
+    type: DataType.INTEGER,
+    allowNull: false,
+    references: {
+      model: UserTableName,
+      key: 'id',
+    },
+    onDelete: 'CASCADE',
   },
   text: {
     type: DataType.STRING,

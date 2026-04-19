@@ -4,6 +4,7 @@ import type { ModelAttributes } from 'sequelize';
 import { CommentTableName } from './comment';
 import { TopicTableName } from './topic';
 import { REACTIONS } from '../constants/constrains';
+import { UserTableName } from './user';
 
 export interface IReaction {
   id: number;
@@ -27,15 +28,19 @@ export const ReactionAttributes: ModelAttributes<Model, IReaction> = {
     primaryKey: true,
     autoIncrement: true,
   },
-  authorId: {
-    type: DataType.INTEGER,
-    allowNull: false,
-  },
   text: {
     type: DataType.STRING,
     allowNull: false,
     validate: {
       isIn: [REACTIONS], // можно взять отсюда https://snipp.ru/handbk/emoji?ysclid=mnnix0kb9u274533936
+    },
+  },
+  authorId: {
+    type: DataType.INTEGER,
+    allowNull: false,
+    references: {
+      model: UserTableName,
+      key: 'id',
     },
   },
   topicId: {

@@ -7,6 +7,7 @@ import {
   MIN_TEXT,
   MIN_TITLE,
 } from '../constants/constrains';
+import { UserTableName } from './user';
 
 export interface ITopic {
   id: number;
@@ -20,6 +21,7 @@ export interface ITopic {
 
 export const TopicModelName = 'Topic';
 export const TopicTableName = 'topics';
+export const TopicAssociationAlias = 'topics';
 
 export const TopicAttributes: ModelAttributes<Model, ITopic> = {
   id: {
@@ -30,6 +32,10 @@ export const TopicAttributes: ModelAttributes<Model, ITopic> = {
   authorId: {
     type: DataType.INTEGER,
     allowNull: false,
+    references: {
+      model: UserTableName,
+      key: 'id',
+    },
   },
   title: {
     type: DataType.STRING(100),

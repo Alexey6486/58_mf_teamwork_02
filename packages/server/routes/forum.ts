@@ -1,10 +1,6 @@
 import express from 'express';
 import { getAllTopics, createTopic, deleteTopic } from '../controllers/forum';
-import {
-  getAllComments,
-  createComment,
-  createReply,
-} from '../controllers/comment';
+import { getAllComments, createComment } from '../controllers/comment';
 import { createReaction, deleteReaction } from '../controllers/reaction';
 
 const routerForum = express.Router();
@@ -16,8 +12,6 @@ routerForum.route('/topic').post(createTopic).delete(deleteTopic);
 routerForum.route('/topic/:topicId/comments').get(getAllComments);
 
 routerForum.route('/topic/:topicId/comment').post(createComment);
-
-routerForum.route('/topic/:topicId/comment/:commentId/reply').post(createReply);
 
 routerForum
   .route('/topic/:topicId/comment/:commentId/reaction')
