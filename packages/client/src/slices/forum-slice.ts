@@ -47,7 +47,13 @@ type AppStateLike = {
 
 const resolveAuthorIdFromState = (state: unknown): number | undefined => {
   const s = state as AppStateLike;
-  const candidates = [s?.user?.id, s?.user?.data?.id, s?.auth?.user?.id];
+  const candidates = [
+    s?.user?.data?.id,
+    s?.auth?.data?.id,
+    s?.user?.id,
+    s?.user?.user?.id,
+    s?.auth?.user?.id,
+  ];
   return candidates.find((id): id is number => Number.isFinite(id));
 };
 

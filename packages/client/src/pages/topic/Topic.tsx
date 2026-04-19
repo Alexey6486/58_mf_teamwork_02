@@ -20,6 +20,11 @@ import { EIconButton } from '../../enums';
 import { formatDate, isArray } from '../../utils';
 import { type ITopicComment } from '../../types';
 
+const getErrorMessage = (error: unknown, fallback: string) => {
+  if (error instanceof Error && error.message) return error.message;
+  return fallback;
+};
+
 export const TopicPage: FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -30,11 +35,19 @@ export const TopicPage: FC = () => {
 
   const [response, setResponse] = useState<ITopicComment | null>(null);
   const [text, setText] = useState('');
+  const [isLoadingTopic, setIsLoadingTopic] = useState(false);
+  const [isSending, setIsSending] = useState(false);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [sendError, setSendError] = useState<string | null>(null);
 
   const handleSend = async () => {
-    if (!Number.isFinite(topicId)) return;
+    if (!Number.isFinite(topicId) || isSending) return;
+
     const normalized = text.trim();
     if (!normalized) return;
+
+    setSendError(null);
+    setIsSending(true);
 
     try {
       await dispatch(
@@ -48,8 +61,10 @@ export const TopicPage: FC = () => {
         setResponse(null);
       }
       setText('');
-    } catch {
-      // ...optional ui error handling...
+    } catch (error) {
+      setSendError(getErrorMessage(error, 'Не удалось отправить комментарий'));
+    } finally {
+      setIsSending(false);
     }
   };
 
@@ -67,7 +82,22 @@ export const TopicPage: FC = () => {
 
   useEffect(() => {
     if (!Number.isFinite(topicId)) return;
-    dispatch(fetchTopicCommentsThunk(topicId));
+    const run = async () => {
+      setIsLoadingTopic(true);
+      setLoadError(null);
+
+      try {
+        await dispatch(fetchTopicCommentsThunk(topicId)).unwrap();
+      } catch (error) {
+        setLoadError(
+          getErrorMessage(error, 'Не удалось загрузить топик и комментарии')
+        );
+      } finally {
+        setIsLoadingTopic(false);
+      }
+    };
+
+    void run();
 
     return () => {
       dispatch(resetTopic());
@@ -131,6 +161,14 @@ export const TopicPage: FC = () => {
                 </div>
               </>
             )}
+
+            {isLoadingTopic ? (
+              <p className="text-center text-sm opacity-70">Загрузка...</p>
+            ) : null}
+
+            {loadError ? (
+              <p className="text-center text-sm text-red-600">{loadError}</p>
+            ) : null}
           </div>
           <div className="mt-4 flex gap-3 w-full">
             <div className="w-full flex flex-col p-2 text-main-black bg-white dark:bg-input-dark shadow-inset-light dark:shadow-inset-dark rounded-main-radius overflow-hidden">
@@ -158,6 +196,7 @@ export const TopicPage: FC = () => {
                   placeholder="Введите сообщение"
                   value={text}
                   onChange={e => setText(e.target.value)}
+                  disabled={isSending}
                 />
                 <div className="mx-2 h-[48px] flex align-center">
                   <IconButton
@@ -169,6 +208,9 @@ export const TopicPage: FC = () => {
               </div>
             </div>
           </div>
+          {sendError ? (
+            <p className="mt-2 text-sm text-red-600">{sendError}</p>
+          ) : null}
         </div>
       </div>
     </>

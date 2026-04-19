@@ -12,17 +12,28 @@ type AuthRequest = Request & {
   };
 };
 
+const toPositiveInt = (value: unknown, fallback: number): number => {
+  const num = Number(value);
+  return Number.isFinite(num) && num > 0 ? Math.floor(num) : fallback;
+};
+
+const toOptionalInt = (value: unknown): number | undefined => {
+  const num = Number(value);
+  return Number.isFinite(num) ? Math.floor(num) : undefined;
+};
+
+const toSearchString = (value: unknown): string => {
+  return typeof value === 'string' ? value.trim() : '';
+};
+
 export const getAllTopics = catchAsync(
   async (request: Request, response: Response) => {
-    const { page = 1, size = 10, search = '' } = request.query;
-
-    const pageNum = Math.max(1, Number(page) || 1);
-    const sizeNum = Math.max(1, Number(size) || 10);
+    const pageNum = toPositiveInt(request.query.page, 1);
+    const sizeNum = toPositiveInt(request.query.size, 10);
+    const search = toSearchString(request.query.search);
 
     const whereCondition = search
-      ? {
-          title: { [Op.iLike]: `%${search}%` }, // поиск без учёта регистра
-        }
+      ? { title: { [Op.iLike]: `%${search}%` } }
       : {};
 
     const topics = await Topic.findAll({
@@ -59,26 +70,28 @@ export const getAllTopics = catchAsync(
 
     const total = await Topic.count({ where: whereCondition });
 
-    response //.set(getHeaders) не нужны, т.к. установлены глобально в index.ts app.use(cors...
-      .status(200)
-      .json({
-        status: 'success',
-        total: topics.length,
-        pages: Math.ceil(total / sizeNum),
-        hasNext: pageNum * sizeNum < total,
-        hasPrev: pageNum > 1,
-        data: {
-          topics,
-        },
-      });
+    response.status(200).json({
+      status: 'success',
+      total,
+      pages: Math.ceil(total / sizeNum),
+      hasNext: pageNum * sizeNum < total,
+      hasPrev: pageNum > 1,
+      data: { topics },
+    });
   }
 );
 
 export const createTopic = catchAsync(
   async (request: Request, response: Response) => {
-    const { title, text, authorId } = request.body;
-    const authAuthorId = (request as AuthRequest).user?.id;
-    const resolvedAuthorId = authorId ?? authAuthorId;
+    const { title, text, authorId } = request.body as {
+      title?: unknown;
+      text?: unknown;
+      authorId?: unknown;
+    };
+
+    const authAuthorId = toOptionalInt((request as AuthRequest).user?.id);
+    const bodyAuthorId = toOptionalInt(authorId);
+    const resolvedAuthorId = authAuthorId ?? bodyAuthorId; // приоритет protect
 
     const user = await User.findOne({
       where: {
@@ -91,23 +104,22 @@ export const createTopic = catchAsync(
       return;
     }
 
-    if (TextValidation(title) && TextValidation(text)) {
+    const normalizedTitle = typeof title === 'string' ? title.trim() : '';
+    const normalizedText = typeof text === 'string' ? text.trim() : '';
+
+    if (TextValidation(normalizedTitle) && TextValidation(normalizedText)) {
       const topic = await Topic.create({
-        title: escapeHTML(title),
-        text: escapeHTML(text),
+        title: escapeHTML(normalizedTitle),
+        text: escapeHTML(normalizedText),
         authorId: user?.dataValues?.id,
       });
 
       response.status(200).json({
         status: 'success',
-        data: {
-          topic,
-        },
+        data: { topic },
       });
     } else {
-      response.status(400).json({
-        error: 'wrong data type',
-      });
+      response.status(400).json({ error: 'wrong data type' });
     }
   }
 );
