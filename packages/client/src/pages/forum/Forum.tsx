@@ -12,7 +12,6 @@ import { useDispatch, useSelector } from '../../store/store';
 import {
   createTopicThunk,
   fetchTopicsThunk,
-  selectTopic,
   selectTopics,
 } from '../../slices/forum-slice';
 import { selectUser } from '../../slices/user-slice';
@@ -28,7 +27,6 @@ export const ForumPage: FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const topics = useSelector(selectTopics);
-  const topic = useSelector(selectTopic);
   const user = useSelector(selectUser);
 
   const [isAddingTopic, setIsAddingTopic] = useState(false);
