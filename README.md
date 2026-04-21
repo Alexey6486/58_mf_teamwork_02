@@ -136,4 +136,4 @@ ___
 2.  Если карты в колоде закончились, колода перемешивается и игра продолжается.
 
 ### Ссылка на видео с рабочим приложением
-https://disk.yandex.ru/d/uSZmsduAGqCqMQ
+https://disk.yandex.ru/i/_txPe6Tsvrg-qA
