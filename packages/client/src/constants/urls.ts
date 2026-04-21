@@ -30,4 +30,8 @@ export const URL_FORUM_TOPIC_COMMENTS = (topicId: number | string) =>
   `${SERVER_URI}/forum/topic/${topicId}/comments`;
 export const URL_FORUM_TOPIC_COMMENT = (topicId: number | string) =>
   `${SERVER_URI}/forum/topic/${topicId}/comment`;
+export const URL_FORUM_TOPIC_COMMENT_REACTION = (
+  topicId: number | string,
+  commentId: number | string
+) => `${SERVER_URI}/forum/topic/${topicId}/comment/${commentId}/reaction`;
 export const URL_THEME = '/theme';

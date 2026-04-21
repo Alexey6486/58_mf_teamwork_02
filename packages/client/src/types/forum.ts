@@ -1,5 +1,14 @@
 import { type IServerUser } from './user';
 
+export interface IReaction {
+  id: number;
+  text: string;
+  authorId: number;
+  topicId: number;
+  commentId: number;
+  User?: IServerUser;
+}
+
 export interface ITopic {
   id: number;
   title: string;
@@ -20,7 +29,7 @@ export interface ITopicComment {
   createdAt: string;
   updatedAt: string;
   User: IServerUser;
-  Reactions: [];
+  Reactions: IReaction[];
 }
 
 export interface ITopicDetails {

@@ -1,5 +1,5 @@
 import type { Response, Request } from 'express';
-import { Comment, Topic, Reaction } from '../db';
+import { Comment, Topic, Reaction, User } from '../db';
 import { catchAsync } from '../utils/catchAsync';
 import { TextValidation } from '../utils/validation';
 import { escapeHTML } from '../utils/xss';
@@ -8,6 +8,15 @@ import { REACTIONS } from '../constants/constrains';
 export const createReaction = catchAsync(
   async (request: Request, response: Response) => {
     const { topicId, commentId, authorId, text, id } = request.body;
+
+    const user = await User.findOne({ where: { userId: authorId } });
+
+    if (!user) {
+      response.status(400).json({ error: 'user not found' });
+      return;
+    }
+
+    const foundUserId = user.dataValues.id;
 
     if (!id) {
       const targetTopic = await Topic.findByPk(topicId);
@@ -22,7 +31,7 @@ export const createReaction = catchAsync(
         const reaction = await Reaction.create({
           topicId,
           commentId,
-          authorId,
+          authorId: foundUserId,
           text: escapeHTML(text),
         });
 
@@ -43,7 +52,7 @@ export const createReaction = catchAsync(
       if (reaction) {
         // Обновляем запись
         const [updated] = await Reaction.update(
-          { topicId, commentId, authorId, text },
+          { topicId, commentId, authorId: foundUserId, text },
           {
             where: { id },
             returning: true,
