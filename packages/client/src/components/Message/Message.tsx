@@ -2,7 +2,7 @@ import { type FC, useState } from 'react';
 import { type ITopicComment } from '../../types';
 import { formatDate } from '../../utils';
 import { IconButton } from '../IconButton';
-import { EIconButton } from '../../enums';
+import { EIconButton, EReactions } from '../../enums';
 import { useDispatch, useSelector } from '../../store/store';
 import { selectUser } from '../../slices/user-slice';
 import {
@@ -36,9 +36,9 @@ export const Message: FC<MessageProps> = ({ message, onResponse }) => {
   );
 
   const thumbUpCount =
-    Reactions?.filter(r => r.text === 'thumb_up').length ?? 0;
+    Reactions?.filter(r => r.text === EReactions.TU).length ?? 0;
   const thumbDownCount =
-    Reactions?.filter(r => r.text === 'thumb_down').length ?? 0;
+    Reactions?.filter(r => r.text === EReactions.TD).length ?? 0;
 
   const handleReaction = async (reactionType: string) => {
     if (!user?.id || isReacting) return;
@@ -113,14 +113,14 @@ export const Message: FC<MessageProps> = ({ message, onResponse }) => {
             <IconButton
               iconName={EIconButton.THUMB_UP}
               hoverName="Понравилось"
-              onClick={() => handleReaction('thumb_up')}
+              onClick={() => handleReaction(EReactions.TU)}
               width="18"
-              styles={userReaction?.text === 'thumb_up' ? activeStyle : ''}
+              styles={userReaction?.text === EReactions.TU ? activeStyle : ''}
             />
             {thumbUpCount > 0 && (
               <span
                 className={`text-xs ${
-                  userReaction?.text === 'thumb_up'
+                  userReaction?.text === EReactions.TU
                     ? 'text-[#7cbdff]'
                     : 'dark:text-white'
                 }`}>
@@ -132,14 +132,14 @@ export const Message: FC<MessageProps> = ({ message, onResponse }) => {
             <IconButton
               iconName={EIconButton.THUMB_DOWN}
               hoverName="Не понравилось"
-              onClick={() => handleReaction('thumb_down')}
+              onClick={() => handleReaction(EReactions.TD)}
               width="18"
-              styles={userReaction?.text === 'thumb_down' ? activeStyle : ''}
+              styles={userReaction?.text === EReactions.TD ? activeStyle : ''}
             />
             {thumbDownCount > 0 && (
               <span
                 className={`text-xs ${
-                  userReaction?.text === 'thumb_down'
+                  userReaction?.text === EReactions.TD
                     ? 'text-[#7cbdff]'
                     : 'dark:text-white'
                 }`}>
