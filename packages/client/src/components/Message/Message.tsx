@@ -1,8 +1,14 @@
-import { type FC } from 'react';
+import { type FC, useState } from 'react';
 import { type ITopicComment } from '../../types';
 import { formatDate } from '../../utils';
 import { IconButton } from '../IconButton';
 import { EIconButton } from '../../enums';
+import { useDispatch, useSelector } from '../../store/store';
+import { selectUser } from '../../slices/user-slice';
+import {
+  createReactionThunk,
+  deleteReactionThunk,
+} from '../../slices/forum-slice';
 
 interface MessageProps {
   message: ITopicComment;
@@ -10,11 +16,76 @@ interface MessageProps {
 }
 
 export const Message: FC<MessageProps> = ({ message, onResponse }) => {
-  const { createdAt, User, text, repliedToComment, replyToCommentId } = message;
+  const dispatch = useDispatch();
+  const user = useSelector(selectUser);
+  const {
+    id,
+    topicId,
+    createdAt,
+    User,
+    text,
+    repliedToComment,
+    replyToCommentId,
+    Reactions,
+  } = message;
+
+  const [isReacting, setIsReacting] = useState(false);
+
+  const userReaction = Reactions?.find(
+    r => String(r.User?.userId) === String(user?.id)
+  );
+
+  const thumbUpCount =
+    Reactions?.filter(r => r.text === 'thumb_up').length ?? 0;
+  const thumbDownCount =
+    Reactions?.filter(r => r.text === 'thumb_down').length ?? 0;
+
+  const handleReaction = async (reactionType: string) => {
+    if (!user?.id || isReacting) return;
+
+    setIsReacting(true);
+
+    try {
+      if (userReaction) {
+        if (userReaction.text === reactionType) {
+          await dispatch(
+            deleteReactionThunk({
+              topicId,
+              commentId: id,
+              reactionId: userReaction.id,
+            })
+          ).unwrap();
+        } else {
+          await dispatch(
+            createReactionThunk({
+              topicId,
+              commentId: id,
+              authorId: Number(user.id),
+              text: reactionType,
+              id: userReaction.id,
+            })
+          ).unwrap();
+        }
+      } else {
+        await dispatch(
+          createReactionThunk({
+            topicId,
+            commentId: id,
+            authorId: Number(user.id),
+            text: reactionType,
+          })
+        ).unwrap();
+      }
+    } finally {
+      setIsReacting(false);
+    }
+  };
 
   const handleResponse = () => {
     onResponse(message);
   };
+
+  const activeStyle = '[&_path]:!fill-[#7cbdff]';
 
   return (
     <div className="border-2 border-[#F7EED2] rounded-[10px] py-1.5 px-2.5 mb-2 dark:bg-form-dark">
@@ -36,23 +107,45 @@ export const Message: FC<MessageProps> = ({ message, onResponse }) => {
         </div>
       )}
       <p className="py-2">{text}</p>
-      <div className="flex justify-between h-[24px] mt-2">
-        <div className="flex">
-          <div className="mr-2">
+      <div className="flex justify-between items-center mt-2">
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1">
             <IconButton
               iconName={EIconButton.THUMB_UP}
               hoverName="Понравилось"
-              onClick={() => null}
+              onClick={() => handleReaction('thumb_up')}
               width="18"
+              styles={userReaction?.text === 'thumb_up' ? activeStyle : ''}
             />
+            {thumbUpCount > 0 && (
+              <span
+                className={`text-xs ${
+                  userReaction?.text === 'thumb_up'
+                    ? 'text-[#7cbdff]'
+                    : 'dark:text-white'
+                }`}>
+                {thumbUpCount}
+              </span>
+            )}
           </div>
-          <div>
+          <div className="flex items-center gap-1">
             <IconButton
               iconName={EIconButton.THUMB_DOWN}
               hoverName="Не понравилось"
-              onClick={() => null}
+              onClick={() => handleReaction('thumb_down')}
               width="18"
+              styles={userReaction?.text === 'thumb_down' ? activeStyle : ''}
             />
+            {thumbDownCount > 0 && (
+              <span
+                className={`text-xs ${
+                  userReaction?.text === 'thumb_down'
+                    ? 'text-[#7cbdff]'
+                    : 'dark:text-white'
+                }`}>
+                {thumbDownCount}
+              </span>
+            )}
           </div>
         </div>
         <div>

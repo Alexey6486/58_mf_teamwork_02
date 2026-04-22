@@ -4,6 +4,7 @@ import {
   URL_FORUM_TOPIC,
   URL_FORUM_TOPIC_COMMENT,
   URL_FORUM_TOPIC_COMMENTS,
+  URL_FORUM_TOPIC_COMMENT_REACTION,
 } from '../constants/urls';
 import type { ITopic, ITopicDetails, ITopicComment } from '../types';
 import { type RootState } from '../store/store';
@@ -131,6 +132,64 @@ export const createCommentThunk = createAsyncThunk<
       topicId: Number(comment.topicId ?? topicId),
       message: comment as ITopicComment,
     };
+  }
+);
+
+export const createReactionThunk = createAsyncThunk<
+  void,
+  {
+    topicId: number;
+    commentId: number;
+    authorId: number;
+    text: string;
+    id?: number;
+  },
+  { state: unknown }
+>(
+  'forum/createReaction',
+  async ({ topicId, commentId, authorId, text, id }, { dispatch }) => {
+    const response = await fetch(
+      URL_FORUM_TOPIC_COMMENT_REACTION(topicId, commentId),
+      {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          topicId,
+          commentId,
+          authorId,
+          text,
+          ...(id !== undefined && { id }),
+        }),
+      }
+    );
+
+    if (!response.ok) throw new Error('Failed to create reaction');
+
+    await dispatch(fetchTopicCommentsThunk(topicId));
+  }
+);
+
+export const deleteReactionThunk = createAsyncThunk<
+  void,
+  { topicId: number; commentId: number; reactionId: number },
+  { state: unknown }
+>(
+  'forum/deleteReaction',
+  async ({ topicId, commentId, reactionId }, { dispatch }) => {
+    const response = await fetch(
+      URL_FORUM_TOPIC_COMMENT_REACTION(topicId, commentId),
+      {
+        method: 'DELETE',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: reactionId }),
+      }
+    );
+
+    if (!response.ok) throw new Error('Failed to delete reaction');
+
+    await dispatch(fetchTopicCommentsThunk(topicId));
   }
 );
 
