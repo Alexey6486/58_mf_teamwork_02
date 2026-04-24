@@ -10,6 +10,7 @@ import {
   SERVER_URI,
   URL_AVATAR,
   URL_BASE,
+  URL_LOGOUT,
   URL_PROFILE,
   URL_PSW,
   URL_THEME,
@@ -45,6 +46,7 @@ const initialState: UserState = {
 export const fetchUserThunk = thunkCreator<Partial<IUser>>(
   'user/fetchUserDataThunk',
   async _ => {
+    console.log('fetchUserThunk', { URL_BASE });
     return fetch(`${URL_BASE}${URL_USER_DATA}`, {
       method: ERequestMethods.GET,
       headers: {

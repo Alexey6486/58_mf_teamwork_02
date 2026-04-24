@@ -8,7 +8,7 @@ import { YP_BASE_URL, YP_COOKIE_AUTH, YP_COOKIE_UUID } from '../constants/api';
 export const signin = catchAsync(
   async (request: Request, response: Response) => {
     const { login, password } = request.body;
-
+    console.log('signin', { YP_BASE_URL, request });
     const yp_response = await fetch(`${YP_BASE_URL}/auth/signin`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -18,7 +18,7 @@ export const signin = catchAsync(
       }),
       credentials: 'include',
     });
-
+    console.log('yp_response', { yp_response });
     // Проверяем статус ответа
     if (!yp_response?.ok) {
       response.status(401).json({ error: 'Authentication failed' });
@@ -77,6 +77,7 @@ export const signin = catchAsync(
 
 export const signout = catchAsync(
   async (request: Request, response: Response) => {
+    console.log('signout !!!');
     await fetch(`${YP_BASE_URL}/auth/logout`, {
       method: 'POST',
       headers: {
