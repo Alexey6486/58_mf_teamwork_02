@@ -20,10 +20,16 @@ export const OAUTH_REDIRECT_URI =
   typeof window !== 'undefined' ? window.location.origin : '';
 export const OAUTH_YANDEX_URL = `https://oauth.yandex.ru/authorize`;
 export const URL_LEADERBOARD = `/leaderboard`;
-export const SERVER_URI =
+
+const isDev = process.env.NODE_ENV === 'development';
+export const SERVER_LOCAL =
   (typeof __EXTERNAL_SERVER_URL__ !== 'undefined'
     ? __EXTERNAL_SERVER_URL__
     : 'http://localhost:3001') + '/api/v1';
+export const SERVER_URI = isDev
+  ? SERVER_LOCAL
+  : 'http://46.243.211.198:3001/api/v1';
+
 export const URL_FORUM_TOPICS = `${SERVER_URI}/forum/topics`;
 export const URL_FORUM_TOPIC = `${SERVER_URI}/forum/topic`;
 export const URL_FORUM_TOPIC_COMMENTS = (topicId: number | string) =>
