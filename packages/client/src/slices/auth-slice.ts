@@ -38,6 +38,10 @@ const initialState: AuthState = {
 export const loginThunk = thunkCreator<string, IAuthorizationForm>(
   'auth/loginThunk',
   async authForm => {
+    console.log('loginThunk', {
+      SERVER_URI,
+      EXTERNAL_SERVER_URL: __EXTERNAL_SERVER_URL__,
+    });
     return fetch(`${SERVER_URI}${URL_LOGIN}`, {
       method: ERequestMethods.POST,
       headers: {
@@ -50,6 +54,11 @@ export const loginThunk = thunkCreator<string, IAuthorizationForm>(
 );
 
 export const logoutThunk = thunkCreator<string>('auth/logoutThunk', async _ => {
+  console.log('logoutThunk', {
+    SERVER_URI,
+    URL_BASE,
+    EXTERNAL_SERVER_URL: __EXTERNAL_SERVER_URL__,
+  });
   return fetch(`${URL_BASE}${URL_LOGOUT}`, {
     method: ERequestMethods.POST,
     headers: {
