@@ -77,7 +77,7 @@ export const signin = catchAsync(
 
 export const signout = catchAsync(
   async (request: Request, response: Response) => {
-    console.log('signout !!!');
+    console.log('signout', { YP_BASE_URL, request });
     await fetch(`${YP_BASE_URL}/auth/logout`, {
       method: 'POST',
       headers: {
