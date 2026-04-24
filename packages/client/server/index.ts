@@ -14,7 +14,7 @@ import { apiProxy } from './middlewares/api-proxy';
 
 // На системах линукс под порт 80 проект не запускается
 const port_linux = process.env.CREATE_SERVER_LINUX_PORT || 2000;
-const port_win = process.env.CREATE_SERVER_WIN_PORT || 80;
+const port_win = process.env.CREATE_SERVER_WIN_PORT || 3000;
 const platform = os?.platform() ?? undefined;
 
 const clientPath = path.join(__dirname, '..');
