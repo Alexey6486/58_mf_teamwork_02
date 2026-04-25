@@ -2,14 +2,12 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { IAuthorizationForm, IUser } from '../types';
 import { thunkCreator } from './thunk-creator';
 import {
-  URL_BASE,
   URL_LOGIN,
   URL_LOGOUT,
   URL_SIGNUP,
   URL_OAUTH_SERVICE_ID,
   URL_OAUTH_YANDEX,
   OAUTH_REDIRECT_URI,
-  SERVER_URI,
 } from '../constants/urls';
 import { ERequestMethods } from '../enums';
 import { type RootState } from '../store/store';
@@ -38,11 +36,7 @@ const initialState: AuthState = {
 export const loginThunk = thunkCreator<string, IAuthorizationForm>(
   'auth/loginThunk',
   async authForm => {
-    console.log('loginThunk', {
-      SERVER_URI,
-      EXTERNAL_SERVER_URL: __EXTERNAL_SERVER_URL__,
-    });
-    return fetch(`${SERVER_URI}${URL_LOGIN}`, {
+    return fetch(URL_LOGIN, {
       method: ERequestMethods.POST,
       headers: {
         'Content-Type': 'application/json',
@@ -54,12 +48,7 @@ export const loginThunk = thunkCreator<string, IAuthorizationForm>(
 );
 
 export const logoutThunk = thunkCreator<string>('auth/logoutThunk', async _ => {
-  console.log('logoutThunk', {
-    SERVER_URI,
-    URL_BASE,
-    EXTERNAL_SERVER_URL: __EXTERNAL_SERVER_URL__,
-  });
-  return fetch(`${URL_BASE}${URL_LOGOUT}`, {
+  return fetch(URL_LOGOUT, {
     method: ERequestMethods.POST,
     headers: {
       'Content-Type': 'application/json',
@@ -71,7 +60,7 @@ export const logoutThunk = thunkCreator<string>('auth/logoutThunk', async _ => {
 export const signupThunk = thunkCreator<string, Partial<IRegistrationDto>>(
   'auth/signupThunk',
   async regForm => {
-    return fetch(`${URL_BASE}${URL_SIGNUP}`, {
+    return fetch(URL_SIGNUP, {
       method: ERequestMethods.POST,
       headers: {
         'Content-Type': 'application/json',
@@ -85,19 +74,16 @@ export const signupThunk = thunkCreator<string, Partial<IRegistrationDto>>(
 export const oauthGetServiceIdThunk = thunkCreator<{ service_id: string }>(
   'auth/oauthGetServiceId',
   async _ => {
-    return fetch(
-      `${URL_BASE}${URL_OAUTH_SERVICE_ID}?redirect_uri=${OAUTH_REDIRECT_URI}`,
-      {
-        credentials: 'include' as RequestCredentials,
-      }
-    );
+    return fetch(`${URL_OAUTH_SERVICE_ID}?redirect_uri=${OAUTH_REDIRECT_URI}`, {
+      credentials: 'include' as RequestCredentials,
+    });
   }
 );
 
 export const oauthYandexThunk = thunkCreator<string, { code: string }>(
   'auth/oauthYandex',
   async ({ code }) => {
-    return fetch(`${URL_BASE}${URL_OAUTH_YANDEX}`, {
+    return fetch(URL_OAUTH_YANDEX, {
       method: ERequestMethods.POST,
       headers: {
         'Content-Type': 'application/json',

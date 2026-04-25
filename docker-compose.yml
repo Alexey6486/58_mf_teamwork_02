@@ -13,11 +13,12 @@ services:
       - server
     restart: always
     ports:
-      - "${CLIENT_PORT}:80"
+      - "${CLIENT_PORT}:${CLIENT_PORT}"
     environment:
       - CLIENT_PORT=${CLIENT_PORT}
       - SERVER_PORT=${SERVER_PORT}
       - INTERNAL_SERVER_URL=${INTERNAL_SERVER_URL}
+      - EXTERNAL_SERVER_URL=${EXTERNAL_SERVER_URL}
     networks:
       - flip7network
 
