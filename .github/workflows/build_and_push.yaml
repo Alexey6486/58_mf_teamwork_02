@@ -3,7 +3,7 @@ name: Push to GitHub Container Registry
 on:
   push:
     branches:
-      - main
+      - deploy
 
 jobs:
   build-and-push:
