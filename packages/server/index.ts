@@ -17,7 +17,7 @@ const port = Number(process.env.SERVER_PORT) || 3001;
 // Список разрешённых доменов
 const allowedOrigins: string[] = (
   process.env.CORS_ORIGINS ||
-  'http://localhost:3000,http://localhost:3001,http://localhost:2000,http://localhost,http://46.243.211.198:3000,http://flip7.ya-praktikum.tech'
+  'http://localhost:3000,http://localhost:3001,http://localhost:2000,http://localhost,http://46.243.211.198:3000,http://46.243.211.198:3001,http://flip7.ya-praktikum.tech,https://flip7.ya-praktikum.tech'
 )
   .split(',')
   .map(o => o.trim())
