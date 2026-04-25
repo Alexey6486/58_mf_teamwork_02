@@ -7,9 +7,7 @@ import type {
   IServerUserThemeResponse,
 } from '../types';
 import {
-  SERVER_URI,
   URL_AVATAR,
-  URL_BASE,
   URL_PROFILE,
   URL_PSW,
   URL_THEME,
@@ -45,8 +43,7 @@ const initialState: UserState = {
 export const fetchUserThunk = thunkCreator<Partial<IUser>>(
   'user/fetchUserDataThunk',
   async _ => {
-    console.log('fetchUserThunk', { URL_BASE });
-    return fetch(`${URL_BASE}${URL_USER_DATA}`, {
+    return fetch(URL_USER_DATA, {
       method: ERequestMethods.GET,
       headers: {
         'Content-Type': 'application/json',
@@ -59,7 +56,7 @@ export const fetchUserThunk = thunkCreator<Partial<IUser>>(
 export const changeUserDataThunk = thunkCreator<Partial<IUser>, Partial<IUser>>(
   'user/changeUserDataThunk',
   async userData => {
-    return fetch(`${URL_BASE}${URL_PROFILE}`, {
+    return fetch(URL_PROFILE, {
       method: ERequestMethods.PUT,
       headers: {
         'Content-Type': 'application/json',
@@ -73,7 +70,7 @@ export const changeUserDataThunk = thunkCreator<Partial<IUser>, Partial<IUser>>(
 export const changeUserAvatarThunk = thunkCreator<Partial<IUser>, FormData>(
   'user/changeUserAvatarThunk',
   async avatar => {
-    return fetch(`${URL_BASE}${URL_AVATAR}`, {
+    return fetch(URL_AVATAR, {
       method: ERequestMethods.PUT,
       body: avatar,
       credentials: 'include' as RequestCredentials,
@@ -85,7 +82,7 @@ export const changeUserPasswordThunk = thunkCreator<
   string,
   Partial<IUserPassword>
 >('user/changeUserPasswordThunk', async userPassword => {
-  return fetch(`${URL_BASE}${URL_PSW}`, {
+  return fetch(URL_PSW, {
     method: ERequestMethods.PUT,
     headers: {
       'Content-Type': 'application/json',
@@ -99,7 +96,7 @@ export const fetchUserTheme = thunkCreator<
   IServerUserThemeResponse,
   Partial<IServerUser>
 >('user/fetchUserTheme', async userData => {
-  return fetch(`${SERVER_URI}${URL_THEME}`, {
+  return fetch(URL_THEME, {
     method: ERequestMethods.POST,
     headers: {
       'Content-Type': 'application/json',
@@ -113,7 +110,7 @@ export const changeUserTheme = thunkCreator<
   IServerUserThemeResponse,
   Partial<IServerUser>
 >('user/changeUserTheme', async userData => {
-  return fetch(`${SERVER_URI}${URL_THEME}`, {
+  return fetch(URL_THEME, {
     method: ERequestMethods.PUT,
     headers: {
       'Content-Type': 'application/json',

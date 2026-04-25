@@ -1,18 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import {
-  URL_BASE,
-  URL_USER_DATA
-} from '../constants/urls';
+import { URL_USER_DATA } from '../constants/urls';
 import { ERequestMethods } from '../enums';
-import {
-  type AppDispatch,
-  useSelector
-} from '../store/store';
-import {
-  selectUser,
-  setUsers
-} from '../slices/user-slice';
+import { type AppDispatch, useSelector } from '../store/store';
+import { selectUser, setUsers } from '../slices/user-slice';
 import { safeJsonParse } from '../utils';
 
 export const useIsAuthed = () => {
@@ -24,7 +15,7 @@ export const useIsAuthed = () => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const userData = await fetch(`${URL_BASE}${URL_USER_DATA}`, {
+        const userData = await fetch(URL_USER_DATA, {
           method: ERequestMethods.GET,
           headers: {
             'Content-Type': 'application/json',
