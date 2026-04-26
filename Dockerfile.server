@@ -1,11 +1,17 @@
 ARG NODE_VERSION=25
 ARG SERVER_PORT=3001
 
+ARG DOMAIN
+ARG DOMAIN_IP
+
 FROM node:$NODE_VERSION-bullseye-slim as base
 
 WORKDIR /app
 
 FROM base as builder
+
+ENV DOMAIN=$DOMAIN
+ENV DOMAIN_IP=$DOMAIN_IP
 
 COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile
