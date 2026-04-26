@@ -59,6 +59,9 @@ app.use(
     changeOrigin: true,
     logger: console,
     target: YP_BASE_URL,
+    cookieDomainRewrite: {
+      '*': '',
+    },
   })
 );
 
