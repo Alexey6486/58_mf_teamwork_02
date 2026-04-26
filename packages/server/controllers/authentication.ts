@@ -43,7 +43,7 @@ export const signin = catchAsync(
 
       response.cookie(sessionUuidCookie.name, sessionUuidCookie.value, {
         httpOnly: sessionUuidCookie.httpOnly, // Безопасно по умолчанию
-        secure: sessionUuidCookie.secure, // В продакшене ставьте true при HTTPS
+        secure: false, // sessionUuidCookie.secure, // В продакшене ставьте true при HTTPS
         maxAge: sessionUuidCookie.maxAge,
         expires: sessionUuidCookie.expires,
         domain: process.env.DOMAIN ? process.env.DOMAIN : process.env.DOMAIN_IP,
@@ -53,7 +53,7 @@ export const signin = catchAsync(
 
       response.cookie(sessionAuthCookie.name, sessionAuthCookie.value, {
         httpOnly: sessionAuthCookie.httpOnly,
-        secure: sessionAuthCookie.secure,
+        secure: false, // sessionAuthCookie.secure,
         maxAge: sessionAuthCookie.maxAge,
         expires: sessionAuthCookie.expires,
         domain: process.env.DOMAIN ? process.env.DOMAIN : process.env.DOMAIN_IP,
