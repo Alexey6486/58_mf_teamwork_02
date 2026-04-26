@@ -1,6 +1,6 @@
 const isDev = process.env.NODE_ENV === 'development';
 
-const FLIP7_SERVER_IP = 'http://46.243.211.198:3001/api/v1';
+const FLIP7_SERVER_IP = '/api/v1';
 const FLIP7_SERVER_LOCAL = 'http://localhost:3001/api/v1';
 const YP_API = 'https://ya-praktikum.tech/api/v2';
 const API_PATH = '/api/v2';
@@ -10,7 +10,7 @@ const SERVER_URI = isDev ? FLIP7_SERVER_LOCAL : FLIP7_SERVER_IP;
 const YANDEX_API_HOST =
   typeof __YP_API_BASE__ !== 'undefined' ? __YP_API_BASE__ : YP_API;
 
-const YP_URL_BASE = typeof window !== 'undefined' ? API_PATH : YANDEX_API_HOST;
+const YP_URL_BASE = isDev ? YANDEX_API_HOST : API_PATH;
 
 // const YANDEX_API_HOST =
 //   typeof __YP_API_BASE__ !== 'undefined'
