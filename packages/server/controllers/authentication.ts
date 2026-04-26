@@ -46,7 +46,7 @@ export const signin = catchAsync(
         secure: sessionUuidCookie.secure, // В продакшене ставьте true при HTTPS
         maxAge: sessionUuidCookie.maxAge,
         expires: sessionUuidCookie.expires,
-        domain: process.env.DOMAIN ?? '',
+        domain: process.env.DOMAIN ? process.env.DOMAIN : process.env.DOMAIN_IP,
         path: sessionUuidCookie.path || '/',
         sameSite: sessionUuidCookie.sameSite as CookieOptions['sameSite'],
       });
@@ -56,7 +56,7 @@ export const signin = catchAsync(
         secure: sessionAuthCookie.secure,
         maxAge: sessionAuthCookie.maxAge,
         expires: sessionAuthCookie.expires,
-        domain: process.env.DOMAIN ?? '',
+        domain: process.env.DOMAIN ? process.env.DOMAIN : process.env.DOMAIN_IP,
         path: sessionAuthCookie.path,
         sameSite: sessionUuidCookie.sameSite as CookieOptions['sameSite'],
       });
