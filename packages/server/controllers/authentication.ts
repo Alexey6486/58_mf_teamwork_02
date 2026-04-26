@@ -1,6 +1,5 @@
 import type { Request, Response } from 'express';
 import cookieParser from 'set-cookie-parser';
-import type { CookieOptions } from 'express-serve-static-core';
 import { catchAsync } from '../utils/catchAsync';
 import { cookiesToString } from '../utils/cookies';
 import { YP_BASE_URL, YP_COOKIE_AUTH, YP_COOKIE_UUID } from '../constants/api';
@@ -48,7 +47,7 @@ export const signin = catchAsync(
         expires: sessionUuidCookie.expires,
         domain: process.env.DOMAIN ? process.env.DOMAIN : process.env.DOMAIN_IP,
         path: sessionUuidCookie.path || '/',
-        sameSite: sessionUuidCookie.sameSite as CookieOptions['sameSite'],
+        sameSite: 'lax', // sessionUuidCookie.sameSite as CookieOptions['sameSite'],
       });
 
       response.cookie(sessionAuthCookie.name, sessionAuthCookie.value, {
@@ -58,7 +57,7 @@ export const signin = catchAsync(
         expires: sessionAuthCookie.expires,
         domain: process.env.DOMAIN ? process.env.DOMAIN : process.env.DOMAIN_IP,
         path: sessionAuthCookie.path,
-        sameSite: sessionUuidCookie.sameSite as CookieOptions['sameSite'],
+        sameSite: 'lax', // sessionUuidCookie.sameSite as CookieOptions['sameSite'],
       });
     }
 
