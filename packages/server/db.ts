@@ -39,6 +39,7 @@ const sequelizeOptions: SequelizeOptions = {
 
 // Создаем инстанс Sequelize
 export const sequelize = new Sequelize(sequelizeOptions);
+console.log(sequelize.config);
 
 // Инициализируем модели
 export const Topic = sequelize.define(
