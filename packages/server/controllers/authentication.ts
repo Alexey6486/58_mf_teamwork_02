@@ -8,7 +8,7 @@ import { YP_BASE_URL, YP_COOKIE_AUTH, YP_COOKIE_UUID } from '../constants/api';
 export const signin = catchAsync(
   async (request: Request, response: Response) => {
     const { login, password } = request.body;
-    console.log('signin', { YP_BASE_URL, request });
+
     const yp_response = await fetch(`${YP_BASE_URL}/auth/signin`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -18,7 +18,7 @@ export const signin = catchAsync(
       }),
       credentials: 'include',
     });
-    console.log('yp_response', { yp_response });
+
     // Проверяем статус ответа
     if (!yp_response?.ok) {
       response.status(401).json({ error: 'Authentication failed' });
@@ -46,10 +46,7 @@ export const signin = catchAsync(
         secure: sessionUuidCookie.secure, // В продакшене ставьте true при HTTPS
         maxAge: sessionUuidCookie.maxAge,
         expires: sessionUuidCookie.expires,
-        domain:
-          process.env.NODE_ENV === 'development'
-            ? process.env.DEV_COOKIE_DOMAIN
-            : process.env.PROD_COOKIE_DOMAIN,
+        domain: process.env.DOMAIN ?? '',
         path: sessionUuidCookie.path || '/',
         sameSite: sessionUuidCookie.sameSite as CookieOptions['sameSite'],
       });
@@ -59,10 +56,7 @@ export const signin = catchAsync(
         secure: sessionAuthCookie.secure,
         maxAge: sessionAuthCookie.maxAge,
         expires: sessionAuthCookie.expires,
-        domain:
-          process.env.NODE_ENV === 'development'
-            ? process.env.DEV_COOKIE_DOMAIN
-            : process.env.PROD_COOKIE_DOMAIN,
+        domain: process.env.DOMAIN ?? '',
         path: sessionAuthCookie.path,
         sameSite: sessionUuidCookie.sameSite as CookieOptions['sameSite'],
       });
@@ -77,7 +71,6 @@ export const signin = catchAsync(
 
 export const signout = catchAsync(
   async (request: Request, response: Response) => {
-    console.log('signout', { YP_BASE_URL, request });
     await fetch(`${YP_BASE_URL}/auth/logout`, {
       method: 'POST',
       headers: {
