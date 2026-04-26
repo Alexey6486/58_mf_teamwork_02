@@ -42,12 +42,12 @@ export const signin = catchAsync(
 
       response.cookie(sessionUuidCookie.name, sessionUuidCookie.value, {
         httpOnly: sessionUuidCookie.httpOnly, // Безопасно по умолчанию
-        secure: false, // sessionUuidCookie.secure, // В продакшене ставьте true при HTTPS
+        // secure: sessionUuidCookie.secure, // В продакшене ставьте true при HTTPS
         maxAge: sessionUuidCookie.maxAge,
         expires: sessionUuidCookie.expires,
         domain: process.env.DOMAIN ? process.env.DOMAIN : process.env.DOMAIN_IP,
         path: sessionUuidCookie.path || '/',
-        sameSite: 'lax', // sessionUuidCookie.sameSite as CookieOptions['sameSite'],
+        // sameSite: sessionUuidCookie.sameSite as CookieOptions['sameSite'],
       });
 
       response.cookie(sessionAuthCookie.name, sessionAuthCookie.value, {
