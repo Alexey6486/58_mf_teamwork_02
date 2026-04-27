@@ -45,6 +45,7 @@ services:
       POSTGRES_HOST: ${POSTGRES_HOST}
       DOMAIN_IP: ${DOMAIN_IP}
       DOMAIN: ${DOMAIN}
+      DATABASE_URL: ${DATABASE_URL}
     networks:
       - flip7network
 

@@ -23,6 +23,7 @@ const {
   POSTGRES_DB,
   POSTGRES_PORT,
   POSTGRES_HOST,
+  DATABASE_URL,
 } = process.env;
 
 const isDev = process.env.NODE_ENV === 'development';
@@ -38,7 +39,7 @@ const sequelizeOptions: SequelizeOptions = {
 };
 
 // Создаем инстанс Sequelize
-export const sequelize = new Sequelize(sequelizeOptions);
+export const sequelize = new Sequelize(DATABASE_URL ?? '', sequelizeOptions);
 console.log(sequelize.config);
 
 // Инициализируем модели
