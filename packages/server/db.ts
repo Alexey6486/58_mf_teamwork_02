@@ -36,6 +36,31 @@ const sequelizeOptions: SequelizeOptions = {
   password: POSTGRES_PASSWORD,
   database: isDev ? 'postgres' : POSTGRES_DB,
   dialect: 'postgres',
+  logging: true,
+  pool: {
+    max: 5,
+    min: 0,
+    acquire: 30000,
+    idle: 10000,
+  },
+  retry: {
+    match: [
+      /ETIMEDOUT/,
+      /EHOSTUNREACH/,
+      /ECONNRESET/,
+      /ECONNREFUSED/,
+      /ESOCKETTIMEDOUT/,
+      /EPIPE/,
+      /EAI_AGAIN/,
+      /SequelizeConnectionError/,
+      /SequelizeConnectionRefusedError/,
+      /SequelizeHostNotFoundError/,
+      /SequelizeHostNotReachableError/,
+      /SequelizeInvalidConnectionError/,
+      /SequelizeConnectionTimedOutError/,
+    ],
+    max: 5,
+  },
 };
 
 // Создаем инстанс Sequelize
@@ -191,13 +216,16 @@ export async function dbConnect() {
     await sequelize.authenticate();
 
     // Sync all defined models to the DB.
-    await sequelize.sync({ force: true });
+    await sequelize.sync({ force: isDev });
     // { force: true } — пересоздаёт таблицы (удаляет старые, создаёт новые). Используйте только в разработке.
     // { alter: true } — автоматически изменяет существующую таблицу, чтобы она соответствовала модели.
     // Без опций — создаёт таблицы, если их нет.
 
     console.log('Connection has been established successfully.');
   } catch (error) {
-    console.error('Unable to connect to the database:', error);
+    console.error('Unable to connect to the database:', {
+      error,
+      env: process.env,
+    });
   }
 }
