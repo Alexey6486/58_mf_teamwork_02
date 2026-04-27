@@ -7,7 +7,7 @@ import {
 import { combineReducers, type Store } from 'redux';
 import { configureStore, createListenerMiddleware } from '@reduxjs/toolkit';
 import { LS_ACT } from '../constants/auth';
-import { ROUTES } from '../routes';
+import { ROUTES } from '../constants/routes';
 import ssrReducer from '../slices/ssr-slice';
 import userReducer, {
   fetchUserThunk,

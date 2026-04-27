@@ -33,6 +33,7 @@ import {
 import { logoutThunk } from '../../slices/auth-slice';
 import { IconButton } from '../../components/IconButton';
 import { EIconButton } from '../../enums';
+import { useGeolocation } from '../../hooks';
 
 const INITIAL_VALUES: Partial<IUser> = {
   first_name: '',
@@ -108,6 +109,14 @@ export const ProfilePage: FC = () => {
   const handleLogout = () => {
     dispatch(logoutThunk());
   };
+
+  const {
+    data: geoData,
+    error: geoError,
+    isLoading: geoLoading,
+    isSupported: geoSupported,
+    getLocation,
+  } = useGeolocation();
 
   return (
     <>
@@ -211,6 +220,29 @@ export const ProfilePage: FC = () => {
                 </div>
               </div>
               <div className={BTN_GROUP_CLASS}>
+                {geoSupported && (
+                  <div className="w-full flex flex-col items-center gap-2 mb-2">
+                    <button
+                      type="button"
+                      className={BTN_CLASS}
+                      onClick={getLocation}
+                      disabled={geoLoading}>
+                      {geoLoading ? 'Определяем...' : 'Определить геолокацию'}
+                    </button>
+                    {geoData && (
+                      <p className="text-sm text-center text-gray-500 dark:text-gray-400">
+                        {[geoData.city, geoData.country]
+                          .filter(Boolean)
+                          .join(', ')}
+                      </p>
+                    )}
+                    {geoError && (
+                      <p className="text-sm text-center text-red-500">
+                        {geoError}
+                      </p>
+                    )}
+                  </div>
+                )}
                 <button
                   className={BTN_CLASS}
                   type="submit"
