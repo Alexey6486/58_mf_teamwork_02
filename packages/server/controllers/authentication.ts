@@ -1,4 +1,4 @@
-import type { Request, Response } from 'express';
+import type { CookieOptions, Request, Response } from 'express';
 import cookieParser from 'set-cookie-parser';
 import { catchAsync } from '../utils/catchAsync';
 import { cookiesToString } from '../utils/cookies';
@@ -42,22 +42,22 @@ export const signin = catchAsync(
 
       response.cookie(sessionUuidCookie.name, sessionUuidCookie.value, {
         httpOnly: sessionUuidCookie.httpOnly, // Безопасно по умолчанию
-        // secure: sessionUuidCookie.secure, // В продакшене ставьте true при HTTPS
+        secure: true, // В продакшене ставьте true при HTTPS
         maxAge: sessionUuidCookie.maxAge,
         expires: sessionUuidCookie.expires,
         domain: process.env.DOMAIN ? process.env.DOMAIN : process.env.DOMAIN_IP,
         path: sessionUuidCookie.path || '/',
-        // sameSite: sessionUuidCookie.sameSite as CookieOptions['sameSite'],
+        sameSite: sessionUuidCookie.sameSite as CookieOptions['sameSite'],
       });
 
       response.cookie(sessionAuthCookie.name, sessionAuthCookie.value, {
         httpOnly: sessionAuthCookie.httpOnly,
-        secure: false, // sessionAuthCookie.secure,
+        secure: true, // sessionAuthCookie.secure,
         maxAge: sessionAuthCookie.maxAge,
         expires: sessionAuthCookie.expires,
         domain: process.env.DOMAIN ? process.env.DOMAIN : process.env.DOMAIN_IP,
         path: sessionAuthCookie.path,
-        sameSite: 'lax', // sessionUuidCookie.sameSite as CookieOptions['sameSite'],
+        sameSite: sessionUuidCookie.sameSite as CookieOptions['sameSite'], // 'lax',
       });
     }
 
