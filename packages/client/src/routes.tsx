@@ -29,6 +29,9 @@ import {
 import { useIsAuthed } from './hooks';
 import { logoutThunk } from './slices/auth-slice';
 import { Layout } from './components/Layout';
+import { ROUTES } from './constants/routes';
+
+export { ROUTES } from './constants/routes';
 
 export type PageInitContext = {
   clientToken?: string;
@@ -38,19 +41,6 @@ export type PageInitArgs = {
   dispatch: AppDispatch;
   state: RootState;
   ctx: PageInitContext;
-};
-
-export const ROUTES = {
-  main: '/main',
-  profile: '/profile',
-  password: '/profile/password',
-  login: '/',
-  signup: '/sign-up',
-  game: '/game',
-  leaderboard: '/leaderboard',
-  forum: '/forum',
-  topic: '/forum/:id',
-  error500: '/error',
 };
 
 export const ProtectedRoute = ({ children }: { children: JSX.Element }) => {

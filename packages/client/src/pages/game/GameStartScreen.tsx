@@ -49,8 +49,9 @@ const getDefaultConfig = (user: string) => {
 
 export const GameStartScreen: FC<GameStartScreenProps> = ({ onStart }) => {
   const navigate = useNavigate();
-  const { first_name, display_name } = useSelector(selectUser) || {};
-  const userName = display_name || first_name || 'Игрок 1';
+  // берем login, при сохранении результата сравниваем по login
+  const { login } = useSelector(selectUser) || {};
+  const userName = login || 'Игрок 1';
   // const [playerType, setPlayerType] = useState<PlayerType>(PlayerType.Computer);
   const [playerCount, setPlayerCount] = useState(MIN_PLAYERS);
   const [playersConfig, setPlayersConfig] = useState<PlayerConfig[]>(
@@ -157,6 +158,7 @@ export const GameStartScreen: FC<GameStartScreenProps> = ({ onStart }) => {
                         ComputerPlayerDifficulty.HARD,
                       ].map(dif => (
                         <button
+                          key={dif}
                           className={`${TOGGLE_BTN_BASE_CLASS} ${
                             player.difficulty === dif
                               ? TOGGLE_BTN_ACTIVE_CLASS
