@@ -37,3 +37,5 @@ export const GAME_MAIN_CONTAINER_CLASS =
 export const GAME_CANVAS_CONTAINER_CLASS =
   'relative p-1 border border-solid border-form-light rounded-main-radius shadow-outer-light dark:shadow-outer-dark dark:border-form-dark';
 export const GAME_CONTAINER_FS_CLASS = 'flex justify-center items-center';
+export const HEADER_CENTER =
+  'w-[300px] absolute top-6 left-1/2 -translate-x-1/2';

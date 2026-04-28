@@ -11,7 +11,7 @@ export const NotFoundPage = () => {
       <div className="flex flex-col justify-center items-center">
         <Link
           to={ROUTES.main}
-          className={`${APP_TITLE_CLASS} mt-[100px] no-underline`}>
+          className={`${APP_TITLE_CLASS} mb-[-50px] no-underline z-10`}>
           Перейти на главную страницу
         </Link>
         <img
