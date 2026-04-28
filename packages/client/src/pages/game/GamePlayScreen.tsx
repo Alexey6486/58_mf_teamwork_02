@@ -19,7 +19,11 @@ import {
   FORM_PAGE_CONTAINER_CLASS,
   GAME_CANVAS_CONTAINER_CLASS,
   GAME_CONTAINER_FS_CLASS,
+  GAME_HEADER_CONTAINER_CLASS,
+  GAME_HEADER_DIV_ITEMS_CLASS,
   GAME_MAIN_CONTAINER_CLASS,
+  HEADER_CENTER,
+  ITEMS_CENTER_CLASS,
 } from '../../constants/style-groups';
 import CanvasProcessor, { type Rect } from './engine/CanvasProcessor';
 import { GAME_HEIGHT, GAME_WIDTH } from '../../constants/game';
@@ -27,6 +31,7 @@ import { calcPoint } from '../../utils/calc-point-game';
 import { IconButton } from '../../components/IconButton';
 import { EIconButton } from '../../enums';
 import { useFullscreen } from '../../hooks';
+import { Button } from '../../components/Button';
 
 interface GamePlayScreenProps {
   config: GameConfig;
@@ -227,6 +232,16 @@ export const GamePlayScreen: FC<GamePlayScreenProps> = ({
 
   return (
     <div className={FORM_PAGE_CONTAINER_CLASS}>
+      <header
+        className={`${GAME_HEADER_CONTAINER_CLASS} ${ITEMS_CENTER_CLASS} ${HEADER_CENTER}`}>
+        <div className={`${GAME_HEADER_DIV_ITEMS_CLASS}`}>
+          <Button
+            onClick={() => window.location.reload()}
+            content={'Завершить игру'}
+          />
+        </div>
+        <div></div>
+      </header>
       <div className={GAME_MAIN_CONTAINER_CLASS}>
         <div
           className={`${GAME_CANVAS_CONTAINER_CLASS}${
