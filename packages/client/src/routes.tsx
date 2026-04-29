@@ -7,9 +7,9 @@ import {
   PasswordChange,
   ProfilePage,
   RegistrationPage,
-  initNotFoundPage,
-  NotFoundPage,
-  Error500,
+  initPageNotFound,
+  PageNotFound,
+  ErrorPage,
   GamePage,
   MainPage,
   LeaderboardPage,
@@ -166,7 +166,7 @@ export const routes = [
     path: ROUTES.error500,
     element: (
       <Layout>
-        <Error500 />
+        <ErrorPage />
       </Layout>
     ),
     fetchData: initErrorPage,
@@ -176,10 +176,10 @@ export const routes = [
     element: (
       <ProtectedRoute>
         <Layout>
-          <NotFoundPage />
+          <PageNotFound />
         </Layout>
       </ProtectedRoute>
     ),
-    fetchData: initNotFoundPage,
+    fetchData: initPageNotFound,
   },
 ];
