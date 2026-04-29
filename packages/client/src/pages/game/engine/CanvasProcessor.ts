@@ -33,9 +33,12 @@ export default class CanvasProcessor {
   private ctx: CanvasRenderingContext2D;
   private canvasWidth: number;
   private canvasHeight: number;
-  private cardImages: { back: HTMLImageElement | null; cards: HTMLImageElement[] } = {
+  private cardImages: {
+    back: HTMLImageElement | null;
+    cards: HTMLImageElement[];
+  } = {
     back: null,
-    cards: []
+    cards: [],
   };
 
   constructor(canvas: HTMLCanvasElement | null) {
@@ -50,24 +53,24 @@ export default class CanvasProcessor {
 
     const cards = [
       'back',
-      ...Array.from({ length: COUNT_CARDS }, (_, i) => i + 1)
+      ...Array.from({ length: COUNT_CARDS }, (_, i) => i + 1),
     ];
 
     cards.forEach((name, index) => {
       const img = new Image();
 
       img.onload = () => {
-        if(index === 0){
+        if (index === 0) {
           this.cardImages.back = img;
         } else {
           this.cardImages.cards[index - 1] = img;
         }
-      }
+      };
       img.onerror = () => {
         console.log('Failed to load image');
-      }
-      img.src = `/src/assets/images/cards/${name}.svg`
-    })
+      };
+      img.src = `/images/cards/${name}.svg`;
+    });
   }
 
   getCanvasWidth() {
@@ -127,23 +130,17 @@ export default class CanvasProcessor {
     }
   }
 
-  drawImageCard(
-    x: number,
-    y: number,
-    w: number,
-    h: number,
-    value: number,
-  ){
+  drawImageCard(x: number, y: number, w: number, h: number, value: number) {
     // const img = this.cardImages[value];
     let img: HTMLImageElement | null = null;
     const isBack = value === 0;
-    if(isBack){
+    if (isBack) {
       img = this.cardImages.back;
     } else {
-      img = this.cardImages.cards[value - 1]; 
+      img = this.cardImages.cards[value - 1];
     }
 
-    if(img?.complete && img.naturalHeight !== 0){
+    if (img?.complete && img.naturalHeight !== 0) {
       this.ctx.save();
       this.ctx.shadowColor = SHADOW;
       this.ctx.shadowBlur = 4;
@@ -152,7 +149,14 @@ export default class CanvasProcessor {
       this.ctx.drawImage(img, x, y, w, h);
       this.ctx.restore();
     } else {
-      this.drawCard(x, y, w, h, !isBack ? CARD_BG : BLUE, `${!isBack ? value : ''}`);
+      this.drawCard(
+        x,
+        y,
+        w,
+        h,
+        !isBack ? CARD_BG : BLUE,
+        `${!isBack ? value : ''}`
+      );
     }
   }
 
@@ -340,12 +344,12 @@ export default class CanvasProcessor {
     this.ctx.textAlign = 'left';
     this.ctx.textBaseline = 'bottom';
 
-    for(let offsetY = 0; offsetY < H; offsetY += 80) {
+    for (let offsetY = 0; offsetY < H; offsetY += 80) {
       this.ctx.save();
       this.ctx.translate(-offsetY * 3, H * 0.7);
-      this.ctx.rotate(-Math.PI / 3);         
-      
-      for(let x = 0; x < W * 1.7; x += 300) {
+      this.ctx.rotate(-Math.PI / 3);
+
+      for (let x = 0; x < W * 1.7; x += 300) {
         this.ctx.fillText('Flip 7', x, 0);
       }
       this.ctx.restore();

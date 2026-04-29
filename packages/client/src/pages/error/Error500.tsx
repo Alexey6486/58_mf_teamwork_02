@@ -22,7 +22,7 @@ export const Error500 = () => {
         </Link>
         <img
           className="max-w-full max-h-[70vh] w-auto h-auto object-contain"
-          src={'src/assets/images/500.png'}
+          src={'/images/500.png'}
           alt="500"
         />
       </div>
