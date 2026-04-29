@@ -30,12 +30,11 @@ export const BTN_MENU_CLASS =
 export const ITEMS_CENTER_CLASS = 'justify-center items-center';
 export const GAME_HEADER_CONTAINER_CLASS =
   'fixed z-10 w-full flex flex-row h-16 bg-main-light dark:bg-main-dark';
-export const GAME_BODY_CONTAINER_CLASS = 'fixed w-full h-full';
 export const GAME_HEADER_DIV_ITEMS_CLASS = 'items-center h-10 px-2';
 export const GAME_MAIN_CONTAINER_CLASS =
   'relative flex flex-col justify-center items-center h-screen';
 export const GAME_CANVAS_CONTAINER_CLASS =
-  'relative p-1 border border-solid border-form-light rounded-main-radius shadow-outer-light dark:shadow-outer-dark dark:border-form-dark';
+  'relative mx-2 p-1 border border-solid border-form-light shadow-outer-light dark:shadow-outer-dark dark:border-form-dark';
 export const GAME_CONTAINER_FS_CLASS = 'flex justify-center items-center';
 export const HEADER_CENTER =
-  'w-[300px] absolute top-6 left-1/2 -translate-x-1/2';
+  'max-w-[300px] absolute top-6 left-1/2 -translate-x-1/2';
