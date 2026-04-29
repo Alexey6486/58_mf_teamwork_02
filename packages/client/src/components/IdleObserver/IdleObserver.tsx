@@ -6,7 +6,7 @@ import { type AppDispatch, useSelector } from '../../store/store';
 import { selectUser } from '../../slices/user-slice';
 import { logoutThunk } from '../../slices/auth-slice';
 import { ENotificationPermissions } from '../../enums';
-import logo from '../../assets/images/logo.jpg';
+import logo from '/images/logo.jpg';
 
 const TS_MIN = 60000;
 const TS_MAX = 70000;

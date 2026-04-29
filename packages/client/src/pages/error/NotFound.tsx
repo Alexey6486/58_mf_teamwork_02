@@ -16,7 +16,7 @@ export const NotFoundPage = () => {
         </Link>
         <img
           className="max-w-full max-h-[70vh] w-auto h-auto object-contain"
-          src={'src/assets/images/404.png'}
+          src={'/images/404.png'}
           alt="404"
         />
       </div>
