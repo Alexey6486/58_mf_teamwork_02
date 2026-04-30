@@ -1,6 +1,6 @@
 import { type FC } from 'react';
 import { type ITopic } from '../../types';
-import { formatDate } from '../../utils/format-date';
+import { formatDate } from '../../utils';
 
 interface TopicProps {
   topic: ITopic;
