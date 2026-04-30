@@ -1,13 +1,12 @@
-import { type FC, useState } from 'react';
+import React, { type FC, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  APP_TITLE_CLASS,
   BTN_CLASS,
   BTN_GROUP_CLASS,
+  CARD_BORDER_CLASS,
   COUNTER_BTN_CLASS,
   FORM_CONTAINER_CLASS,
   FORM_PAGE_CONTAINER_CLASS,
-  FORM_TITLE_CLASS,
   TOGGLE_BTN_ACTIVE_CLASS,
   TOGGLE_BTN_BASE_CLASS,
   TOGGLE_BTN_INACTIVE_CLASS,
@@ -21,10 +20,10 @@ import {
 } from './types';
 import { ROUTES } from '../../routes';
 import { MAX_PLAYERS, MIN_PLAYERS } from '../../constants/game';
-import { IconButton } from '../../components/IconButton';
 import { EIconButton } from '../../enums';
 import { selectUser } from '../../slices/user-slice';
 import { useSelector } from '../../store/store';
+import { Logo } from '../../components/Logo/Logo';
 
 const COMPUTER_DIFFICULTY_LABELS: Record<ComputerPlayerDifficulty, string> = {
   [ComputerPlayerDifficulty.EASY]: 'Комп.Легкий',
@@ -124,21 +123,23 @@ export const GameStartScreen: FC<GameStartScreenProps> = ({ onStart }) => {
   return (
     <div className={FORM_PAGE_CONTAINER_CLASS}>
       <div className={FORM_CONTAINER_CLASS}>
-        <div className="w-full flex justify-start absolute pl-8 pr-8 top-12 left-0">
-          <IconButton
-            onClick={toMain}
-            iconName={EIconButton.BACK}
-            hoverName={'На главную страницу'}
-          />
-        </div>
-        <h1 className={APP_TITLE_CLASS}>Flip 7</h1>
-        <h2 className={FORM_TITLE_CLASS}>Настройки игры</h2>
-        <div className="flex flex-col gap-6 w-full">
+        <span className={CARD_BORDER_CLASS} />
+        <Logo
+          text="НАСТРОЙКИ ИГРЫ"
+          textSize="text-3xl"
+          bgColor="bg-f7-light-green"
+          leftBtnCb={toMain}
+          leftBtnIcon={EIconButton.BACK}
+          leftBtnText="На главную страницу"
+        />
+        <div className="z-20 mx-[20px] flex flex-colw-full">
           <div>
             <div>
               {playersConfig.map((player, index) => (
-                <div key={index}>
-                  <span>{player.name}</span>
+                <div className="mb-4" key={index}>
+                  <span className="text-main-white dark:text-main-black mb-4 block">
+                    Имя: {player.name}
+                  </span>
                   <div className="flex gap-2 w-full">
                     <button
                       className={`${TOGGLE_BTN_BASE_CLASS} ${
@@ -163,7 +164,7 @@ export const GameStartScreen: FC<GameStartScreenProps> = ({ onStart }) => {
                             player.difficulty === dif
                               ? TOGGLE_BTN_ACTIVE_CLASS
                               : TOGGLE_BTN_INACTIVE_CLASS
-                          }`}
+                          } mr-2`}
                           onClick={() =>
                             changePlayerType(
                               player,
@@ -196,7 +197,7 @@ export const GameStartScreen: FC<GameStartScreenProps> = ({ onStart }) => {
             </div>
           </div>
         </div>
-        <div className={BTN_GROUP_CLASS}>
+        <div className={`${BTN_GROUP_CLASS} w-full z-20`}>
           <Button onClick={handleStart} content="Начать игру" />
         </div>
       </div>

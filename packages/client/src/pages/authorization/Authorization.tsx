@@ -17,6 +17,7 @@ import { type PageInitArgs, ROUTES } from '../../routes';
 import {
   BTN_CLASS,
   BTN_GROUP_CLASS,
+  CARD_BORDER_CLASS,
   FIELD_CLASS,
   FIELD_GROUP_CLASS,
   FORM_CONTAINER_CLASS,
@@ -98,7 +99,8 @@ export const AuthorizationPage: FC = () => {
           />
         </div>
         <div className={FORM_CONTAINER_CLASS}>
-          <Logo />
+          <span className={CARD_BORDER_CLASS} />
+          <Logo text="FLIP7" fontWeight="font-bold" />
           <div className={FORM_WRAPPER_CLASS}>
             <FormikProvider value={formik}>
               <div className={FIELD_GROUP_CLASS}>

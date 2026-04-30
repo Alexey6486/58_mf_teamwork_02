@@ -85,17 +85,17 @@ export const Message: FC<MessageProps> = ({ message, onResponse }) => {
     onResponse(message);
   };
 
-  const activeStyle = '[&_path]:!fill-[#7cbdff]';
+  const activeStyle = '[&_path]:!fill-f7-light-blue';
 
   return (
-    <div className="border-2 border-[#F7EED2] rounded-[10px] py-1.5 px-2.5 mb-2 dark:bg-form-dark">
-      <div className="flex justify-between border-b">
+    <div className="border-2 border-f7-beige rounded-[10px] py-1.5 px-2.5 mb-2 bg-form-dark dark:bg-f7-beige text-main-light dark:text-main-black ">
+      <div className="flex justify-between border-b dark:border-f7-dark border-main-white">
         <span className="text-sm">автор: {User?.login ?? ''}</span>
         <span className="text-sm">создано: {formatDate(createdAt ?? '')}</span>
       </div>
       {replyToCommentId && repliedToComment && (
-        <div className="relative mt-1 mb-2 p-2 bg-input-dark rounded-main-radius dark:bg-main-dark dark:text-main-light truncate">
-          <div className="flex justify-between border-b">
+        <div className="relative mt-1 mb-2 p-2 bg-input-dark rounded-main-radius text-f7-dark dark:bg-main-dark dark:text-main-light truncate">
+          <div className="flex justify-between border-b border-f7-dark dark:border-main-white">
             <span className="text-sm">
               автор: {repliedToComment?.User?.login ?? ''}
             </span>
@@ -121,7 +121,7 @@ export const Message: FC<MessageProps> = ({ message, onResponse }) => {
               <span
                 className={`text-xs ${
                   userReaction?.text === EReactions.TU
-                    ? 'text-[#7cbdff]'
+                    ? 'text-f7-light-blue'
                     : 'dark:text-white'
                 }`}>
                 {thumbUpCount}
@@ -140,7 +140,7 @@ export const Message: FC<MessageProps> = ({ message, onResponse }) => {
               <span
                 className={`text-xs ${
                   userReaction?.text === EReactions.TD
-                    ? 'text-[#7cbdff]'
+                    ? 'text-f7-light-blue'
                     : 'dark:text-white'
                 }`}>
                 {thumbDownCount}

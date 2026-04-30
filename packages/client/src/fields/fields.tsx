@@ -84,7 +84,7 @@ const TextField =
     return (
       <>
         {label && (
-          <label className="mb-2 text-main-black dark:text-main-white">
+          <label className="mb-2 text-main-white dark:text-f7-dark">
             {label}
           </label>
         )}
