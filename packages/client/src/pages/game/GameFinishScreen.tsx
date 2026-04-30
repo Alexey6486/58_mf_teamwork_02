@@ -68,7 +68,7 @@ export const GameFinishScreen: FC<GameFinishScreenProps> = ({
             </li>
           ))}
         </ul>
-        <div className={`${BTN_GROUP_CLASS} w-full`}>
+        <div className={`${BTN_GROUP_CLASS} w-full z-20`}>
           <Button onClick={onRestart} content="Играть снова" />
           <Button onClick={() => navigate(ROUTES.main)} content="Выйти" />
         </div>
