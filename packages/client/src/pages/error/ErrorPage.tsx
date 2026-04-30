@@ -48,14 +48,14 @@ export const ErrorPage = () => {
             src={`/images/cards/${
               theme === ETheme.light ? '0' : '0_light'
             }.svg`}
-            alt="500"
+            alt="0"
           />
           <img
             className="max-h-[200px]"
             src={`/images/cards/${
               theme === ETheme.light ? '0' : '0_light'
             }.svg`}
-            alt="500"
+            alt="0"
           />
         </div>
         <div className="mb-6 dark:text-main-white">

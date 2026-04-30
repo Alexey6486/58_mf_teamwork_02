@@ -1,4 +1,4 @@
-import { type FC, type MouseEvent, useEffect } from 'react';
+import React, { type FC, type MouseEvent, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
@@ -18,17 +18,17 @@ import { type PageInitArgs, ROUTES } from '../../routes';
 import {
   BTN_CLASS,
   BTN_GROUP_CLASS,
+  CARD_BORDER_CLASS,
   FIELD_CLASS,
   FIELD_PR_CLASS,
   FORM_CONTAINER_CLASS,
   FORM_PAGE_CONTAINER_CLASS,
-  FORM_TITLE_CLASS,
   FORM_WRAPPER_CLASS,
 } from '../../constants/style-groups';
 import { selectUser } from '../../slices/user-slice';
 import { signupThunk } from '../../slices/auth-slice';
-import { IconButton } from '../../components/IconButton';
 import { EIconButton } from '../../enums';
+import { Logo } from '../../components/Logo/Logo';
 
 const INITIAL_VALUES: Partial<IRegistrationForm> = {
   first_name: '',
@@ -113,14 +113,15 @@ export const RegistrationPage: FC = () => {
       </Helmet>
       <div className={FORM_PAGE_CONTAINER_CLASS}>
         <div className={FORM_CONTAINER_CLASS}>
-          <div className="w-full flex justify-between absolute pl-8 pr-8 top-12 left-0">
-            <IconButton
-              onClick={toAuthorization}
-              iconName={EIconButton.BACK}
-              hoverName={'На страницу авторизации'}
-            />
-          </div>
-          <h3 className={FORM_TITLE_CLASS}>Регистрация</h3>
+          <span className={CARD_BORDER_CLASS} />
+          <Logo
+            text="РЕГИСТРАЦИЯ"
+            textSize="text-3xl"
+            bgColor="bg-f7-green"
+            leftBtnCb={toAuthorization}
+            leftBtnIcon={EIconButton.BACK}
+            leftBtnText="На страницу авторизации"
+          />
           <div className={FORM_WRAPPER_CLASS}>
             <FormikProvider value={formik}>
               <div className="flex flex-col">
