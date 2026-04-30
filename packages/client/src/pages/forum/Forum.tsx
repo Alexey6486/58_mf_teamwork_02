@@ -161,9 +161,7 @@ export const ForumPage: FC = () => {
                   />
                 ))
               ) : (
-                <p className="text-main-black dark:text-main-white ">
-                  Пока нет созданных тем...
-                </p>
+                <p className="text-main-white ">Пока нет созданных тем...</p>
               )}
             </div>
           </div>
