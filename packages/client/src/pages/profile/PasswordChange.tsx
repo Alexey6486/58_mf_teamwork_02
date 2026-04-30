@@ -1,4 +1,4 @@
-import { type FC, type MouseEvent } from 'react';
+import React, { type FC, type MouseEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FormikProvider, useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -18,13 +18,15 @@ import { type PageInitArgs, ROUTES } from '../../routes';
 import {
   BTN_CLASS,
   BTN_GROUP_CLASS,
+  CARD_BORDER_CLASS,
   FIELD_CLASS,
   FIELD_GROUP_CLASS,
   FORM_CONTAINER_CLASS,
   FORM_PAGE_CONTAINER_CLASS,
-  FORM_TITLE_CLASS,
   FORM_WRAPPER_CLASS,
 } from '../../constants/style-groups';
+import { Logo } from '../../components/Logo/Logo';
+import { EIconButton } from '../../enums';
 
 const INITIAL_VALUES: Partial<IUserPassword> = {
   oldPassword: '',
@@ -76,11 +78,19 @@ export const PasswordChange: FC = () => {
 
   return (
     <div className={FORM_PAGE_CONTAINER_CLASS}>
-      <div className={FORM_CONTAINER_CLASS}>
-        <h3 className={FORM_TITLE_CLASS}>Изменить пароль</h3>
+      <div className={`${FORM_CONTAINER_CLASS} w-[500px]`}>
+        <span className={CARD_BORDER_CLASS} />
+        <Logo
+          text="ИЗМЕНИТЬ ПАРОЛЬ"
+          textSize="text-3xl"
+          bgColor="bg-f7-pale-red"
+          leftBtnCb={toProfile}
+          leftBtnIcon={EIconButton.BACK}
+          leftBtnText="На страницу профиля"
+        />
         <div className={FORM_WRAPPER_CLASS}>
           <FormikProvider value={formik}>
-            <div className={FIELD_GROUP_CLASS}>
+            <div className={`${FIELD_GROUP_CLASS} items-center mb-10`}>
               <div className={FIELD_CLASS}>
                 <Fields.Text
                   name="oldPassword"
@@ -109,9 +119,6 @@ export const PasswordChange: FC = () => {
                 type="submit"
                 onClick={onSubmitForm}>
                 Сохранить
-              </button>
-              <button className={BTN_CLASS} onClick={toProfile}>
-                Назад
               </button>
             </div>
           </FormikProvider>

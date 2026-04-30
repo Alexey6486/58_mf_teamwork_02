@@ -1,4 +1,4 @@
-import { type FC, type MouseEvent, type ChangeEvent } from 'react';
+import React, { type FC, type MouseEvent, type ChangeEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
@@ -23,17 +23,17 @@ import { type PageInitArgs, ROUTES } from '../../routes';
 import {
   BTN_CLASS,
   BTN_GROUP_CLASS,
+  CARD_BORDER_CLASS,
   FIELD_CLASS,
   FIELD_PR_CLASS,
   FORM_CONTAINER_CLASS,
   FORM_PAGE_CONTAINER_CLASS,
-  FORM_TITLE_CLASS,
   FORM_WRAPPER_CLASS,
 } from '../../constants/style-groups';
 import { logoutThunk } from '../../slices/auth-slice';
-import { IconButton } from '../../components/IconButton';
 import { EIconButton } from '../../enums';
 import { useGeolocation } from '../../hooks';
+import { Logo } from '../../components/Logo/Logo';
 
 const INITIAL_VALUES: Partial<IUser> = {
   first_name: '',
@@ -127,19 +127,18 @@ export const ProfilePage: FC = () => {
       </Helmet>
       <div className={FORM_PAGE_CONTAINER_CLASS}>
         <div className={FORM_CONTAINER_CLASS}>
-          <div className="w-full flex justify-between absolute pl-8 pr-8 top-12 left-0">
-            <IconButton
-              onClick={toMain}
-              iconName={EIconButton.BACK}
-              hoverName={'На главную страницу'}
-            />
-            <IconButton
-              onClick={handleLogout}
-              iconName={EIconButton.OUT}
-              hoverName={'Выйти из профиля'}
-            />
-          </div>
-          <h3 className={FORM_TITLE_CLASS}>Профиль</h3>
+          <span className={CARD_BORDER_CLASS} />
+          <Logo
+            text="ПРОФИЛЬ"
+            textSize="text-3xl"
+            bgColor="bg-f7-green"
+            leftBtnCb={toMain}
+            leftBtnIcon={EIconButton.BACK}
+            leftBtnText="На главную страницу"
+            rightBtnCb={handleLogout}
+            rightBtnIcon={EIconButton.OUT}
+            rightBtnText="Выйти из профиля"
+          />
           <div className={FORM_WRAPPER_CLASS}>
             <div className="w-full flex flex-col justify-center items-center mb-5">
               <div className="relative w-[100px] h-[100px] rounded-full bg-gray-200 cursor-pointer overflow-hidden group">
@@ -221,7 +220,7 @@ export const ProfilePage: FC = () => {
               </div>
               <div className={BTN_GROUP_CLASS}>
                 {geoSupported && (
-                  <div className="w-full flex flex-col items-center gap-2 mb-2">
+                  <div className="w-full flex flex-col items-center gap-2 mb-6">
                     <button
                       type="button"
                       className={BTN_CLASS}
