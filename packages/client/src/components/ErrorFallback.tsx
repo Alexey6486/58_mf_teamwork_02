@@ -29,7 +29,7 @@ export const ErrorFallback = ({ error }: FallbackProps) => {
   const errorStack = isErrorWithStack(error) ? error.stack : 'undefined';
 
   return (
-    <div className={FORM_PAGE_CONTAINER_CLASS}>
+    <div className={`${FORM_PAGE_CONTAINER_CLASS} h-screen`}>
       <div className="flex flex-col items-center">
         <h2 className={FORM_TITLE_CLASS}>{errorMessage}</h2>
         <div className="flex flex-col items-center">

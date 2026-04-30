@@ -1,8 +1,5 @@
-import { Link, useNavigate } from 'react-router-dom';
-import {
-  APP_TITLE_CLASS,
-  FORM_PAGE_CONTAINER_CLASS,
-} from '../../constants/style-groups';
+import { useNavigate } from 'react-router-dom';
+import { FORM_PAGE_CONTAINER_CLASS } from '../../constants/style-groups';
 import { type PageInitArgs, ROUTES } from '../../routes';
 import { useSelector } from 'react-redux';
 import { selectUserTheme } from '../../slices/user-slice';
@@ -38,21 +35,21 @@ export const PageNotFound = () => {
             src={`/images/cards/${
               theme === ETheme.light ? '4' : '4_light'
             }.svg`}
-            alt="500"
+            alt="400"
           />
           <img
             className="max-h-[200px] mr-4"
             src={`/images/cards/${
               theme === ETheme.light ? '0' : '0_light'
             }.svg`}
-            alt="500"
+            alt="0"
           />
           <img
             className="max-h-[200px]"
             src={`/images/cards/${
               theme === ETheme.light ? '4' : '4_light'
             }.svg`}
-            alt="500"
+            alt="4"
           />
         </div>
         <div className="mb-6 dark:text-main-white">Страница не найдена</div>

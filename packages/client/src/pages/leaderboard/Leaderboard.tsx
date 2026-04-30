@@ -1,4 +1,4 @@
-import { type FC, memo, useEffect, useMemo, useState } from 'react';
+import React, { type FC, memo, useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
@@ -11,15 +11,15 @@ import { type AppDispatch, useSelector } from '../../store/store';
 import { type ILeaderboard, type TSortDirection } from '../../types';
 import { bubbleObjectSort, cloneDeep } from '../../utils';
 import {
+  CARD_BORDER_CLASS,
   FORM_CONTAINER_CLASS,
   FORM_PAGE_CONTAINER_CLASS,
-  FORM_TITLE_CLASS,
 } from '../../constants/style-groups';
 import { type PageInitArgs, ROUTES } from '../../routes';
-import { IconButton } from '../../components/IconButton';
 import { EIconButton } from '../../enums';
 import { fromLeaderboardData } from '../../utils/fromLeaderboardData';
 import { usePage } from '../../hooks';
+import { Logo } from '../../components/Logo/Logo';
 
 type TLeaderboardRow =
   | (ILeaderboard & {
@@ -201,15 +201,16 @@ export const LeaderboardPage = () => {
       </Helmet>
       <div className={FORM_PAGE_CONTAINER_CLASS}>
         <div className={FORM_CONTAINER_CLASS}>
-          <div className="w-full flex justify-between absolute pl-8 pr-8 top-12 left-0">
-            <IconButton
-              onClick={toMain}
-              iconName={EIconButton.BACK}
-              hoverName={'На главную страницу'}
-            />
-          </div>
-          <div className={FORM_TITLE_CLASS}>Таблица лидеров</div>
-          <div className="mt-4 overflow-auto max-h-80 max-w-96 pl-2 pr-2 bg-form-light dark:bg-form-dark border border-form-light rounded-main-radius dark:border-form-dark">
+          <span className={CARD_BORDER_CLASS} />
+          <Logo
+            text="ТАБЛИЦА ЛИДЕРОВ"
+            textSize="text-3xl"
+            bgColor="bg-f7-light-blueish"
+            leftBtnCb={toMain}
+            leftBtnIcon={EIconButton.BACK}
+            leftBtnText="На главную страницу"
+          />
+          <div className="z-20 mt-4 mx-[50px] overflow-auto max-h-80 w-[500px] pl-2 pr-2 bg-form-light dark:bg-form-dark border border-form-light rounded-main-radius dark:border-form-dark custom-scroll">
             <LeaderboardRow
               type={'header'}
               id={'header'}

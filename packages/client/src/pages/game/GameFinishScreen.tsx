@@ -1,9 +1,9 @@
-import { type FC } from 'react';
+import React, { type FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { type GameResult } from './types';
 import {
-  APP_TITLE_CLASS,
   BTN_GROUP_CLASS,
+  CARD_BORDER_CLASS,
   FORM_CONTAINER_CLASS,
   FORM_PAGE_CONTAINER_CLASS,
   FORM_TITLE_CLASS,
@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from '../../store/store';
 import { selectUser, selectUserRating } from '../../slices/user-slice';
 import { updateLeaderboardScore } from '../../slices/leaderboard-slice';
 import { ROUTES } from '../../routes';
+import { Logo } from '../../components/Logo/Logo';
 
 interface GameFinishScreenProps {
   result: GameResult;
@@ -49,20 +50,25 @@ export const GameFinishScreen: FC<GameFinishScreenProps> = ({
   return (
     <div className={FORM_PAGE_CONTAINER_CLASS}>
       <div className={FORM_CONTAINER_CLASS}>
-        <h1 className={APP_TITLE_CLASS}>Flip 7</h1>
+        <span className={CARD_BORDER_CLASS} />
+        <Logo
+          text="РЕЗУЛЬТАТЫ"
+          textSize="text-3xl"
+          bgColor="bg-f7-light-green"
+        />
         <span className={FORM_TITLE_CLASS}>
-          Победитель: <b>{result.winnerName}</b>
+          Победитель:&nbsp;<b>{result.winnerName}</b>
         </span>
         <ul>
           {result.players.map((p, i) => (
             <li
               key={p.name}
-              className={'mb-2 text-main-black dark:text-main-white'}>
+              className={'mb-2 dark:text-main-black text-main-white'}>
               {i + 1}. {p.name} — {p.totalScore} очков
             </li>
           ))}
         </ul>
-        <div className={BTN_GROUP_CLASS}>
+        <div className={`${BTN_GROUP_CLASS} w-full`}>
           <Button onClick={onRestart} content="Играть снова" />
           <Button onClick={() => navigate(ROUTES.main)} content="Выйти" />
         </div>
