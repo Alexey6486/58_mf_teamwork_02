@@ -1,12 +1,10 @@
 import React, { type FC, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import { Logo } from '../../components/Logo/Logo';
 import { Message } from '../../components/Message/Message';
 import {
-  CARD_BORDER_CLASS,
-  FORM_CONTAINER_CLASS,
   FORM_PAGE_CONTAINER_CLASS,
+  PAGE_TITLE_SIZE_CLASS,
 } from '../../constants/style-groups';
 import { useDispatch, useSelector } from '../../store/store';
 import {
@@ -21,6 +19,7 @@ import { IconButton } from '../../components/IconButton';
 import { EIconButton } from '../../enums';
 import { formatDate, isArray } from '../../utils';
 import { type ITopicComment } from '../../types';
+import { CardLayout } from '../../components/CardLayout';
 
 const getErrorMessage = (error: unknown, fallback: string) => {
   if (error instanceof Error && error.message) return error.message;
@@ -117,17 +116,14 @@ export const TopicPage: FC = () => {
       </Helmet>
       <div
         className={`${FORM_PAGE_CONTAINER_CLASS} flex-col items-center justify-start`}>
-        <div className={`${FORM_CONTAINER_CLASS}`}>
-          <span className={CARD_BORDER_CLASS} />
-          <Logo
-            text="СТРАНИЦА ТОПИКА"
-            textSize="text-3xl"
-            bgColor="bg-f7-light-blue"
-            leftBtnCb={toForum}
-            leftBtnIcon={EIconButton.BACK}
-            leftBtnText="На страницу форума"
-          />
-          <div className="z-20 mt-[32px] w-[900px] mx-[20px]">
+        <CardLayout
+          text="СТРАНИЦА ТОПИКА"
+          textSize={PAGE_TITLE_SIZE_CLASS}
+          bgColor="bg-f7-light-blue"
+          leftBtnCb={toForum}
+          leftBtnIcon={EIconButton.BACK}
+          leftBtnText="На страницу форума">
+          <div className="mt-[32px] w-[900px]">
             <div className="mt-4 h-[700px] rounded-[10px] p-6 flex flex-col gap-[10px] bg-f7-beige dark:bg-form-dark">
               {topic && (
                 <>
@@ -218,7 +214,7 @@ export const TopicPage: FC = () => {
               <p className="mt-2 text-sm text-red-600">{sendError}</p>
             ) : null}
           </div>
-        </div>
+        </CardLayout>
       </div>
     </>
   );

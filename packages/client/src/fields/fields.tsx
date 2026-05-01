@@ -89,7 +89,7 @@ const TextField =
           </label>
         )}
         <input
-          className="w-72 text-main-black p-3 shadow-inset-light dark:bg-input-dark dark:shadow-inset-dark rounded-main-radius"
+          className="w-f text-main-black p-3 shadow-inset-light dark:bg-input-dark dark:shadow-inset-dark rounded-main-radius"
           name={field.name}
           type={type}
           onChange={handleChange}

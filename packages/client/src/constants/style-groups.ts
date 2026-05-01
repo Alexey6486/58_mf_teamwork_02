@@ -3,15 +3,14 @@ export const FORM_PAGE_CONTAINER_CLASS =
   'flex justify-center items-center h-full rounded-md bg-f7-beige dark:bg-f7-dark';
 export const FORM_CONTAINER_CLASS =
   'relative flex flex-col justify-center items-center min-w-96 py-10 bg-f7-dark border border-form-light rounded-main-radius shadow-outer-light dark:shadow-outer-dark dark:bg-f7-beige dark:border-form-dark';
-export const FORM_WRAPPER_CLASS =
-  'flex flex-col justify-between w-full h-min-72 px-10 z-10';
+export const FORM_WRAPPER_CLASS = 'flex flex-col justify-between h-min-72 z-10';
 export const FIELD_CLASS = 'flex flex-col mb-6 last:mb-0';
 export const FIELD_PR_CLASS = 'flex flex-col mb-6 mr-4 last:mr-0';
 export const FIELD_GROUP_CLASS = 'flex flex-col';
 export const BTN_GROUP_CLASS =
   'mt-10 flex flex-col justify-center items-center';
 export const BTN_CLASS =
-  'shadow-md max-w-60 w-full text-main-white p-2 border border-f7-light-brownish rounded-main-radius bg-f7-light-brownish mb-6 last:mb-0 dark:text-main-white dark:bg-f7-brown dark:border-f7-brown';
+  'shadow-md max-w-60 w-full text-main-white p-2 border border-f7-light-brownish rounded-main-radius bg-f7-light-brownish mb-6 last:mb-0 dark:text-main-white dark:bg-f7-brown dark:border-f7-brown hover:bg-f7-brown hover:border-f7-brown dark:hover:bg-f7-light-brownish dark:hover:border-f7-light-brownish';
 export const COUNTER_BTN_CLASS =
   'w-8 h-8 rounded-full border border-main-red-dark bg-main-red-dark text-main-white dark:bg-btn-dark dark:border-btn-dark disabled:opacity-40';
 export const TOGGLE_BTN_BASE_CLASS =
@@ -21,11 +20,8 @@ export const TOGGLE_BTN_ACTIVE_CLASS =
 export const TOGGLE_BTN_INACTIVE_CLASS =
   'bg-row-light text-main-black border-row-light dark:text-f7-dark dark:border-row-light hover:bg-f7-light-green hover:border-f7-light-green hover:text-main-white dark:hover:text-main-white';
 export const TITLE_CLASS =
-  'relative font-bold text-main-white dark:text-f7-dark w-full mb-12 h-[64px] z-10 flex justify-center items-center';
-export const APP_TITLE_CLASS = `${TITLE_CLASS}`;
-export const FORM_TITLE_CLASS = `${TITLE_CLASS}`;
-
-export const BTN_MENU_CLASS = 'w-fit px-10 py-3 hover:text-white';
+  'relative font-bold text-f7-dark dark:text-f7-beige w-full mb-12 h-[64px] z-10 flex justify-center items-center';
+export const PAGE_TITLE_SIZE_CLASS = 'text-3xl';
 
 export const ITEMS_CENTER_CLASS = 'justify-center items-center';
 export const GAME_HEADER_CONTAINER_CLASS =

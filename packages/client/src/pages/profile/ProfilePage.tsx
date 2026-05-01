@@ -22,18 +22,15 @@ import { URL_BASE_IMG } from '../../constants/urls';
 import { type PageInitArgs, ROUTES } from '../../routes';
 import {
   BTN_CLASS,
-  BTN_GROUP_CLASS,
-  CARD_BORDER_CLASS,
   FIELD_CLASS,
   FIELD_PR_CLASS,
-  FORM_CONTAINER_CLASS,
   FORM_PAGE_CONTAINER_CLASS,
   FORM_WRAPPER_CLASS,
+  PAGE_TITLE_SIZE_CLASS,
 } from '../../constants/style-groups';
 import { logoutThunk } from '../../slices/auth-slice';
 import { EIconButton } from '../../enums';
-import { useGeolocation } from '../../hooks';
-import { Logo } from '../../components/Logo/Logo';
+import { CardLayout } from '../../components/CardLayout';
 
 const INITIAL_VALUES: Partial<IUser> = {
   first_name: '',
@@ -110,14 +107,6 @@ export const ProfilePage: FC = () => {
     dispatch(logoutThunk());
   };
 
-  const {
-    data: geoData,
-    error: geoError,
-    isLoading: geoLoading,
-    isSupported: geoSupported,
-    getLocation,
-  } = useGeolocation();
-
   return (
     <>
       <Helmet>
@@ -126,21 +115,18 @@ export const ProfilePage: FC = () => {
         <meta name="description" content="Страница профиля" />
       </Helmet>
       <div className={FORM_PAGE_CONTAINER_CLASS}>
-        <div className={FORM_CONTAINER_CLASS}>
-          <span className={CARD_BORDER_CLASS} />
-          <Logo
-            text="ПРОФИЛЬ"
-            textSize="text-3xl"
-            bgColor="bg-f7-green"
-            leftBtnCb={toMain}
-            leftBtnIcon={EIconButton.BACK}
-            leftBtnText="На главную страницу"
-            rightBtnCb={handleLogout}
-            rightBtnIcon={EIconButton.OUT}
-            rightBtnText="Выйти из профиля"
-          />
+        <CardLayout
+          text="ПРОФИЛЬ"
+          textSize={PAGE_TITLE_SIZE_CLASS}
+          bgColor="bg-f7-green"
+          leftBtnCb={toMain}
+          leftBtnIcon={EIconButton.BACK}
+          leftBtnText="На главную страницу"
+          rightBtnCb={handleLogout}
+          rightBtnIcon={EIconButton.OUT}
+          rightBtnText="Выйти из профиля">
           <div className={FORM_WRAPPER_CLASS}>
-            <div className="w-full flex flex-col justify-center items-center mb-5">
+            <div className="w-full flex flex-col justify-center items-center -mt-[25px] mb-5">
               <div className="relative w-[100px] h-[100px] rounded-full bg-gray-200 cursor-pointer overflow-hidden group">
                 <input
                   type="file"
@@ -160,7 +146,6 @@ export const ProfilePage: FC = () => {
                 )}
               </div>
             </div>
-
             <FormikProvider value={formik}>
               <div className="flex flex-col">
                 <div className="w-full flex">
@@ -218,32 +203,9 @@ export const ProfilePage: FC = () => {
                   </div>
                 </div>
               </div>
-              <div className={BTN_GROUP_CLASS}>
-                {geoSupported && (
-                  <div className="w-full flex flex-col items-center gap-2 mb-6">
-                    <button
-                      type="button"
-                      className={BTN_CLASS}
-                      onClick={getLocation}
-                      disabled={geoLoading}>
-                      {geoLoading ? 'Определяем...' : 'Определить геолокацию'}
-                    </button>
-                    {geoData && (
-                      <p className="text-sm text-center text-gray-500 dark:text-gray-400">
-                        {[geoData.city, geoData.country]
-                          .filter(Boolean)
-                          .join(', ')}
-                      </p>
-                    )}
-                    {geoError && (
-                      <p className="text-sm text-center text-red-500">
-                        {geoError}
-                      </p>
-                    )}
-                  </div>
-                )}
+              <div className="mt-4 flex w-full justify-between items-center">
                 <button
-                  className={BTN_CLASS}
+                  className={`${BTN_CLASS} first:mb-0 mr-4`}
                   type="submit"
                   onClick={onSubmitForm}>
                   Сохранить
@@ -254,7 +216,7 @@ export const ProfilePage: FC = () => {
               </div>
             </FormikProvider>
           </div>
-        </div>
+        </CardLayout>
       </div>
     </>
   );
