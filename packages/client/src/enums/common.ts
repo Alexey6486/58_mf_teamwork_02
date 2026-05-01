@@ -19,4 +19,5 @@ export const EIconButton = {
   THUMB_DOWN: EReactions.TD,
   SEND: 'send',
   CROSS: 'cross',
+  GEO: 'geolocation',
 } as const;

@@ -3,10 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import {
   BTN_CLASS,
   BTN_GROUP_CLASS,
-  CARD_BORDER_CLASS,
   COUNTER_BTN_CLASS,
-  FORM_CONTAINER_CLASS,
   FORM_PAGE_CONTAINER_CLASS,
+  PAGE_TITLE_SIZE_CLASS,
   TOGGLE_BTN_ACTIVE_CLASS,
   TOGGLE_BTN_BASE_CLASS,
   TOGGLE_BTN_INACTIVE_CLASS,
@@ -23,7 +22,7 @@ import { MAX_PLAYERS, MIN_PLAYERS } from '../../constants/game';
 import { EIconButton } from '../../enums';
 import { selectUser } from '../../slices/user-slice';
 import { useSelector } from '../../store/store';
-import { Logo } from '../../components/Logo/Logo';
+import { CardLayout } from '../../components/CardLayout';
 
 const COMPUTER_DIFFICULTY_LABELS: Record<ComputerPlayerDifficulty, string> = {
   [ComputerPlayerDifficulty.EASY]: 'Комп.Легкий',
@@ -122,85 +121,84 @@ export const GameStartScreen: FC<GameStartScreenProps> = ({ onStart }) => {
 
   return (
     <div className={FORM_PAGE_CONTAINER_CLASS}>
-      <div className={FORM_CONTAINER_CLASS}>
-        <span className={CARD_BORDER_CLASS} />
-        <Logo
-          text="НАСТРОЙКИ ИГРЫ"
-          textSize="text-3xl"
-          bgColor="bg-f7-light-green"
-          leftBtnCb={toMain}
-          leftBtnIcon={EIconButton.BACK}
-          leftBtnText="На главную страницу"
-        />
-        <div className="z-20 mx-[20px] flex flex-colw-full">
-          <div>
+      <CardLayout
+        text="НАСТРОЙКИ ИГРЫ"
+        textSize={PAGE_TITLE_SIZE_CLASS}
+        bgColor="bg-f7-light-green"
+        leftBtnCb={toMain}
+        leftBtnIcon={EIconButton.BACK}
+        leftBtnText="На главную страницу">
+        <>
+          <div className="flex flex-colw-full">
             <div>
-              {playersConfig.map((player, index) => (
-                <div className="mb-4" key={index}>
-                  <span className="text-main-white dark:text-main-black mb-4 block">
-                    Имя: {player.name}
-                  </span>
-                  <div className="flex gap-2 w-full">
-                    <button
-                      className={`${TOGGLE_BTN_BASE_CLASS} ${
-                        player.type === 'human'
-                          ? TOGGLE_BTN_ACTIVE_CLASS
-                          : TOGGLE_BTN_INACTIVE_CLASS
-                      }`}
-                      onClick={() =>
-                        changePlayerType(player, PlayerType.Human, index)
-                      }>
-                      Человек
-                    </button>
-                    <div>
-                      {[
-                        ComputerPlayerDifficulty.EASY,
-                        ComputerPlayerDifficulty.NORMAL,
-                        ComputerPlayerDifficulty.HARD,
-                      ].map(dif => (
-                        <button
-                          key={dif}
-                          className={`${TOGGLE_BTN_BASE_CLASS} ${
-                            player.difficulty === dif
-                              ? TOGGLE_BTN_ACTIVE_CLASS
-                              : TOGGLE_BTN_INACTIVE_CLASS
-                          } mr-2`}
-                          onClick={() =>
-                            changePlayerType(
-                              player,
-                              PlayerType.Computer,
-                              index,
-                              dif
-                            )
-                          }>
-                          {COMPUTER_DIFFICULTY_LABELS[dif]}
-                        </button>
-                      ))}
+              <div>
+                {playersConfig.map((player, index) => (
+                  <div className="mb-4" key={index}>
+                    <span className="text-main-white dark:text-main-black mb-4 block">
+                      Имя: {player.name}
+                    </span>
+                    <div className="flex gap-2 w-full">
+                      <button
+                        className={`${TOGGLE_BTN_BASE_CLASS} ${
+                          player.type === 'human'
+                            ? TOGGLE_BTN_ACTIVE_CLASS
+                            : TOGGLE_BTN_INACTIVE_CLASS
+                        }`}
+                        onClick={() =>
+                          changePlayerType(player, PlayerType.Human, index)
+                        }>
+                        Человек
+                      </button>
+                      <div>
+                        {[
+                          ComputerPlayerDifficulty.EASY,
+                          ComputerPlayerDifficulty.NORMAL,
+                          ComputerPlayerDifficulty.HARD,
+                        ].map(dif => (
+                          <button
+                            key={dif}
+                            className={`${TOGGLE_BTN_BASE_CLASS} ${
+                              player.difficulty === dif
+                                ? TOGGLE_BTN_ACTIVE_CLASS
+                                : TOGGLE_BTN_INACTIVE_CLASS
+                            } mr-2`}
+                            onClick={() =>
+                              changePlayerType(
+                                player,
+                                PlayerType.Computer,
+                                index,
+                                dif
+                              )
+                            }>
+                            {COMPUTER_DIFFICULTY_LABELS[dif]}
+                          </button>
+                        ))}
+                      </div>
+                      <button
+                        className={COUNTER_BTN_CLASS}
+                        onClick={() => removePlayer(index)}
+                        disabled={playerCount <= 2}>
+                        -
+                      </button>
                     </div>
-                    <button
-                      className={COUNTER_BTN_CLASS}
-                      onClick={() => removePlayer(index)}
-                      disabled={playerCount <= 2}>
-                      -
-                    </button>
                   </div>
-                </div>
-              ))}
-            </div>
-            <div className={BTN_GROUP_CLASS}>
-              <button
-                className={BTN_CLASS}
-                onClick={() => fillPlayer()}
-                disabled={playerCount >= MAX_PLAYERS}>
-                Добавить игрока
-              </button>
+                ))}
+              </div>
+              <div className={BTN_GROUP_CLASS}>
+                <button
+                  className={BTN_CLASS}
+                  onClick={() => fillPlayer()}
+                  disabled={playerCount >= MAX_PLAYERS}>
+                  Добавить игрока
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-        <div className={`${BTN_GROUP_CLASS} w-full z-20`}>
-          <Button onClick={handleStart} content="Начать игру" />
-        </div>
-      </div>
+          <div className={`${BTN_GROUP_CLASS} w-full`}>
+            <Button onClick={handleStart} content="Начать игру" />
+          </div>
+        </>
+      </CardLayout>
     </div>
   );
 };

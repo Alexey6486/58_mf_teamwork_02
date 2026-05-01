@@ -1,5 +1,6 @@
 import React, { type FC, type ReactNode } from 'react';
 import { ThemeSwitch } from '../ThemeSwitch';
+import { GeoLocation } from '../Geo';
 import { MAIN_CONTAINER_CLASS } from '../../constants/style-groups';
 
 type TProps = {
@@ -11,6 +12,7 @@ export const Layout: FC<TProps> = ({ children }) => {
     <div className={MAIN_CONTAINER_CLASS}>
       {children}
       <ThemeSwitch />
+      <GeoLocation />
     </div>
   );
 };
