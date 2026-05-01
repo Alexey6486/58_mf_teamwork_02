@@ -17,13 +17,14 @@ const getIcon = (type: EnumIconType, hoverName: string, width: string) => {
     case EIconButton.BACK: {
       return (
         <svg
+          className="group"
           xmlns="http://www.w3.org/2000/svg"
           width={width}
           height="24"
           viewBox="0 0 24 24">
           <title>{hoverName}</title>
           <path
-            className="dark:fill-path-light fill-path-dark"
+            className="dark:fill-f7-beige fill-f7-dark group-hover:fill-f7-beige dark:group-hover:fill-f7-dark"
             d="M21 11H6.414l5.293-5.293l-1.414-1.414L2.586 12l7.707 7.707l1.414-1.414L6.414 13H21z"
           />
         </svg>
@@ -32,17 +33,18 @@ const getIcon = (type: EnumIconType, hoverName: string, width: string) => {
     case EIconButton.OUT: {
       return (
         <svg
+          className="group"
           xmlns="http://www.w3.org/2000/svg"
           width={width}
           height="24"
           viewBox="0 0 24 24">
           <title>{hoverName}</title>
           <path
-            className="dark:fill-path-light fill-path-dark"
+            className="dark:fill-f7-beige fill-f7-dark group-hover:fill-f7-beige dark:group-hover:fill-f7-dark"
             d="m13 16l5-4l-5-4v3H4v2h9z"
           />
           <path
-            className="dark:fill-path-light fill-path-dark"
+            className="dark:fill-f7-beige fill-f7-dark group-hover:fill-f7-beige dark:group-hover:fill-f7-dark"
             d="M20 3h-9c-1.103 0-2 .897-2 2v4h2V5h9v14h-9v-4H9v4c0 1.103.897 2 2 2h9c1.103 0 2-.897 2-2V5c0-1.103-.897-2-2-2"
           />
         </svg>
@@ -57,7 +59,7 @@ const getIcon = (type: EnumIconType, hoverName: string, width: string) => {
           viewBox="0 0 24 24">
           <title>{hoverName}</title>
           <path
-            fill="#000000"
+            className="fill-f7-dark"
             d="M11.289 23.287v-2.952a.713.713 0 1 1 1.426 0v2.952a.713.713 0 1 1-1.426 0m8.19-2.804l-2.087-2.086a.713.713 0 1 1 1.008-1.008l2.085 2.089a.713.713 0 0 1-1.009 1.002l.001.001zm-15.962 0a.71.71 0 0 1 0-1.008l2.087-2.087a.713.713 0 1 1 1.008 1.008l-2.087 2.086a.71.71 0 0 1-1.008 0zm2.803-8.485a5.683 5.683 0 1 1 11.366 0a5.683 5.683 0 0 1-11.366 0m1.425 0a4.26 4.26 0 1 0 8.518 0a4.26 4.26 0 0 0-8.518 0m12.591.713a.713.713 0 1 1 0-1.426h2.952a.713.713 0 1 1 0 1.426zm-19.623 0a.713.713 0 1 1 0-1.426h2.953a.713.713 0 1 1 0 1.426zM17.39 6.608a.71.71 0 0 1 0-1.008l2.087-2.087a.713.713 0 1 1 1.008 1.008l-2.087 2.087a.71.71 0 0 1-1.008 0m-11.788 0L3.517 4.523a.713.713 0 1 1 1.008-1.008l2.087 2.087A.713.713 0 1 1 5.604 6.61zm5.685-2.944V.713a.713.713 0 1 1 1.426 0v2.952a.713.713 0 1 1-1.426 0z"
           />
         </svg>
@@ -72,8 +74,8 @@ const getIcon = (type: EnumIconType, hoverName: string, width: string) => {
           viewBox="0 0 24 24">
           <title>{hoverName}</title>
           <path
+            className="fill-f7-beige"
             d="M12 11.807A9.002 9.002 0 0 1 10.049 2a9.942 9.942 0 0 0-5.12 2.735c-3.905 3.905-3.905 10.237 0 14.142c3.906 3.906 10.237 3.905 14.143 0a9.946 9.946 0 0 0 2.735-5.119A9.003 9.003 0 0 1 12 11.807z"
-            fill="#FFFFFF"
           />
         </svg>
       );
@@ -184,6 +186,35 @@ const getIcon = (type: EnumIconType, hoverName: string, width: string) => {
             strokeLinejoin="round"
             strokeWidth="2"
             d="m7 7l10 10M7 17L17 7"
+          />
+        </svg>
+      );
+    }
+    case EIconButton.GEO: {
+      return (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24">
+          <title>{hoverName}</title>
+          <path
+            className="fill-path-light dark:fill-path-dark"
+            fillRule="evenodd"
+            d="M11.455 23h1.101l.994-1.242c1.306-1.632 2.881-3.725 4.137-5.891C18.904 13.767 20 11.305 20 9c0-4.605-3.395-8-8-8S4 4.395 4 9c0 2.293 1.063 4.755 2.271 6.867c1.245 2.177 2.82 4.276 4.177 5.916zM6 9c0 2.95 2.386 6.846 4.712 9.9c.41.54.83 1.047 1.225 1.524L12 20.5q.603-.755 1.247-1.611C15.553 15.823 18 11.949 18 9c0-3.5-2.5-6-6-6S6 5.5 6 9"
+            clipRule="evenodd"
+          />
+          <circle
+            cx="12"
+            cy="9"
+            r="1"
+            className="fill-path-light dark:fill-path-dark"
+          />
+          <path
+            className="fill-path-light dark:fill-path-dark"
+            fillRule="evenodd"
+            d="M12 11a2 2 0 1 0 0-4a2 2 0 0 0 0 4"
+            clipRule="evenodd"
           />
         </svg>
       );

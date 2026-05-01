@@ -11,15 +11,14 @@ import { type AppDispatch, useSelector } from '../../store/store';
 import { type ILeaderboard, type TSortDirection } from '../../types';
 import { bubbleObjectSort, cloneDeep } from '../../utils';
 import {
-  CARD_BORDER_CLASS,
-  FORM_CONTAINER_CLASS,
   FORM_PAGE_CONTAINER_CLASS,
+  PAGE_TITLE_SIZE_CLASS,
 } from '../../constants/style-groups';
 import { type PageInitArgs, ROUTES } from '../../routes';
 import { EIconButton } from '../../enums';
 import { fromLeaderboardData } from '../../utils/fromLeaderboardData';
 import { usePage } from '../../hooks';
-import { Logo } from '../../components/Logo/Logo';
+import { CardLayout } from '../../components/CardLayout';
 
 type TLeaderboardRow =
   | (ILeaderboard & {
@@ -157,7 +156,6 @@ const LeaderboardRow: FC<TLeaderboardRow> = memo(
 
 export const LeaderboardPage = () => {
   usePage({ initPage: initLeaderBoardPage });
-
   const { data } = useSelector(selectLeaderboard);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -200,17 +198,14 @@ export const LeaderboardPage = () => {
         <meta name="description" content="Страница лидерборд" />
       </Helmet>
       <div className={FORM_PAGE_CONTAINER_CLASS}>
-        <div className={FORM_CONTAINER_CLASS}>
-          <span className={CARD_BORDER_CLASS} />
-          <Logo
-            text="ТАБЛИЦА ЛИДЕРОВ"
-            textSize="text-3xl"
-            bgColor="bg-f7-light-blueish"
-            leftBtnCb={toMain}
-            leftBtnIcon={EIconButton.BACK}
-            leftBtnText="На главную страницу"
-          />
-          <div className="z-20 mt-4 mx-[50px] overflow-auto max-h-80 w-[500px] pl-2 pr-2 bg-form-light dark:bg-form-dark border border-form-light rounded-main-radius dark:border-form-dark custom-scroll">
+        <CardLayout
+          text="ТАБЛИЦА ЛИДЕРОВ"
+          textSize={PAGE_TITLE_SIZE_CLASS}
+          bgColor="bg-f7-light-blueish"
+          leftBtnCb={toMain}
+          leftBtnIcon={EIconButton.BACK}
+          leftBtnText="На главную страницу">
+          <div className="overflow-auto h-80 w-[500px] pl-2 pr-2 bg-form-light dark:bg-form-dark border border-form-light dark:border-form-dark custom-scroll">
             <LeaderboardRow
               type={'header'}
               id={'header'}
@@ -222,7 +217,7 @@ export const LeaderboardPage = () => {
               <LeaderboardRow key={el.id} type={'row'} {...el} />
             ))}
           </div>
-        </div>
+        </CardLayout>
       </div>
     </>
   );
