@@ -1,13 +1,11 @@
 import React, { type FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import { Logo } from '../../components/Logo/Logo';
 import { Topic } from '../../components/Topic/Topic';
 import {
   BTN_CLASS,
-  CARD_BORDER_CLASS,
-  FORM_CONTAINER_CLASS,
   FORM_PAGE_CONTAINER_CLASS,
+  PAGE_TITLE_SIZE_CLASS,
 } from '../../constants/style-groups';
 import { type PageInitArgs, ROUTES } from '../../routes';
 import { useDispatch, useSelector } from '../../store/store';
@@ -20,6 +18,7 @@ import { selectUser } from '../../slices/user-slice';
 import { EIconButton } from '../../enums';
 import { isArray } from '../../utils';
 import { type ITopic } from '../../types';
+import { CardLayout } from '../../components/CardLayout';
 
 const getErrorMessage = (error: unknown, fallback: string) => {
   if (error instanceof Error && error.message) return error.message;
@@ -92,18 +91,14 @@ export const ForumPage: FC = () => {
       </Helmet>
       <div
         className={`${FORM_PAGE_CONTAINER_CLASS} flex-col items-center justify-start`}>
-        <div className={`${FORM_CONTAINER_CLASS} w-[950px]`}>
-          <span className={CARD_BORDER_CLASS} />
-          <Logo
-            text="ФОРУМ"
-            textSize="text-3xl"
-            bgColor="bg-f7-light-green"
-            leftBtnCb={toMain}
-            leftBtnIcon={EIconButton.BACK}
-            leftBtnText="На главную страницу"
-          />
-
-          <div className="z-20 mt-[32px] w-[900px]">
+        <CardLayout
+          text="ФОРУМ"
+          textSize={PAGE_TITLE_SIZE_CLASS}
+          bgColor="bg-f7-light-green"
+          leftBtnCb={toMain}
+          leftBtnIcon={EIconButton.BACK}
+          leftBtnText="На главную страницу">
+          <div className="mt-[32px] w-[900px]">
             <div className="flex justify-end">
               {!isAddingTopic ? (
                 <div className="flex justify-end w-full">
@@ -151,7 +146,7 @@ export const ForumPage: FC = () => {
               <p className="mt-2 text-sm text-red-600">{createError}</p>
             ) : null}
 
-            <div className="z-20 mt-4 max-h-[650px] overflow-y-auto overflow-x-hidden rounded-[10px] custom-scroll bg-form-dark px-[10px] py-6 flex flex-col gap-[10px] dark:bg-form-dark">
+            <div className="mt-4 max-h-[650px] overflow-y-auto overflow-x-hidden custom-scroll border dark:border-form-dark border-form-dark bg-form-dark px-[10px] py-6 flex flex-col gap-[10px] dark:bg-form-dark">
               {isArray(topics, true) ? (
                 topics.map((topic: ITopic) => (
                   <Topic
@@ -165,7 +160,7 @@ export const ForumPage: FC = () => {
               )}
             </div>
           </div>
-        </div>
+        </CardLayout>
       </div>
     </>
   );
