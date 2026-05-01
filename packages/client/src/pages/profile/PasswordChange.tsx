@@ -18,15 +18,14 @@ import { type PageInitArgs, ROUTES } from '../../routes';
 import {
   BTN_CLASS,
   BTN_GROUP_CLASS,
-  CARD_BORDER_CLASS,
   FIELD_CLASS,
   FIELD_GROUP_CLASS,
-  FORM_CONTAINER_CLASS,
   FORM_PAGE_CONTAINER_CLASS,
   FORM_WRAPPER_CLASS,
+  PAGE_TITLE_SIZE_CLASS,
 } from '../../constants/style-groups';
-import { Logo } from '../../components/Logo/Logo';
 import { EIconButton } from '../../enums';
+import { CardLayout } from '../../components/CardLayout';
 
 const INITIAL_VALUES: Partial<IUserPassword> = {
   oldPassword: '',
@@ -78,34 +77,31 @@ export const PasswordChange: FC = () => {
 
   return (
     <div className={FORM_PAGE_CONTAINER_CLASS}>
-      <div className={`${FORM_CONTAINER_CLASS} w-[500px]`}>
-        <span className={CARD_BORDER_CLASS} />
-        <Logo
-          text="ИЗМЕНИТЬ ПАРОЛЬ"
-          textSize="text-3xl"
-          bgColor="bg-f7-pale-red"
-          leftBtnCb={toProfile}
-          leftBtnIcon={EIconButton.BACK}
-          leftBtnText="На страницу профиля"
-        />
+      <CardLayout
+        text="ПАРОЛЬ"
+        textSize={PAGE_TITLE_SIZE_CLASS}
+        bgColor="bg-f7-pale-red"
+        leftBtnCb={toProfile}
+        leftBtnIcon={EIconButton.BACK}
+        leftBtnText="На страницу профиля">
         <div className={FORM_WRAPPER_CLASS}>
           <FormikProvider value={formik}>
             <div className={`${FIELD_GROUP_CLASS} items-center mb-10`}>
-              <div className={FIELD_CLASS}>
+              <div className={`${FIELD_CLASS} w-full`}>
                 <Fields.Text
                   name="oldPassword"
                   type="password"
                   label="Старый пароль"
                 />
               </div>
-              <div className={FIELD_CLASS}>
+              <div className={`${FIELD_CLASS} w-full`}>
                 <Fields.Text
                   name="newPassword"
                   type="password"
                   label="Новый пароль"
                 />
               </div>
-              <div className={FIELD_CLASS}>
+              <div className={`${FIELD_CLASS} w-full`}>
                 <Fields.Text
                   name="confirmedPassword"
                   type="password"
@@ -113,7 +109,7 @@ export const PasswordChange: FC = () => {
                 />
               </div>
             </div>
-            <div className={BTN_GROUP_CLASS}>
+            <div className="w-full flex justify-center">
               <button
                 className={BTN_CLASS}
                 type="submit"
@@ -123,7 +119,7 @@ export const PasswordChange: FC = () => {
             </div>
           </FormikProvider>
         </div>
-      </div>
+      </CardLayout>
     </div>
   );
 };

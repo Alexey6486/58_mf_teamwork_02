@@ -1,0 +1,1 @@
+export { GeoLocation } from './GeoLocation';

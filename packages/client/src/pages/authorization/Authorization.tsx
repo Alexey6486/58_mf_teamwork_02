@@ -4,7 +4,6 @@ import * as Yup from 'yup';
 import { FormikProvider, useFormik } from 'formik';
 import { useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
-import { Logo } from '../../components/Logo/Logo';
 import type { IAuthorizationForm } from '../../types';
 import {
   REGEX,
@@ -17,10 +16,8 @@ import { type PageInitArgs, ROUTES } from '../../routes';
 import {
   BTN_CLASS,
   BTN_GROUP_CLASS,
-  CARD_BORDER_CLASS,
   FIELD_CLASS,
   FIELD_GROUP_CLASS,
-  FORM_CONTAINER_CLASS,
   FORM_PAGE_CONTAINER_CLASS,
   FORM_WRAPPER_CLASS,
 } from '../../constants/style-groups';
@@ -31,6 +28,7 @@ import { useYandexOAuth } from '../../hooks';
 import { IconButton } from '../../components/IconButton';
 import { EIconButton } from '../../enums';
 import { YandexIdLogo } from '../../components/YandexIdLogo/YandexIdLogo';
+import { CardLayout } from '../../components/CardLayout';
 
 const INITIAL_VALUES: IAuthorizationForm = {
   login: '',
@@ -98,9 +96,7 @@ export const AuthorizationPage: FC = () => {
             hoverName={'Logout'}
           />
         </div>
-        <div className={FORM_CONTAINER_CLASS}>
-          <span className={CARD_BORDER_CLASS} />
-          <Logo text="FLIP7" fontWeight="font-bold" />
+        <CardLayout text="FLIP7" fontWeight="font-bold">
           <div className={FORM_WRAPPER_CLASS}>
             <FormikProvider value={formik}>
               <div className={FIELD_GROUP_CLASS}>
@@ -131,7 +127,7 @@ export const AuthorizationPage: FC = () => {
               </div>
             </FormikProvider>
           </div>
-        </div>
+        </CardLayout>
       </div>
     </>
   );

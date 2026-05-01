@@ -18,17 +18,16 @@ import { type PageInitArgs, ROUTES } from '../../routes';
 import {
   BTN_CLASS,
   BTN_GROUP_CLASS,
-  CARD_BORDER_CLASS,
   FIELD_CLASS,
   FIELD_PR_CLASS,
-  FORM_CONTAINER_CLASS,
   FORM_PAGE_CONTAINER_CLASS,
   FORM_WRAPPER_CLASS,
+  PAGE_TITLE_SIZE_CLASS,
 } from '../../constants/style-groups';
 import { selectUser } from '../../slices/user-slice';
 import { signupThunk } from '../../slices/auth-slice';
 import { EIconButton } from '../../enums';
-import { Logo } from '../../components/Logo/Logo';
+import { CardLayout } from '../../components/CardLayout';
 
 const INITIAL_VALUES: Partial<IRegistrationForm> = {
   first_name: '',
@@ -112,16 +111,13 @@ export const RegistrationPage: FC = () => {
         <meta name="description" content="Страница регистрации" />
       </Helmet>
       <div className={FORM_PAGE_CONTAINER_CLASS}>
-        <div className={FORM_CONTAINER_CLASS}>
-          <span className={CARD_BORDER_CLASS} />
-          <Logo
-            text="РЕГИСТРАЦИЯ"
-            textSize="text-3xl"
-            bgColor="bg-f7-green"
-            leftBtnCb={toAuthorization}
-            leftBtnIcon={EIconButton.BACK}
-            leftBtnText="На страницу авторизации"
-          />
+        <CardLayout
+          text="РЕГИСТРАЦИЯ"
+          textSize={PAGE_TITLE_SIZE_CLASS}
+          bgColor="bg-f7-pink"
+          leftBtnCb={toAuthorization}
+          leftBtnIcon={EIconButton.BACK}
+          leftBtnText="На страницу авторизации">
           <div className={FORM_WRAPPER_CLASS}>
             <FormikProvider value={formik}>
               <div className="flex flex-col">
@@ -200,7 +196,7 @@ export const RegistrationPage: FC = () => {
               </div>
             </FormikProvider>
           </div>
-        </div>
+        </CardLayout>
       </div>
     </>
   );

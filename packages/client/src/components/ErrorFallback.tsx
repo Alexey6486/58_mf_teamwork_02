@@ -1,7 +1,6 @@
 import { type FallbackProps } from 'react-error-boundary';
 import {
   FORM_PAGE_CONTAINER_CLASS,
-  FORM_TITLE_CLASS,
   TITLE_CLASS,
 } from '../constants/style-groups';
 
@@ -31,7 +30,7 @@ export const ErrorFallback = ({ error }: FallbackProps) => {
   return (
     <div className={`${FORM_PAGE_CONTAINER_CLASS} h-screen`}>
       <div className="flex flex-col items-center">
-        <h2 className={FORM_TITLE_CLASS}>{errorMessage}</h2>
+        <h2 className={TITLE_CLASS}>{errorMessage}</h2>
         <div className="flex flex-col items-center">
           <h4 className={TITLE_CLASS}>Error stack</h4>
           <div className="mt-6 p-4 max-w-96 max-h-96 overflow-auto bg-main-white dark:bg-form-dark border border-form-light dark:border-form-dark rounded-main-radius text-main-black dark:text-main-white shadow-outer-light dark:shadow-outer-dark">
