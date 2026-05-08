@@ -2,17 +2,19 @@ import type { Response, Request } from 'express';
 import { Comment, Reaction, Topic, User } from '../db';
 import { catchAsync } from '../utils/catchAsync';
 import { CommentAssociationAlias } from '../models/comment';
-import { TextValidation } from '../utils/validation';
+import {
+  TextValidation,
+  normalizeText,
+  toPositiveInt,
+} from '../utils/validation';
 import { escapeHTML } from '../utils/xss';
 
-const toOptionalInt = (value: unknown): number | undefined => {
-  if (value === null || value === undefined || value === '') return undefined;
+const COMMENT_TEXT_MIN = 1;
+const COMMENT_TEXT_MAX = 2000;
 
-  const num = Number(value);
-  if (!Number.isFinite(num)) return undefined;
-
-  const int = Math.floor(num);
-  return int > 0 ? int : undefined;
+const toOptionalPositiveInt = (value: unknown): number | null => {
+  if (value === null || value === undefined || value === '') return null;
+  return toPositiveInt(value) ?? null;
 };
 
 export const getAllComments = catchAsync(
@@ -82,7 +84,7 @@ export const getAllComments = catchAsync(
 
 export const createComment = catchAsync(
   async (request: Request, response: Response) => {
-    const topicId = toOptionalInt(
+    const topicId = toPositiveInt(
       request.params.topicId ?? request.body.topicId
     );
     const {
@@ -95,39 +97,77 @@ export const createComment = catchAsync(
       replyToCommentId?: unknown;
     };
 
-    const user = await User.findOne({
-      where: {
-        userId: authorId,
-      },
-    });
-
     if (!topicId) {
       response.status(400).json({ error: 'wrong topic id' });
       return;
     }
 
-    const normalizedText = typeof text === 'string' ? text.trim() : '';
+    const authorExternalId = toPositiveInt(authorId);
+    if (!authorExternalId) {
+      response.status(400).json({ error: 'wrong author id' });
+      return;
+    }
+
+    const user = await User.findOne({
+      where: {
+        userId: authorExternalId,
+      },
+    });
+
+    if (!user) {
+      response.status(400).json({ error: 'user not found' });
+      return;
+    }
+
+    const normalizedText = normalizeText(text);
+    const isTextValid = TextValidation(normalizedText, {
+      min: COMMENT_TEXT_MIN,
+      max: COMMENT_TEXT_MAX,
+    });
+
+    if (!isTextValid) {
+      response.status(400).json({ error: 'wrong data type or length' });
+      return;
+    }
 
     const targetTopic = await Topic.findByPk(topicId);
-
     if (!targetTopic) {
-      throw new Error('Topic not found');
+      response.status(404).json({ error: 'topic not found' });
+      return;
     }
 
-    if (TextValidation(normalizedText)) {
-      const comment = await Comment.create({
-        authorId: user?.dataValues?.id,
-        topicId,
-        text: escapeHTML(normalizedText),
-        replyToCommentId,
-      });
-
-      response.status(200).json({
-        status: 'success',
-        data: { comment },
-      });
-    } else {
-      response.status(400).json({ error: 'wrong data type' });
+    const normalizedReplyToCommentId = toOptionalPositiveInt(replyToCommentId);
+    if (
+      replyToCommentId !== null &&
+      replyToCommentId !== undefined &&
+      replyToCommentId !== '' &&
+      !normalizedReplyToCommentId
+    ) {
+      response.status(400).json({ error: 'wrong replyToCommentId' });
+      return;
     }
+
+    if (normalizedReplyToCommentId) {
+      const repliedComment = await Comment.findByPk(normalizedReplyToCommentId);
+
+      if (!repliedComment || repliedComment.dataValues.topicId !== topicId) {
+        response
+          .status(400)
+          .json({ error: 'reply comment not found in topic' });
+        return;
+      }
+    }
+
+    const comment = await Comment.create({
+      authorId: user.dataValues.id,
+      topicId,
+      text: escapeHTML(normalizedText),
+      replyToCommentId: normalizedReplyToCommentId,
+    });
+
+    response.status(200).json({
+      status: 'success',
+      data: { comment },
+    });
   }
 );

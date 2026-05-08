@@ -8,12 +8,15 @@ interface TopicProps {
 }
 
 export const Topic: FC<TopicProps> = ({ topic, onClick }) => {
+  const safeTitle = String(topic?.title ?? '');
+  const safeAuthorLogin = String(topic?.User?.login ?? '');
+
   return (
     <div
       className="bg-[#F7EED2] rounded-[10px] p-2 cursor-pointer"
       onClick={onClick}>
       <div className="flex justify-between mb-2">
-        <p className="font-bold text-lg">{topic.title}</p>
+        <p className="font-bold text-lg">{safeTitle}</p>
         <span>
           {topic.commentCount > 0
             ? `Комментариев: ${topic.commentCount}`
@@ -21,7 +24,7 @@ export const Topic: FC<TopicProps> = ({ topic, onClick }) => {
         </span>
       </div>
       <div className="flex justify-between">
-        <span className="text-sm">автор: {topic.User.login}</span>
+        <span className="text-sm">автор: {safeAuthorLogin}</span>
         <span className="text-sm">создано: {formatDate(topic.createdAt)}</span>
       </div>
     </div>
