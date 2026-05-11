@@ -21,6 +21,8 @@ import { formatDate, isArray } from '../../utils';
 import { type ITopicComment } from '../../types';
 import { CardLayout } from '../../components/CardLayout';
 
+const COMMENT_MAX_LENGTH = 2000;
+
 const getErrorMessage = (error: unknown, fallback: string) => {
   if (error instanceof Error && error.message) return error.message;
   return fallback;
@@ -45,8 +47,19 @@ export const TopicPage: FC = () => {
   const handleSend = async () => {
     if (!Number.isFinite(topicId) || isSending) return;
 
+    const authorId = Number(user?.id);
+    if (!Number.isInteger(authorId) || authorId <= 0) {
+      setSendError('Пользователь не авторизован');
+      return;
+    }
+
     const normalized = text.trim();
     if (!normalized) return;
+
+    if (normalized.length > COMMENT_MAX_LENGTH) {
+      setSendError(`Комментарий слишком длинный (макс. ${COMMENT_MAX_LENGTH})`);
+      return;
+    }
 
     setSendError(null);
     setIsSending(true);
@@ -56,7 +69,7 @@ export const TopicPage: FC = () => {
         createCommentThunk({
           topicId,
           text: normalized,
-          authorId: Number(user?.id),
+          authorId,
           ...(response && { replyToCommentId: response.id }),
         })
       ).unwrap();
@@ -186,7 +199,9 @@ export const TopicPage: FC = () => {
                       <div className="border-b mb-2 text-sm border-f7-dark dark:border-main-white">
                         Ответ на комментарий:
                       </div>
-                      <div className="w-full truncate">{response.text}</div>
+                      <div className="w-full truncate">
+                        {String(response.text ?? '')}
+                      </div>
                     </div>
                   </div>
                 )}
@@ -196,7 +211,10 @@ export const TopicPage: FC = () => {
                     className="flex-1 text-main-black p-3 dark:bg-input-dark"
                     placeholder="Введите сообщение"
                     value={text}
-                    onChange={e => setText(e.target.value)}
+                    onChange={e =>
+                      setText(e.target.value.slice(0, COMMENT_MAX_LENGTH))
+                    }
+                    maxLength={COMMENT_MAX_LENGTH}
                     disabled={isSending}
                   />
                   <div className="mx-2 h-[48px] flex align-center">

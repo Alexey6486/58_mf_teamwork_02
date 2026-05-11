@@ -87,26 +87,29 @@ export const Message: FC<MessageProps> = ({ message, onResponse }) => {
 
   const activeStyle = '[&_path]:!fill-f7-light-blue';
 
+  const safeAuthorLogin = String(User?.login ?? '');
+  const safeText = String(text ?? '');
+  const safeReplyAuthorLogin = String(repliedToComment?.User?.login ?? '');
+  const safeReplyText = String(repliedToComment?.text ?? '');
+
   return (
     <div className="border-2 border-f7-beige rounded-[10px] py-1.5 px-2.5 mb-2 bg-form-dark dark:bg-f7-beige text-main-light dark:text-main-black ">
       <div className="flex justify-between border-b dark:border-f7-dark border-main-white">
-        <span className="text-sm">автор: {User?.login ?? ''}</span>
+        <span className="text-sm">автор: {safeAuthorLogin}</span>
         <span className="text-sm">создано: {formatDate(createdAt ?? '')}</span>
       </div>
       {replyToCommentId && repliedToComment && (
         <div className="relative mt-1 mb-2 p-2 bg-input-dark rounded-main-radius text-f7-dark dark:bg-main-dark dark:text-main-light truncate">
           <div className="flex justify-between border-b border-f7-dark dark:border-main-white">
-            <span className="text-sm">
-              автор: {repliedToComment?.User?.login ?? ''}
-            </span>
+            <span className="text-sm">автор: {safeReplyAuthorLogin}</span>
             <span className="text-sm">
               создано: {formatDate(repliedToComment?.createdAt ?? '')}
             </span>
           </div>
-          <div className="w-full truncate">{repliedToComment?.text ?? ''}</div>
+          <div className="w-full truncate">{safeReplyText}</div>
         </div>
       )}
-      <p className="py-2">{text}</p>
+      <p className="py-2">{safeText}</p>
       <div className="flex justify-between items-center mt-2">
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-1">
