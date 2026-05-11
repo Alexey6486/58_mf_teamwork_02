@@ -23,6 +23,14 @@ const port =
   isDev && platform && !platform.includes('win') ? port_linux : port_win;
 const API_PROXY_PATH = '/api/v2';
 
+const escapeInlineScriptJSON = (json: string): string =>
+  json
+    .replace(/</g, '\\u003C')
+    .replace(/>/g, '\\u003E')
+    .replace(/&/g, '\\u0026')
+    .replace(/\u2028/g, '\\u2028')
+    .replace(/\u2029/g, '\\u2029');
+
 async function createServer() {
   const app = express();
 
@@ -98,6 +106,12 @@ async function createServer() {
         styleTags,
       } = await render(req);
 
+      const serializedState = escapeInlineScriptJSON(
+        serialize(initialState, {
+          isJSON: true,
+        })
+      );
+
       // Заменяем комментарий на сгенерированную HTML-строку
       const html = template
         .replace('<!--ssr-styles-->', styleTags)
@@ -108,15 +122,15 @@ async function createServer() {
         .replace(`<!--ssr-outlet-->`, appHtml)
         .replace(
           `<!--ssr-initial-state-->`,
-          `<script>window.APP_INITIAL_STATE = ${serialize(initialState, {
-            isJSON: true,
-          })}</script>`
+          `<script>window.APP_INITIAL_STATE = ${serializedState}</script>`
         );
 
       // Завершаем запрос и отдаём HTML-страницу
       res.status(200).set({ 'Content-Type': 'text/html' }).end(html);
     } catch (e) {
-      vite.ssrFixStacktrace(e as Error);
+      if (vite) {
+        vite.ssrFixStacktrace(e as Error);
+      }
       next(e);
     }
   });
