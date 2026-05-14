@@ -35,10 +35,8 @@ export const Message: FC<MessageProps> = ({ message, onResponse }) => {
     r => String(r.User?.userId) === String(user?.id)
   );
 
-  const thumbUpCount =
-    Reactions?.filter(r => r.text === EReactions.TU).length ?? 0;
-  const thumbDownCount =
-    Reactions?.filter(r => r.text === EReactions.TD).length ?? 0;
+  const thumbUpCount = Reactions?.filter(r => r.text === EReactions.TU);
+  const thumbDownCount = Reactions?.filter(r => r.text === EReactions.TD);
 
   const handleReaction = async (reactionType: string) => {
     if (!user?.id || isReacting) return;
@@ -120,14 +118,21 @@ export const Message: FC<MessageProps> = ({ message, onResponse }) => {
               width="18"
               styles={userReaction?.text === EReactions.TU ? activeStyle : ''}
             />
-            {thumbUpCount > 0 && (
+            {thumbUpCount.length > 0 && (
               <span
-                className={`text-xs ${
+                className={`relative group text-xs cursor-pointer ${
                   userReaction?.text === EReactions.TU
                     ? 'text-f7-light-blue'
                     : 'dark:text-white'
                 }`}>
-                {thumbUpCount}
+                {thumbUpCount.length}
+                <span className="custom-scroll overflow-y-auto max-h-100 group-hover:block hidden hover:block absolute top-[calc(100%-2px)] left-0 bg-gray-400 rounded-main-radius p-2 text-f7-beige">
+                  {thumbUpCount.map(reaction => (
+                    <p key={reaction?.User?.login}>
+                      {reaction?.User?.login ?? ''}
+                    </p>
+                  ))}
+                </span>
               </span>
             )}
           </div>
@@ -139,14 +144,21 @@ export const Message: FC<MessageProps> = ({ message, onResponse }) => {
               width="18"
               styles={userReaction?.text === EReactions.TD ? activeStyle : ''}
             />
-            {thumbDownCount > 0 && (
+            {thumbDownCount.length > 0 && (
               <span
-                className={`text-xs ${
+                className={`relative group text-xs cursor-pointer ${
                   userReaction?.text === EReactions.TD
                     ? 'text-f7-light-blue'
                     : 'dark:text-white'
                 }`}>
-                {thumbDownCount}
+                {thumbDownCount.length}
+                <span className="custom-scroll overflow-y-auto max-h-100 group-hover:block hidden hover:block absolute top-[calc(100%-2px)] left-0 bg-gray-400 rounded-main-radius p-2 text-f7-beige">
+                  {thumbDownCount.map(reaction => (
+                    <p key={reaction?.User?.login}>
+                      {reaction?.User?.login ?? ''}
+                    </p>
+                  ))}
+                </span>
               </span>
             )}
           </div>

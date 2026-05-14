@@ -1,4 +1,4 @@
-import React, { type FC, useState } from 'react';
+import React, { type FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   BTN_CLASS,
@@ -118,6 +118,11 @@ export const GameStartScreen: FC<GameStartScreenProps> = ({ onStart }) => {
   const toMain = () => {
     navigate(ROUTES.main);
   };
+
+  useEffect(() => {
+    const gameConfig = getDefaultConfig(userName);
+    setPlayersConfig(gameConfig);
+  }, [login]);
 
   return (
     <div className={FORM_PAGE_CONTAINER_CLASS}>
