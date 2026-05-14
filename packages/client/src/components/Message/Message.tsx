@@ -126,7 +126,7 @@ export const Message: FC<MessageProps> = ({ message, onResponse }) => {
                     : 'text-white dark:text-f7-dark'
                 }`}>
                 {thumbUpCount.length}
-                <span className="custom-scroll overflow-y-auto max-h-100 group-hover:block hidden hover:block absolute top-[calc(100%-2px)] left-0 bg-gray-400 rounded-main-radius p-2 text-f7-beige">
+                <span className="z-10 custom-scroll overflow-y-auto max-h-100 group-hover:block hidden hover:block absolute top-[calc(100%-2px)] left-0 bg-gray-400 rounded-main-radius p-2 text-f7-beige">
                   {thumbUpCount.map(reaction => (
                     <p key={reaction?.User?.login}>
                       {reaction?.User?.login ?? ''}
@@ -152,7 +152,7 @@ export const Message: FC<MessageProps> = ({ message, onResponse }) => {
                     : 'text-white dark:text-f7-dark'
                 }`}>
                 {thumbDownCount.length}
-                <span className="custom-scroll overflow-y-auto max-h-100 group-hover:block hidden hover:block absolute top-[calc(100%-2px)] left-0 bg-gray-400 rounded-main-radius p-2 text-f7-beige">
+                <span className="z-10 custom-scroll overflow-y-auto max-h-100 group-hover:block hidden hover:block absolute top-[calc(100%-2px)] left-0 bg-gray-400 rounded-main-radius p-2 text-f7-beige">
                   {thumbDownCount.map(reaction => (
                     <p key={reaction?.User?.login}>
                       {reaction?.User?.login ?? ''}
