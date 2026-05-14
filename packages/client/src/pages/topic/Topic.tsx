@@ -22,8 +22,6 @@ import { type ITopicComment } from '../../types';
 import { CardLayout } from '../../components/CardLayout';
 import { TOPIC_COMMENT_MAX_LENGTH } from '../../constants/forum';
 
-const COMMENT_MAX_LENGTH = 2000;
-
 const getErrorMessage = (error: unknown, fallback: string) => {
   if (error instanceof Error && error.message) return error.message;
   return fallback;
@@ -57,8 +55,10 @@ export const TopicPage: FC = () => {
     const normalized = text.trim();
     if (!normalized) return;
 
-    if (normalized.length > COMMENT_MAX_LENGTH) {
-      setSendError(`Комментарий слишком длинный (макс. ${COMMENT_MAX_LENGTH})`);
+    if (normalized.length > TOPIC_COMMENT_MAX_LENGTH) {
+      setSendError(
+        `Комментарий слишком длинный (макс. ${TOPIC_COMMENT_MAX_LENGTH})`
+      );
       return;
     }
 
@@ -214,9 +214,11 @@ export const TopicPage: FC = () => {
                       placeholder="Введите сообщение"
                       value={text}
                       onChange={e =>
-                        setText(e.target.value.slice(0, COMMENT_MAX_LENGTH))
+                        setText(
+                          e.target.value.slice(0, TOPIC_COMMENT_MAX_LENGTH)
+                        )
                       }
-                      maxLength={COMMENT_MAX_LENGTH}
+                      maxLength={TOPIC_COMMENT_MAX_LENGTH}
                       disabled={isSending}
                     />
                     <span className="flex absolute bottom-0 right-2 text-[10px] text-gray-400">

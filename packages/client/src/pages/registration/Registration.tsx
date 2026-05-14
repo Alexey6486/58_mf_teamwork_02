@@ -88,7 +88,7 @@ export const RegistrationPage: FC = () => {
       );
     },
   });
-  console.log({ formik });
+
   const onSubmitForm = (event: MouseEvent<HTMLButtonElement>) => {
     event?.preventDefault();
     formik?.handleSubmit();
