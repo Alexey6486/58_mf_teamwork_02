@@ -20,6 +20,7 @@ import { EIconButton } from '../../enums';
 import { formatDate, isArray } from '../../utils';
 import { type ITopicComment } from '../../types';
 import { CardLayout } from '../../components/CardLayout';
+import { TOPIC_COMMENT_MAX_LENGTH } from '../../constants/forum';
 
 const COMMENT_MAX_LENGTH = 2000;
 
@@ -206,17 +207,23 @@ export const TopicPage: FC = () => {
                   </div>
                 )}
                 <div className="flex align-end">
-                  <input
-                    type="text"
-                    className="flex-1 text-main-black p-3 dark:bg-input-dark"
-                    placeholder="Введите сообщение"
-                    value={text}
-                    onChange={e =>
-                      setText(e.target.value.slice(0, COMMENT_MAX_LENGTH))
-                    }
-                    maxLength={COMMENT_MAX_LENGTH}
-                    disabled={isSending}
-                  />
+                  <div className="flex relative w-full">
+                    <input
+                      type="text"
+                      className="flex-1 text-main-black p-3 dark:bg-input-dark"
+                      placeholder="Введите сообщение"
+                      value={text}
+                      onChange={e =>
+                        setText(e.target.value.slice(0, COMMENT_MAX_LENGTH))
+                      }
+                      maxLength={COMMENT_MAX_LENGTH}
+                      disabled={isSending}
+                    />
+                    <span className="flex absolute bottom-0 right-2 text-[10px] text-gray-400">
+                      {text.length ?? 0}/{TOPIC_COMMENT_MAX_LENGTH}
+                    </span>
+                  </div>
+
                   <div className="mx-2 h-[48px] flex align-center">
                     <IconButton
                       iconName={EIconButton.SEND}

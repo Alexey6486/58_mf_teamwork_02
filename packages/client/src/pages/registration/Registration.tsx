@@ -20,6 +20,7 @@ import {
   BTN_GROUP_CLASS,
   FIELD_CLASS,
   FIELD_PR_CLASS,
+  FIELD_WIDTH_288,
   FORM_PAGE_CONTAINER_CLASS,
   FORM_WRAPPER_CLASS,
   PAGE_TITLE_SIZE_CLASS,
@@ -87,7 +88,7 @@ export const RegistrationPage: FC = () => {
       );
     },
   });
-
+  console.log({ formik });
   const onSubmitForm = (event: MouseEvent<HTMLButtonElement>) => {
     event?.preventDefault();
     formik?.handleSubmit();
@@ -122,7 +123,7 @@ export const RegistrationPage: FC = () => {
             <FormikProvider value={formik}>
               <div className="flex flex-col">
                 <div className="w-full flex">
-                  <div className={FIELD_PR_CLASS}>
+                  <div className={`${FIELD_PR_CLASS} ${FIELD_WIDTH_288}`}>
                     <Fields.Text
                       name="first_name"
                       type="text"
@@ -130,7 +131,7 @@ export const RegistrationPage: FC = () => {
                       placeholder="Имя"
                     />
                   </div>
-                  <div className={FIELD_CLASS}>
+                  <div className={`${FIELD_CLASS} ${FIELD_WIDTH_288}`}>
                     <Fields.Text
                       name="second_name"
                       type="text"
@@ -140,7 +141,7 @@ export const RegistrationPage: FC = () => {
                   </div>
                 </div>
                 <div className="w-full flex">
-                  <div className={FIELD_PR_CLASS}>
+                  <div className={`${FIELD_PR_CLASS} ${FIELD_WIDTH_288}`}>
                     <Fields.Text
                       name="login"
                       type="text"
@@ -148,7 +149,7 @@ export const RegistrationPage: FC = () => {
                       placeholder="Логин"
                     />
                   </div>
-                  <div className={FIELD_CLASS}>
+                  <div className={`${FIELD_CLASS} ${FIELD_WIDTH_288}`}>
                     <Fields.Text
                       name="email"
                       type="email"
@@ -158,7 +159,7 @@ export const RegistrationPage: FC = () => {
                   </div>
                 </div>
                 <div className="w-full flex">
-                  <div className={FIELD_PR_CLASS}>
+                  <div className={`${FIELD_PR_CLASS} ${FIELD_WIDTH_288}`}>
                     <Fields.Text
                       name="phone"
                       type="text"
@@ -168,7 +169,7 @@ export const RegistrationPage: FC = () => {
                   </div>
                 </div>
                 <div className="w-full flex">
-                  <div className={FIELD_PR_CLASS}>
+                  <div className={`${FIELD_PR_CLASS} ${FIELD_WIDTH_288}`}>
                     <Fields.Text
                       name="newPassword"
                       type="password"
@@ -176,7 +177,7 @@ export const RegistrationPage: FC = () => {
                       placeholder="Пароль"
                     />
                   </div>
-                  <div className={FIELD_CLASS}>
+                  <div className={`${FIELD_CLASS} ${FIELD_WIDTH_288}`}>
                     <Fields.Text
                       name="confirmedPassword"
                       type="password"
