@@ -19,6 +19,10 @@ import { EIconButton } from '../../enums';
 import { isArray } from '../../utils';
 import { type ITopic } from '../../types';
 import { CardLayout } from '../../components/CardLayout';
+import {
+  TOPIC_CONTENT_MAX_LENGTH,
+  TOPIC_TITLE_MAX_LENGTH,
+} from '../../constants/forum';
 
 const getErrorMessage = (error: unknown, fallback: string) => {
   if (error instanceof Error && error.message) return error.message;
@@ -109,22 +113,34 @@ export const ForumPage: FC = () => {
               ) : (
                 <div className="flex gap-3 items-stretch w-full">
                   <div className="flex-1 flex flex-col gap-2">
-                    <input
-                      type="text"
-                      className="flex-1 text-main-black p-3 shadow-inset-light dark:bg-input-dark dark:shadow-inset-dark rounded-main-radius"
-                      placeholder="Введите название топика"
-                      value={newTopicTitle}
-                      onChange={e => setNewTopicTitle(e.target.value)}
-                      disabled={isCreatingTopic}
-                    />
-                    <input
-                      type="text"
-                      className="flex-1 text-main-black p-3 shadow-inset-light dark:bg-input-dark dark:shadow-inset-dark rounded-main-radius"
-                      placeholder="Введите текст топика"
-                      value={newTopicText}
-                      onChange={e => setNewTopicText(e.target.value)}
-                      disabled={isCreatingTopic}
-                    />
+                    <div className="flex relative w-full">
+                      <input
+                        type="text"
+                        className="flex-1 text-main-black py-3 pl-3 pr-14 shadow-inset-light dark:bg-input-dark dark:shadow-inset-dark rounded-main-radius"
+                        placeholder="Введите название топика"
+                        value={newTopicTitle}
+                        onChange={e => setNewTopicTitle(e.target.value)}
+                        disabled={isCreatingTopic}
+                        maxLength={TOPIC_TITLE_MAX_LENGTH}
+                      />
+                      <span className="flex absolute bottom-0 right-2 text-[10px] text-gray-400">
+                        {newTopicTitle.length ?? 0}/{TOPIC_TITLE_MAX_LENGTH}
+                      </span>
+                    </div>
+                    <div className="flex relative w-full">
+                      <input
+                        type="text"
+                        className="flex-1 text-main-black py-3 pl-3 pr-14 shadow-inset-light dark:bg-input-dark dark:shadow-inset-dark rounded-main-radius"
+                        placeholder="Введите текст топика"
+                        value={newTopicText}
+                        onChange={e => setNewTopicText(e.target.value)}
+                        disabled={isCreatingTopic}
+                        maxLength={TOPIC_CONTENT_MAX_LENGTH}
+                      />
+                      <span className="flex absolute bottom-0 right-2 text-[10px] text-gray-400">
+                        {newTopicText.length ?? 0}/{TOPIC_CONTENT_MAX_LENGTH}
+                      </span>
+                    </div>
                   </div>
                   <button
                     className={`${BTN_CLASS} !mb-0 flex items-center justify-center max-w-[100px]`}
