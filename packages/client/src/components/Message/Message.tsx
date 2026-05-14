@@ -119,11 +119,11 @@ export const Message: FC<MessageProps> = ({ message, onResponse }) => {
               styles={userReaction?.text === EReactions.TU ? activeStyle : ''}
             />
             {thumbUpCount.length > 0 && (
-              <span
+              <div
                 className={`relative group text-xs cursor-pointer ${
                   userReaction?.text === EReactions.TU
                     ? 'text-f7-light-blue'
-                    : 'dark:text-white'
+                    : 'text-white dark:text-f7-dark'
                 }`}>
                 {thumbUpCount.length}
                 <span className="custom-scroll overflow-y-auto max-h-100 group-hover:block hidden hover:block absolute top-[calc(100%-2px)] left-0 bg-gray-400 rounded-main-radius p-2 text-f7-beige">
@@ -133,7 +133,7 @@ export const Message: FC<MessageProps> = ({ message, onResponse }) => {
                     </p>
                   ))}
                 </span>
-              </span>
+              </div>
             )}
           </div>
           <div className="flex items-center gap-1">
@@ -145,11 +145,11 @@ export const Message: FC<MessageProps> = ({ message, onResponse }) => {
               styles={userReaction?.text === EReactions.TD ? activeStyle : ''}
             />
             {thumbDownCount.length > 0 && (
-              <span
+              <div
                 className={`relative group text-xs cursor-pointer ${
                   userReaction?.text === EReactions.TD
                     ? 'text-f7-light-blue'
-                    : 'dark:text-white'
+                    : 'text-white dark:text-f7-dark'
                 }`}>
                 {thumbDownCount.length}
                 <span className="custom-scroll overflow-y-auto max-h-100 group-hover:block hidden hover:block absolute top-[calc(100%-2px)] left-0 bg-gray-400 rounded-main-radius p-2 text-f7-beige">
@@ -159,7 +159,7 @@ export const Message: FC<MessageProps> = ({ message, onResponse }) => {
                     </p>
                   ))}
                 </span>
-              </span>
+              </div>
             )}
           </div>
         </div>
