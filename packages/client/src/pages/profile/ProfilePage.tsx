@@ -24,6 +24,7 @@ import {
   BTN_CLASS,
   FIELD_CLASS,
   FIELD_PR_CLASS,
+  FIELD_WIDTH_288,
   FORM_PAGE_CONTAINER_CLASS,
   FORM_WRAPPER_CLASS,
   PAGE_TITLE_SIZE_CLASS,
@@ -149,7 +150,7 @@ export const ProfilePage: FC = () => {
             <FormikProvider value={formik}>
               <div className="flex flex-col">
                 <div className="w-full flex">
-                  <div className={FIELD_PR_CLASS}>
+                  <div className={`${FIELD_PR_CLASS} ${FIELD_WIDTH_288}`}>
                     <Fields.Text
                       name="first_name"
                       type="text"
@@ -157,7 +158,7 @@ export const ProfilePage: FC = () => {
                       placeholder="Имя"
                     />
                   </div>
-                  <div className={FIELD_CLASS}>
+                  <div className={`${FIELD_CLASS} ${FIELD_WIDTH_288}`}>
                     <Fields.Text
                       name="login"
                       type="text"
@@ -167,7 +168,7 @@ export const ProfilePage: FC = () => {
                   </div>
                 </div>
                 <div className="w-full flex">
-                  <div className={FIELD_PR_CLASS}>
+                  <div className={`${FIELD_PR_CLASS} ${FIELD_WIDTH_288}`}>
                     <Fields.Text
                       name="second_name"
                       type="text"
@@ -175,7 +176,7 @@ export const ProfilePage: FC = () => {
                       placeholder="Фамилия"
                     />
                   </div>
-                  <div className={FIELD_CLASS}>
+                  <div className={`${FIELD_CLASS} ${FIELD_WIDTH_288}`}>
                     <Fields.Text
                       name="email"
                       type="email"
@@ -185,7 +186,7 @@ export const ProfilePage: FC = () => {
                   </div>
                 </div>
                 <div className="w-full flex">
-                  <div className={FIELD_PR_CLASS}>
+                  <div className={`${FIELD_PR_CLASS} ${FIELD_WIDTH_288}`}>
                     <Fields.Text
                       name="display_name"
                       type="text"
@@ -193,7 +194,7 @@ export const ProfilePage: FC = () => {
                       placeholder="Ник"
                     />
                   </div>
-                  <div className={FIELD_CLASS}>
+                  <div className={`${FIELD_CLASS} ${FIELD_WIDTH_288}`}>
                     <Fields.Text
                       name="phone"
                       type="text"

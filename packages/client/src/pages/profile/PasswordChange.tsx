@@ -17,7 +17,6 @@ import { Fields } from '../../fields';
 import { type PageInitArgs, ROUTES } from '../../routes';
 import {
   BTN_CLASS,
-  BTN_GROUP_CLASS,
   FIELD_CLASS,
   FIELD_GROUP_CLASS,
   FORM_PAGE_CONTAINER_CLASS,
