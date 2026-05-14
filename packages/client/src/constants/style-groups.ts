@@ -6,6 +6,7 @@ export const FORM_CONTAINER_CLASS =
 export const FORM_WRAPPER_CLASS = 'flex flex-col justify-between h-min-72 z-10';
 export const FIELD_CLASS = 'flex flex-col mb-6 last:mb-0';
 export const FIELD_PR_CLASS = 'flex flex-col mb-6 mr-4 last:mr-0';
+export const FIELD_WIDTH_288 = 'w-[288px]';
 export const FIELD_GROUP_CLASS = 'flex flex-col';
 export const BTN_GROUP_CLASS =
   'mt-10 flex flex-col justify-center items-center';
