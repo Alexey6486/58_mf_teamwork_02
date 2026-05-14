@@ -1,11 +1,7 @@
 import type { Response, Request } from 'express';
 import { Comment, Topic, Reaction, User } from '../db';
 import { catchAsync } from '../utils/catchAsync';
-import {
-  TextValidation,
-  normalizeText,
-  toPositiveInt,
-} from '../utils/validation';
+import { normalizeText, toPositiveInt } from '../utils/validation';
 import { escapeHTML } from '../utils/xss';
 import { REACTIONS } from '../constants/constrains';
 
@@ -33,10 +29,7 @@ export const createReaction = catchAsync(
     }
 
     const normalizedText = normalizeText(text);
-    if (
-      !TextValidation(normalizedText, { min: 1, max: 8 }) ||
-      !REACTIONS.includes(normalizedText)
-    ) {
+    if (!REACTIONS.includes(normalizedText)) {
       response.status(400).json({ error: 'wrong reaction type' });
       return;
     }
