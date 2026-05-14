@@ -1,0 +1,3 @@
+export const TOPIC_TITLE_MAX_LENGTH = 120;
+export const TOPIC_CONTENT_MAX_LENGTH = 5000;
+export const TOPIC_COMMENT_MAX_LENGTH = 2000;
