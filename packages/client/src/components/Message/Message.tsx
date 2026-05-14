@@ -89,7 +89,7 @@ export const Message: FC<MessageProps> = ({ message, onResponse }) => {
   const safeText = String(text ?? '');
   const safeReplyAuthorLogin = String(repliedToComment?.User?.login ?? '');
   const safeReplyText = String(repliedToComment?.text ?? '');
-  console.log({ thumbUpCount, thumbDownCount });
+
   return (
     <div className="border-2 border-f7-beige rounded-[10px] py-1.5 px-2.5 mb-2 bg-form-dark dark:bg-f7-beige text-main-light dark:text-main-black ">
       <div className="flex justify-between border-b dark:border-f7-dark border-main-white">
