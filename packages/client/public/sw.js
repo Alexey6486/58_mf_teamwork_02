@@ -33,32 +33,27 @@ self.addEventListener('fetch', event => {
   }
 
   event.respondWith(
-    caches.match(event.request).then(cached => {
-      if (cached) {
-        return cached;
-      }
-
-      const fetchRequest = event.request.clone();
-
-      return fetch(fetchRequest)
-        .then(response => {
-          if (!response || response.status !== 200 || response.type !== 'basic') {
-            return response;
-          }
-
+    fetch(event.request)
+      .then(response => {
+        // если запрос успешен — кешируем и отдаём
+        if (response && response.status === 200 && response.type === 'basic') {
           const responseToCache = response.clone();
-
           caches.open(CACHE_NAME).then(cache => {
             cache.put(event.request, responseToCache);
           });
-
-          return response;
-        })
-        .catch(() => {
+        }
+        return response;
+      })
+      .catch(() => {
+        // если сеть недоступна пытаемся достать из кеша
+        return caches.match(event.request).then(cached => {
+          if (cached) {
+            return cached;
+          }
           if (event.request.mode === 'navigate') {
             return caches.match('/index.html');
           }
         });
-    })
+      })
   );
 });
